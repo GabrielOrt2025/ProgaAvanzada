@@ -1,5 +1,6 @@
-#🧠 Proyecto: Aplicación de Seguimiento Terapéutico
-📄 Descripción
+# 🧠 Proyecto: Aplicación de Seguimiento Terapéutico
+
+## 📄 Descripción
 
 Este proyecto propone el desarrollo de una aplicación para un centro de terapias, orientada a optimizar la gestión de citas, la organización de servicios terapéuticos por categorías clínicas y el seguimiento de pacientes.
 
