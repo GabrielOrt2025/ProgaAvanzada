@@ -28,16 +28,16 @@
 </head>
 
 <body>
-    
+
     <!-- Preloader -->
     <div class="preloader">
-            <div class="preloader-inner">
-                <div class="preloader-icon">
-                    <span></span>
-                    <span></span>
-                </div>
+        <div class="preloader-inner">
+            <div class="preloader-icon">
+                <span></span>
+                <span></span>
             </div>
         </div>
+    </div>
     <!-- /End Preloader -->
     <!-- Start Header Area -->
     <header class="header navbar-area">
@@ -50,6 +50,7 @@
                             <a class="navbar-brand" href="index.html">
                                 <img src="~/Template/images/logo/logo.svg" alt="Logo">
                             </a>
+
                             <button class="navbar-toggler mobile-menu-btn" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                                     aria-expanded="false" aria-label="Toggle navigation">
@@ -57,42 +58,52 @@
                                 <span class="toggler-icon"></span>
                                 <span class="toggler-icon"></span>
                             </button>
+
                             <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                                 <ul id="nav" class="navbar-nav ms-auto">
                                     <li class="nav-item">
                                         <a class="page-scroll active dd-menu collapsed" href="javascript:void(0)"
                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-1"
                                            aria-controls="navbarSupportedContent" aria-expanded="false"
-                                           aria-label="Toggle navigation">Home</a>
+                                           aria-label="Toggle navigation">Inicio</a>
                                         <ul class="sub-menu collapse" id="submenu-1-1">
-                                            <li class="nav-item active"><a href="index.html">Home Default</a></li>
+                                            <li class="nav-item active">
+                                                <a href="@Url.Action("Index", "Home")">Inicio</a>
+                                            </li>
                                         </ul>
                                     </li>
+
                                     <li class="nav-item">
                                         <a class="page-scroll dd-menu collapsed" href="javascript:void(0)"
                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-2"
                                            aria-controls="navbarSupportedContent" aria-expanded="false"
-                                           aria-label="Toggle navigation">Pages</a>
+                                           aria-label="Toggle navigation">Páginas</a>
                                         <ul class="sub-menu collapse" id="submenu-1-2">
-                                            <li class="nav-item"><a href="~/Home/Login">Login</a></li>
+                                            <li class="nav-item"><a href="~/Home/Login">Iniciar sesión</a></li>
+                                            <li class="nav-item"><a href="~/Home/Register">Registro</a></li>
                                         </ul>
                                     </li>
+
                                     <li class="nav-item">
-                                        <a href="javascript:void(0)" aria-label="Toggle navigation">Services</a>
+                                        <a href="javascript:void(0)" aria-label="Toggle navigation">Servicios</a>
                                     </li>
+
                                     <li class="nav-item">
-                                        <a href="javascript:void(0)" aria-label="Toggle navigation">Doctors</a>
+                                        <a href="javascript:void(0)" aria-label="Toggle navigation">Terapeutas</a>
                                     </li>
+
                                     <li class="nav-item">
                                         <a href="javascript:void(0)" aria-label="Toggle navigation">Blog</a>
                                     </li>
+
                                     <li class="nav-item">
-                                        <a href="javascript:void(0)" aria-label="Toggle navigation">Contact</a>
+                                        <a href="javascript:void(0)" aria-label="Toggle navigation">Contacto</a>
                                     </li>
                                 </ul>
                             </div> <!-- navbar collapse -->
+
                             <div class="button add-list-button">
-                                <a href="javascript:void(0)" class="btn">Book Appointment</a>
+                                <a href="javascript:void(0)" class="btn">Agendar cita</a>
                             </div>
                         </nav>
                         <!-- End Navbar -->
@@ -102,15 +113,15 @@
         </div> <!-- container -->
     </header>
     <!-- End Header Area -->
-    <div>
 
+    <div>
         @RenderBody()
     </div>
-    
+
     <!-- Start Footer Area -->
     <footer class="footer overlay">
         <!-- Start Footer Top -->
-        <div class="footer-top">
+        @*<div class="footer-top">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-12">
@@ -135,14 +146,13 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
         <!-- End Footer Top -->
         <!-- Start Footer Middle -->
         <div class="footer-middle">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3 col-md-6 col-12">
-                        <!-- Single Widget -->
                         <div class="single-footer f-about">
                             <div class="logo">
                                 <a href="index.html">
@@ -158,37 +168,35 @@
                                 <li><a href="javascript:void(0)"><i class="lni lni-youtube"></i></a></li>
                             </ul>
                         </div>
-                        <!-- End Single Widget -->
                     </div>
+
                     <div class="col-lg-3 col-md-6 col-12">
-                        <!-- Single Widget -->
                         <div class="single-footer f-link">
-                            <h3>Useful Links</h3>
+                            <h3>Enlaces útiles                            </h3>
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <ul>
-                                        <li><a href="javascript:void(0)">About</a></li>
-                                        <li><a href="javascript:void(0)">Team</a></li>
-                                        <li><a href="javascript:void(0)">Before After</a></li>
-                                        <li><a href="javascript:void(0)">Cost Calculator</a></li>
-                                        <li><a href="javascript:void(0)">Working Hours</a></li>
+                                        <li><a href="javascript:void(0)">Más informacin</a></li>
+                                        <li><a href="javascript:void(0)">Nuestro Equipo</a></li>
+                                        <li><a href="javascript:void(0)">Terapias Disponibles</a></li>
+                                        <li><a href="javascript:void(0)">Horarios</a></li>
+                                        <li><a href="javascript:void(0)">Especialidades</a></li>
                                     </ul>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <ul>
-                                        <li><a href="javascript:void(0)">Appointment</a></li>
-                                        <li><a href="javascript:void(0)">Gallery</a></li>
-                                        <li><a href="javascript:void(0)">Timetable</a></li>
-                                        <li><a href="javascript:void(0)">Departments</a></li>
-                                        <li><a href="javascript:void(0)">Contact Us</a></li>
+                                        <li><a href="javascript:void(0)">Citas</a></li>
+                                        <li><a href="javascript:void(0)">Galleria</a></li>
+                                        <li><a href="javascript:void(0)">Sobre Nosotros</a></li>
+                                        <li><a href="javascript:void(0)">Doctores</a></li>
+                                        <li><a href="javascript:void(0)">Contactanos</a></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        <!-- End Single Widget -->
                     </div>
+
                     <div class="col-lg-3 col-md-6 col-12">
-                        <!-- Single Widget -->
                         <div class="single-footer opening-hours">
                             <h3>Opening Hours</h3>
                             <ul>
@@ -210,10 +218,9 @@
                                 </li>
                             </ul>
                         </div>
-                        <!-- End Single Widget -->
                     </div>
+
                     <div class="col-lg-3 col-md-6 col-12">
-                        <!-- Single Widget -->
                         <div class="single-footer last f-contact">
                             <h3>Contact</h3>
                             <ul>
@@ -225,13 +232,13 @@
                                 <li><i class="lni lni-envelope"></i> Mail. support@classigrids.com</li>
                             </ul>
                         </div>
-                        <!-- End Single Widget -->
                     </div>
+
                 </div>
             </div>
         </div>
         <!--/ End Footer Middle -->
-        <!-- Start Footer Bottom -->
+
         <div class="footer-bottom">
             <div class="container">
                 <div class="inner">
@@ -255,17 +262,13 @@
                 </div>
             </div>
         </div>
-        <!-- End Footer Middle -->
     </footer>
-    <!--/ End Footer Area -->
-    <!-- ========================= scroll-top ========================= -->
+
     <a href="#" class="scroll-top">
         <i class="lni lni-chevron-up"></i>
     </a>
 
     <!-- ========================= JS here ========================= -->
-  
-
     <script src="~/Template/js/bootstrap.min.js"></script>
     <script src="~/Template/js/wow.min.js"></script>
     <script src="~/Template/js/tiny-slider.js"></script>
@@ -274,11 +277,8 @@
     <script src="~/Template/js/imagesloaded.min.js"></script>
     <script src="~/Template/js/isotope.min.js"></script>
     <script src="~/Template/js/main.js"></script>
+
     <script type="text/javascript">
-
-
-
-
         //======== Hero Slider
         var slider = new tns({
             container: '.hero-slider',
@@ -295,18 +295,12 @@
                 '<i class="lni lni-chevron-right"></i>'
             ],
             responsive: {
-                1200: {
-                    items: 1,
-                },
-                992: {
-                    items: 1,
-                },
-                0: {
-                    items: 1,
-                }
-
+                1200: { items: 1 },
+                992: { items: 1 },
+                0: { items: 1 }
             }
         });
+
         //========= testimonial
         tns({
             container: '.testimonial-slider',
@@ -319,25 +313,14 @@
             controls: false,
             controlsText: ['<i class="lni lni-arrow-left"></i>', '<i class="lni lni-arrow-right"></i>'],
             responsive: {
-                0: {
-                    items: 1,
-                },
-                540: {
-                    items: 1,
-                },
-                768: {
-                    items: 2,
-                },
-                992: {
-                    items: 2,
-                },
-                1170: {
-                    items: 3,
-                }
+                0: { items: 1 },
+                540: { items: 1 },
+                768: { items: 2 },
+                992: { items: 2 },
+                1170: { items: 3 }
             }
         });
 
-        //====== counter up
         var cu = new counterUp({
             start: 0,
             duration: 2000,
@@ -346,42 +329,32 @@
             append: " ",
         });
         cu.start();
-        //========= glightbox
+
         GLightbox({
             'href': 'https://www.youtube.com/watch?v=r44RKWyfcFw&fbclid=IwAR21beSJORalzmzokxDRcGfkZA1AtRTE__l5N4r09HcGS5Y6vOluyouM9EM',
             'type': 'video',
-            'source': 'youtube', //vimeo, youtube or local
+            'source': 'youtube',
             'width': 900,
             'autoplayVideos': true,
         });
-        //============== isotope masonry js with imagesloaded
+
         imagesLoaded('#container', function () {
             var elem = document.querySelector('.grid');
             var iso = new Isotope(elem, {
-                // options
                 itemSelector: '.grid-item',
-                masonry: {
-                    // use outer width of grid-sizer for columnWidth
-                    columnWidth: '.grid-item'
-                }
+                masonry: { columnWidth: '.grid-item' }
             });
 
             let filterButtons = document.querySelectorAll('.portfolio-btn-wrapper button');
             filterButtons.forEach(e =>
                 e.addEventListener('click', () => {
-
                     let filterValue = event.target.getAttribute('data-filter');
-                    iso.arrange({
-                        filter: filterValue
-                    });
+                    iso.arrange({ filter: filterValue });
                 })
             );
         });
     </script>
 </body>
-
 </html>
-
-
 
 
