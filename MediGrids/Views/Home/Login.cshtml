@@ -9,11 +9,11 @@
         <div class="row align-items-center">
             <div class="col-lg-8 offset-lg-2 col-md-12 col-12">
                 <div class="breadcrumbs-content">
-                    <h1 class="page-title">Login</h1>
+                    <h1 class="page-title">Iniciar Sesión</h1>
                 </div>
                 <ul class="breadcrumb-nav">
-                    <li><a href="index.html">Home</a></li>
-                    <li>Login</li>
+                    <li><a href="@Url.Action("Index","Home")">Inicio</a></li>
+                    <li>Iniciar Sesión</li>
                 </ul>
             </div>
         </div>
@@ -21,56 +21,56 @@
 </div>
 <div class="login-container">
     <div class="login-card">
-        <h2 class="login-title">Login To Your Account</h2>
+        <h2 class="login-title">Inicia sesión en tu cuenta</h2>
         <form action="#!" method="post">
             <div class="form-group">
-                <input type="email" class="form-control" name="email" placeholder="Email" required>
+                <input type="email" class="form-control" name="email" placeholder="Correo" required>
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" name="password" placeholder="Password" required>
+                <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
             </div>
             <div class="remember-forgot">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="rememberMe">
-                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                    <label class="form-check-label" for="rememberMe">Recuérdame</label>
                 </div>
-                <a href="javascript:void(0)" class="lost-pass">Lost your password?</a>
+                <a href="javascript:void(0)" class="lost-pass">¿Olvidó su contraseña?</a>
             </div>
-            <button type="submit" class="btn btn-login">Login Now</button>
+            <button type="submit" class="btn btn-login">Iniciar sesión</button>
             
-            <div class="divider">Or</div>
+            <div class="divider">O</div>
             
             <div class="social-buttons">
                 <div class="row">
                     <div class="col-md-6 col-12">
                         <a href="javascript:void(0)" class="btn-social facebook">
                             <i class="lni lni-facebook-original"></i>
-                            Login With Facebook
+                            Iniciar sesión con Facebook
                         </a>
                     </div>
                     <div class="col-md-6 col-12">
                         <a href="javascript:void(0)" class="btn-social google">
                             <i class="lni lni-google"></i>
-                            Login With Google Plus
+                            Iniciar sesión con Google
                         </a>
                     </div>
                     <div class="col-md-6 col-12">
                         <a href="javascript:void(0)" class="btn-social instagram">
                             <i class="lni lni-instagram"></i>
-                            Login With Instagram
+                            Iniciar sesión con Instagram
                         </a>
                     </div>
                     <div class="col-md-6 col-12">
                         <a href="javascript:void(0)" class="btn-social linkedin">
                             <i class="lni lni-linkedin-original"></i>
-                            Login With Linkedin
+                            Iniciar sesión con LinkedIn
                         </a>
                     </div>
                 </div>
             </div>
             
             <p class="register-link">
-                Don't have an account? <a href="@Url.Action("Register", "Home")">Register here</a>
+                ¿No tiene cuenta? <a href="@Url.Action("Register", "Home")">Regístrese aquí</a>
             </p>
         </form>
     </div>
