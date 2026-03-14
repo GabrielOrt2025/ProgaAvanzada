@@ -1,0 +1,578 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CategoriaClinica">
+          <Key>
+            <PropertyRef Name="id_categoria" />
+          </Key>
+          <Property Name="id_categoria" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="255" />
+          <Property Name="id_terapia" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ejercicio">
+          <Key>
+            <PropertyRef Name="id_ejercicio" />
+          </Key>
+          <Property Name="id_ejercicio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="500" />
+          <Property Name="objetivo" Type="varchar" MaxLength="255" />
+          <Property Name="dificultad" Type="varchar" MaxLength="50" />
+          <Property Name="video_url" Type="varchar" MaxLength="500" />
+          <Property Name="id_terapia" Type="int" Nullable="false" />
+          <Property Name="id_categoria" Type="int" Nullable="false" />
+          <Property Name="creado_por" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Paciente">
+          <Key>
+            <PropertyRef Name="id_paciente" />
+          </Key>
+          <Property Name="id_paciente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_usuario" Type="int" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="apellidos" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="telefono" Type="varchar" MaxLength="20" />
+          <Property Name="email" Type="varchar" MaxLength="150" />
+          <Property Name="activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="Rol">
+          <Key>
+            <PropertyRef Name="id_rol" />
+          </Key>
+          <Property Name="id_rol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Terapeuta">
+          <Key>
+            <PropertyRef Name="id_terapeuta" />
+          </Key>
+          <Property Name="id_terapeuta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_usuario" Type="int" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="apellidos" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="telefono" Type="varchar" MaxLength="20" />
+          <Property Name="email" Type="varchar" MaxLength="150" />
+          <Property Name="activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="TipoTerapia">
+          <Key>
+            <PropertyRef Name="id_terapia" />
+          </Key>
+          <Property Name="id_terapia" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="id_usuario" />
+          </Key>
+          <Property Name="id_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password_hash" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="id_rol" Type="int" Nullable="false" />
+          <Property Name="activo" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rules' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="database_firewall_rules">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="start_ip_address" />
+            <PropertyRef Name="end_ip_address" />
+            <PropertyRef Name="create_date" />
+            <PropertyRef Name="modify_date" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="start_ip_address" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="end_ip_address" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="create_date" Type="datetime" Nullable="false" />
+          <Property Name="modify_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_CategoriaClinica_TipoTerapia">
+          <End Role="TipoTerapia" Type="Self.TipoTerapia" Multiplicity="1" />
+          <End Role="CategoriaClinica" Type="Self.CategoriaClinica" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoTerapia">
+              <PropertyRef Name="id_terapia" />
+            </Principal>
+            <Dependent Role="CategoriaClinica">
+              <PropertyRef Name="id_terapia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ejercicio_CategoriaClinica">
+          <End Role="CategoriaClinica" Type="Self.CategoriaClinica" Multiplicity="1" />
+          <End Role="Ejercicio" Type="Self.Ejercicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoriaClinica">
+              <PropertyRef Name="id_categoria" />
+            </Principal>
+            <Dependent Role="Ejercicio">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ejercicio_Terapeuta">
+          <End Role="Terapeuta" Type="Self.Terapeuta" Multiplicity="1" />
+          <End Role="Ejercicio" Type="Self.Ejercicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terapeuta">
+              <PropertyRef Name="id_terapeuta" />
+            </Principal>
+            <Dependent Role="Ejercicio">
+              <PropertyRef Name="creado_por" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ejercicio_TipoTerapia">
+          <End Role="TipoTerapia" Type="Self.TipoTerapia" Multiplicity="1" />
+          <End Role="Ejercicio" Type="Self.Ejercicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoTerapia">
+              <PropertyRef Name="id_terapia" />
+            </Principal>
+            <Dependent Role="Ejercicio">
+              <PropertyRef Name="id_terapia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Paciente_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Paciente" Type="Self.Paciente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="Paciente">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Terapeuta_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Terapeuta" Type="Self.Terapeuta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="Terapeuta">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usuario_Rol">
+          <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rol">
+              <PropertyRef Name="id_rol" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="id_rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="CategoriaClinica" EntityType="Self.CategoriaClinica" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ejercicio" EntityType="Self.Ejercicio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Paciente" EntityType="Self.Paciente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Terapeuta" EntityType="Self.Terapeuta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipoTerapia" EntityType="Self.TipoTerapia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" store:Type="Views" store:Schema="sys">
+            <DefiningQuery>SELECT 
+    [database_firewall_rules].[id] AS [id], 
+    [database_firewall_rules].[name] AS [name], 
+    [database_firewall_rules].[start_ip_address] AS [start_ip_address], 
+    [database_firewall_rules].[end_ip_address] AS [end_ip_address], 
+    [database_firewall_rules].[create_date] AS [create_date], 
+    [database_firewall_rules].[modify_date] AS [modify_date]
+    FROM [sys].[database_firewall_rules] AS [database_firewall_rules]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_CategoriaClinica_TipoTerapia" Association="Self.FK_CategoriaClinica_TipoTerapia">
+            <End Role="TipoTerapia" EntitySet="TipoTerapia" />
+            <End Role="CategoriaClinica" EntitySet="CategoriaClinica" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ejercicio_CategoriaClinica" Association="Self.FK_Ejercicio_CategoriaClinica">
+            <End Role="CategoriaClinica" EntitySet="CategoriaClinica" />
+            <End Role="Ejercicio" EntitySet="Ejercicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ejercicio_Terapeuta" Association="Self.FK_Ejercicio_Terapeuta">
+            <End Role="Terapeuta" EntitySet="Terapeuta" />
+            <End Role="Ejercicio" EntitySet="Ejercicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ejercicio_TipoTerapia" Association="Self.FK_Ejercicio_TipoTerapia">
+            <End Role="TipoTerapia" EntitySet="TipoTerapia" />
+            <End Role="Ejercicio" EntitySet="Ejercicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Paciente_Usuario" Association="Self.FK_Paciente_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Paciente" EntitySet="Paciente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Terapeuta_Usuario" Association="Self.FK_Terapeuta_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Terapeuta" EntitySet="Terapeuta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuario_Rol" Association="Self.FK_Usuario_Rol">
+            <End Role="Rol" EntitySet="Rol" />
+            <End Role="Usuario" EntitySet="Usuario" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CategoriaClinica">
+          <Key>
+            <PropertyRef Name="id_categoria" />
+          </Key>
+          <Property Name="id_categoria" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="id_terapia" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TipoTerapia" Relationship="Self.FK_CategoriaClinica_TipoTerapia" FromRole="CategoriaClinica" ToRole="TipoTerapia" />
+          <NavigationProperty Name="Ejercicio" Relationship="Self.FK_Ejercicio_CategoriaClinica" FromRole="CategoriaClinica" ToRole="Ejercicio" />
+        </EntityType>
+        <EntityType Name="Ejercicio">
+          <Key>
+            <PropertyRef Name="id_ejercicio" />
+          </Key>
+          <Property Name="id_ejercicio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="objetivo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="dificultad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="video_url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="id_terapia" Type="Int32" Nullable="false" />
+          <Property Name="id_categoria" Type="Int32" Nullable="false" />
+          <Property Name="creado_por" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CategoriaClinica" Relationship="Self.FK_Ejercicio_CategoriaClinica" FromRole="Ejercicio" ToRole="CategoriaClinica" />
+          <NavigationProperty Name="Terapeuta" Relationship="Self.FK_Ejercicio_Terapeuta" FromRole="Ejercicio" ToRole="Terapeuta" />
+          <NavigationProperty Name="TipoTerapia" Relationship="Self.FK_Ejercicio_TipoTerapia" FromRole="Ejercicio" ToRole="TipoTerapia" />
+        </EntityType>
+        <EntityType Name="Paciente">
+          <Key>
+            <PropertyRef Name="id_paciente" />
+          </Key>
+          <Property Name="id_paciente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_usuario" Type="Int32" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellidos" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="activo" Type="Boolean" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Paciente_Usuario" FromRole="Paciente" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Rol">
+          <Key>
+            <PropertyRef Name="id_rol" />
+          </Key>
+          <Property Name="id_rol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Usuario_Rol" FromRole="Rol" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Terapeuta">
+          <Key>
+            <PropertyRef Name="id_terapeuta" />
+          </Key>
+          <Property Name="id_terapeuta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_usuario" Type="Int32" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellidos" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="activo" Type="Boolean" />
+          <NavigationProperty Name="Ejercicio" Relationship="Self.FK_Ejercicio_Terapeuta" FromRole="Terapeuta" ToRole="Ejercicio" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Terapeuta_Usuario" FromRole="Terapeuta" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="TipoTerapia">
+          <Key>
+            <PropertyRef Name="id_terapia" />
+          </Key>
+          <Property Name="id_terapia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CategoriaClinica" Relationship="Self.FK_CategoriaClinica_TipoTerapia" FromRole="TipoTerapia" ToRole="CategoriaClinica" />
+          <NavigationProperty Name="Ejercicio" Relationship="Self.FK_Ejercicio_TipoTerapia" FromRole="TipoTerapia" ToRole="Ejercicio" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="id_usuario" />
+          </Key>
+          <Property Name="id_usuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password_hash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id_rol" Type="Int32" Nullable="false" />
+          <Property Name="activo" Type="Boolean" />
+          <NavigationProperty Name="Paciente" Relationship="Self.FK_Paciente_Usuario" FromRole="Usuario" ToRole="Paciente" />
+          <NavigationProperty Name="Rol" Relationship="Self.FK_Usuario_Rol" FromRole="Usuario" ToRole="Rol" />
+          <NavigationProperty Name="Terapeuta" Relationship="Self.FK_Terapeuta_Usuario" FromRole="Usuario" ToRole="Terapeuta" />
+        </EntityType>
+        <EntityType Name="database_firewall_rules">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="start_ip_address" />
+            <PropertyRef Name="end_ip_address" />
+            <PropertyRef Name="create_date" />
+            <PropertyRef Name="modify_date" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="start_ip_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="end_ip_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="create_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="modify_date" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <Association Name="FK_CategoriaClinica_TipoTerapia">
+          <End Role="TipoTerapia" Type="Self.TipoTerapia" Multiplicity="1" />
+          <End Role="CategoriaClinica" Type="Self.CategoriaClinica" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoTerapia">
+              <PropertyRef Name="id_terapia" />
+            </Principal>
+            <Dependent Role="CategoriaClinica">
+              <PropertyRef Name="id_terapia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ejercicio_CategoriaClinica">
+          <End Role="CategoriaClinica" Type="Self.CategoriaClinica" Multiplicity="1" />
+          <End Role="Ejercicio" Type="Self.Ejercicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoriaClinica">
+              <PropertyRef Name="id_categoria" />
+            </Principal>
+            <Dependent Role="Ejercicio">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ejercicio_Terapeuta">
+          <End Role="Terapeuta" Type="Self.Terapeuta" Multiplicity="1" />
+          <End Role="Ejercicio" Type="Self.Ejercicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terapeuta">
+              <PropertyRef Name="id_terapeuta" />
+            </Principal>
+            <Dependent Role="Ejercicio">
+              <PropertyRef Name="creado_por" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ejercicio_TipoTerapia">
+          <End Role="TipoTerapia" Type="Self.TipoTerapia" Multiplicity="1" />
+          <End Role="Ejercicio" Type="Self.Ejercicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoTerapia">
+              <PropertyRef Name="id_terapia" />
+            </Principal>
+            <Dependent Role="Ejercicio">
+              <PropertyRef Name="id_terapia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Paciente_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Paciente" Type="Self.Paciente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="Paciente">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usuario_Rol">
+          <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rol">
+              <PropertyRef Name="id_rol" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="id_rol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Terapeuta_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Terapeuta" Type="Self.Terapeuta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="Terapeuta">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CategoriaClinica" EntityType="Self.CategoriaClinica" />
+          <EntitySet Name="Ejercicio" EntityType="Self.Ejercicio" />
+          <EntitySet Name="Paciente" EntityType="Self.Paciente" />
+          <EntitySet Name="Rol" EntityType="Self.Rol" />
+          <EntitySet Name="Terapeuta" EntityType="Self.Terapeuta" />
+          <EntitySet Name="TipoTerapia" EntityType="Self.TipoTerapia" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+          <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" />
+          <AssociationSet Name="FK_CategoriaClinica_TipoTerapia" Association="Self.FK_CategoriaClinica_TipoTerapia">
+            <End Role="TipoTerapia" EntitySet="TipoTerapia" />
+            <End Role="CategoriaClinica" EntitySet="CategoriaClinica" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ejercicio_CategoriaClinica" Association="Self.FK_Ejercicio_CategoriaClinica">
+            <End Role="CategoriaClinica" EntitySet="CategoriaClinica" />
+            <End Role="Ejercicio" EntitySet="Ejercicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ejercicio_Terapeuta" Association="Self.FK_Ejercicio_Terapeuta">
+            <End Role="Terapeuta" EntitySet="Terapeuta" />
+            <End Role="Ejercicio" EntitySet="Ejercicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ejercicio_TipoTerapia" Association="Self.FK_Ejercicio_TipoTerapia">
+            <End Role="TipoTerapia" EntitySet="TipoTerapia" />
+            <End Role="Ejercicio" EntitySet="Ejercicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Paciente_Usuario" Association="Self.FK_Paciente_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Paciente" EntitySet="Paciente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuario_Rol" Association="Self.FK_Usuario_Rol">
+            <End Role="Rol" EntitySet="Rol" />
+            <End Role="Usuario" EntitySet="Usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Terapeuta_Usuario" Association="Self.FK_Terapeuta_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Terapeuta" EntitySet="Terapeuta" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="CategoriaClinica">
+            <EntityTypeMapping TypeName="Model.CategoriaClinica">
+              <MappingFragment StoreEntitySet="CategoriaClinica">
+                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="id_terapia" ColumnName="id_terapia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ejercicio">
+            <EntityTypeMapping TypeName="Model.Ejercicio">
+              <MappingFragment StoreEntitySet="Ejercicio">
+                <ScalarProperty Name="id_ejercicio" ColumnName="id_ejercicio" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="objetivo" ColumnName="objetivo" />
+                <ScalarProperty Name="dificultad" ColumnName="dificultad" />
+                <ScalarProperty Name="video_url" ColumnName="video_url" />
+                <ScalarProperty Name="id_terapia" ColumnName="id_terapia" />
+                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
+                <ScalarProperty Name="creado_por" ColumnName="creado_por" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Paciente">
+            <EntityTypeMapping TypeName="Model.Paciente">
+              <MappingFragment StoreEntitySet="Paciente">
+                <ScalarProperty Name="id_paciente" ColumnName="id_paciente" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rol">
+            <EntityTypeMapping TypeName="Model.Rol">
+              <MappingFragment StoreEntitySet="Rol">
+                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Terapeuta">
+            <EntityTypeMapping TypeName="Model.Terapeuta">
+              <MappingFragment StoreEntitySet="Terapeuta">
+                <ScalarProperty Name="id_terapeuta" ColumnName="id_terapeuta" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoTerapia">
+            <EntityTypeMapping TypeName="Model.TipoTerapia">
+              <MappingFragment StoreEntitySet="TipoTerapia">
+                <ScalarProperty Name="id_terapia" ColumnName="id_terapia" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuario">
+            <EntityTypeMapping TypeName="Model.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password_hash" ColumnName="password_hash" />
+                <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="database_firewall_rules">
+            <EntityTypeMapping TypeName="Model.database_firewall_rules">
+              <MappingFragment StoreEntitySet="database_firewall_rules">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="start_ip_address" ColumnName="start_ip_address" />
+                <ScalarProperty Name="end_ip_address" ColumnName="end_ip_address" />
+                <ScalarProperty Name="create_date" ColumnName="create_date" />
+                <ScalarProperty Name="modify_date" ColumnName="modify_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
