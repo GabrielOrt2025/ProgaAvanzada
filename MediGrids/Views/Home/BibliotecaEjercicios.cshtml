@@ -1,0 +1,107 @@
+﻿@model List<MediGrids.EntityFramework.Ejercicio>
+
+@{
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+    ViewBag.Title = "Biblioteca de Ejercicios";
+    var terapias = ViewBag.Terapias as List<MediGrids.EntityFramework.TipoTerapia>;
+    var categorias = ViewBag.Categorias as List<MediGrids.EntityFramework.CategoriaClinica>;
+}
+
+<style>
+    .biblioteca-header-box {
+        background: #0c7a3e;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        margin-bottom: 30px;
+    }
+
+        .biblioteca-header-box h1 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .biblioteca-header-box label {
+            color: white;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+</style>
+
+<section class="container">
+    <div class="biblioteca-header-box">
+        <h1>Biblioteca de Ejercicios</h1>
+
+        <form action="/Home/BibliotecaEjercicios" method="get">
+            <div class="row align-items-end">
+                <div class="col-md-4">
+                    <label>Tipo de terapia</label>
+                    <select name="idTerapia" class="form-control">
+                        <option value="">-- Seleccione una terapia --</option>
+                        @if (terapias != null)
+                        {
+                            foreach (var t in terapias)
+                            {
+                                <option value="@t.id_terapia" @(ViewBag.IdTerapia != null && Convert.ToInt32(ViewBag.IdTerapia) == t.id_terapia ? "selected=\"selected\"" : "")>
+                                    @t.nombre
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label>Categoría clínica</label>
+                    <select name="idCategoria" class="form-control">
+                        <option value="">-- Seleccione una categoría --</option>
+                        @if (categorias != null)
+                        {
+                            foreach (var c in categorias)
+                            {
+                                <option value="@c.id_categoria" @(ViewBag.IdCategoria != null && Convert.ToInt32(ViewBag.IdCategoria) == c.id_categoria ? "selected=\"selected\"" : "")>
+                                    @c.nombre
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <input type="submit" value="Filtrar" class="btn btn-light me-2" />
+                    <a href="/Home/BibliotecaEjercicios" class="btn btn-secondary">Limpiar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">@item.nombre</h4>
+                            <p><strong>Descripción:</strong> @item.descripcion</p>
+                            <p><strong>Objetivo terapéutico:</strong> @item.objetivo</p>
+                            <p><strong>Nivel de dificultad:</strong> @item.dificultad</p>
+                            <p><strong>Categoría clínica:</strong> @(item.CategoriaClinica != null ? item.CategoriaClinica.nombre : "")</p>
+
+                            @if (!string.IsNullOrEmpty(item.video_url))
+                            {
+                                <a href="@item.video_url" target="_blank" class="btn btn-primary">Ver video</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            No hay ejercicios disponibles con los filtros seleccionados.
+        </div>
+    }
+</section>

@@ -271,7 +271,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_LayoutExterno.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Template\fonts\LineIcons.eot" />
     <Content Include="Template\fonts\LineIcons.ttf" />
@@ -279,6 +279,8 @@
     <Content Include="Template\fonts\LineIcons.woff2" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
+    <Content Include="Views\Home\BibliotecaEjercicios.cshtml" />
+    <Content Include="Views\Shared\_LayoutInterno.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
