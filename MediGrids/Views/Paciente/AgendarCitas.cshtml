@@ -1,0 +1,198 @@
+@{
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+    ViewBag.Title = "Agendar Cita";
+    var tiposTerapia = ViewBag.TiposTerapia as List<MediGrids.Models.TipoTerapiaViewModel>;
+    var categoriasCompletas = ViewBag.CategoriasCompletas as List<MediGrids.EntityFramework.CategoriaClinica>;
+}
+
+<link rel="stylesheet" href="~/Template/css/agendar-citas.css" />
+
+<section class="container">
+    <div class="agendar-citas-header">
+        <h1><i class="lni lni-calendar"></i> Agendar Nueva Cita</h1>
+        <p>Complete los siguientes pasos para agendar su cita terapéutica</p>
+    </div>
+
+    <div class="step-wizard">
+        <!-- Indicador de Pasos -->
+        <div class="step-indicator">
+            <div class="step-item active" id="step-indicator-1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Selección</div>
+            </div>
+            <div class="step-item" id="step-indicator-2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Disponibilidad</div>
+            </div>
+        </div>
+
+        <!-- Paso 1: Selección -->
+        <div class="step-content active" id="step-1">
+            <form id="form-paso-1">
+                <!-- Tipo de Terapia -->
+                <div class="form-section">
+                    <h3><i class="lni lni-heart-filled"></i> Seleccion del Tipo de Terapia</h3>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label for="tipoTerapia">Tipo de Terapia</label>
+                                <select class="form-control" id="tipoTerapia" name="tipoTerapia" required>
+                                    <option value="">-- Seleccione un tipo de terapia --</option>
+                                    @if (tiposTerapia != null)
+                                    {
+                                        foreach (var t in tiposTerapia)
+                                        {
+                                            <option value="@t.IdTerapia">@t.Nombre</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categoría Clínica -->
+                <div class="form-section">
+                    <h3><i class="lni lni-list"></i> Categoria Clinica</h3>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label for="categoriaClinica">Categoría Terapéutica</label>
+                                <select class="form-control" id="categoriaClinica" name="categoriaClinica" required>
+                                    <option value="">-- Primero seleccione un tipo de terapia --</option>
+                                </select>
+                                <small class="text-muted">Las categorías se cargarán según el tipo de terapia seleccionado</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selección de Terapeuta -->
+                <div class="form-section">
+                    <h3><i class="lni lni-user"></i> Selección de Profesional</h3>
+                    <div id="terapeutas-container">
+                        <p class="text-muted">Seleccione un tipo de terapia para ver los profesionales disponibles</p>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-primary btn-step" id="btn-siguiente-1">
+                        Siguiente <i class="lni lni-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Paso 2: Disponibilidad -->
+        <div class="step-content" id="step-2">
+            <form id="form-paso-2">
+                <!-- Resumen de Selección -->
+                <div class="resumen-cita mb-4">
+                    <h4><i class="lni lni-checkmark-circle"></i> Resumen de su Selección</h4>
+                    <div class="info-item">
+                        <strong>Tipo de Terapia:</strong> <span id="resumen-terapia">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Categoría:</strong> <span id="resumen-categoria">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Terapeuta:</strong> <span id="resumen-terapeuta">-</span>
+                    </div>
+                </div>
+
+                <!-- Calendario y Disponibilidad -->
+                <div class="form-section">
+                    <h3><i class="lni lni-calendar"></i> Seleccione Fecha y Hora</h3>
+                    
+                    <!-- Rango de Fechas -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fechaInicio">Fecha Inicio</label>
+                                <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fechaFin">Fecha Fin</label>
+                                <input type="date" class="form-control" id="fechaFin" name="fechaFin" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-secondary mb-3" id="btn-consultar-disponibilidad">
+                        <i class="lni lni-search"></i> Consultar Disponibilidad
+                    </button>
+
+                    <!-- Calendario -->
+                    <div class="calendar-container" id="calendario-container" style="display: none;">
+                        <div class="calendar-header">
+                            <h4 id="calendario-mes-anio">Enero 2024</h4>
+                            <div class="calendar-nav">
+                                <button type="button" id="btn-mes-anterior"><i class="lni lni-chevron-left"></i></button>
+                                <button type="button" id="btn-mes-siguiente"><i class="lni lni-chevron-right"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="calendar-grid">
+                            <div class="calendar-day-header">Dom</div>
+                            <div class="calendar-day-header">Lun</div>
+                            <div class="calendar-day-header">Mar</div>
+                            <div class="calendar-day-header">Mié</div>
+                            <div class="calendar-day-header">Jue</div>
+                            <div class="calendar-day-header">Vie</div>
+                            <div class="calendar-day-header">Sáb</div>
+                            <div id="calendario-dias"></div>
+                        </div>
+
+                        <!-- Horarios Disponibles -->
+                        <div id="horarios-container" style="display: none;">
+                            <h5 class="mt-4 mb-3">Horarios Disponibles: <span id="fecha-seleccionada"></span></h5>
+                            <div class="time-slots" id="horarios-disponibles">
+                                <!-- Se llenarán dinámicamente -->
+                            </div>
+                        </div>
+
+                        <!-- Leyenda -->
+                        <div class="legend">
+                            <div class="legend-item">
+                                <div class="legend-color available"></div>
+                                <span>Disponible</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color occupied"></div>
+                                <span>Ocupado</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color selected"></div>
+                                <span>Seleccionado</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between gap-2 mt-4">
+                    <button type="button" class="btn btn-secondary btn-step" id="btn-anterior-2">
+                        <i class="lni lni-arrow-left"></i> Anterior
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-step">
+                        <i class="lni lni-checkmark-circle"></i> Confirmar Cita
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Script de Agendar Citas -->
+<script src="~/Template/js/agendar-citas.js"></script>
+<script>
+    // Inicializar la aplicación con datos del servidor
+    (function() {
+        var categorias = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Categorias ?? new List<object>()));
+        var terapeutas = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Terapeutas ?? new List<object>()));
+
+        // Llamar a la función de inicialización del archivo externo
+        initAgendarCitas(categorias, terapeutas);
+    })();
+</script>

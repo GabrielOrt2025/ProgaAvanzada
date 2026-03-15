@@ -9,21 +9,24 @@ namespace MediGrids.Controllers
     {
         private Entities db = new Entities();
 
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
-
+        [HttpGet]
         public ActionResult Register()
         {
             return View();
         }
-
+        [HttpGet]
         public ActionResult Login()
         {
             return View();
         }
 
+        [HttpGet]
+      
         public ActionResult BibliotecaEjercicios(int? idTerapia, int? idCategoria)
         {
             var ejercicios = db.Ejercicio

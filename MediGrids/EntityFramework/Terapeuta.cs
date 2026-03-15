@@ -27,7 +27,9 @@ namespace MediGrids.EntityFramework
         public string telefono { get; set; }
         public string email { get; set; }
         public Nullable<bool> activo { get; set; }
+        public Nullable<int> id_categoria { get; set; }
     
+        public virtual CategoriaClinica CategoriaClinica { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ejercicio> Ejercicio { get; set; }
         public virtual Usuario Usuario { get; set; }

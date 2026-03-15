@@ -47,7 +47,7 @@
                     <div class="nav-inner">
                         <!-- Start Navbar -->
                         <nav class="navbar navbar-expand-lg">
-                            <a class="navbar-brand" href="~/Home/Index">
+                            <a class="navbar-brand" href="@Url.Action("Index", "Home")">
                                 <img src="~/Template/images/logo/logo.svg" alt="Logo">
                             </a>
 
@@ -79,8 +79,8 @@
                                            aria-controls="navbarSupportedContent" aria-expanded="false"
                                            aria-label="Toggle navigation">Páginas</a>
                                         <ul class="sub-menu collapse" id="submenu-1-2">
-                                            <li class="nav-item"><a href="~/Home/Login">Iniciar sesión</a></li>
-                                            <li class="nav-item"><a href="~/Home/Register">Registro</a></li>
+                                            <li class="nav-item"><a href="@Url.Action("Login", "Home")">Iniciar sesión</a></li>
+                                            <li class="nav-item"><a href="@Url.Action("Register", "Home")">Registro</a></li>
                                         </ul>
                                     </li>
 

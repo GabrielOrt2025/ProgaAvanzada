@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Steven\OneDrive\U Fidelitas\2026\Programacion Avanzada 2026 I\Repo 1\ProgaAvanzada\MediGrids\EntityFramework\Model1.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\JordanStevenChavarri\source\repos\ProgaAvanzada\MediGrids\EntityFramework\Model1.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

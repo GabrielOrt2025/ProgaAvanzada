@@ -58,6 +58,7 @@
           <Property Name="telefono" Type="varchar" MaxLength="20" />
           <Property Name="email" Type="varchar" MaxLength="150" />
           <Property Name="activo" Type="bit" />
+          <Property Name="id_categoria" Type="int" />
         </EntityType>
         <EntityType Name="TipoTerapia">
           <Key>
@@ -155,6 +156,18 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Terapeuta_Categoria">
+          <End Role="CategoriaClinica" Type="Self.CategoriaClinica" Multiplicity="0..1" />
+          <End Role="Terapeuta" Type="Self.Terapeuta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoriaClinica">
+              <PropertyRef Name="id_categoria" />
+            </Principal>
+            <Dependent Role="Terapeuta">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Terapeuta_Usuario">
           <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
           <End Role="Terapeuta" Type="Self.Terapeuta" Multiplicity="*" />
@@ -217,6 +230,10 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Paciente" EntitySet="Paciente" />
           </AssociationSet>
+          <AssociationSet Name="FK_Terapeuta_Categoria" Association="Self.FK_Terapeuta_Categoria">
+            <End Role="CategoriaClinica" EntitySet="CategoriaClinica" />
+            <End Role="Terapeuta" EntitySet="Terapeuta" />
+          </AssociationSet>
           <AssociationSet Name="FK_Terapeuta_Usuario" Association="Self.FK_Terapeuta_Usuario">
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Terapeuta" EntitySet="Terapeuta" />
@@ -241,6 +258,7 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <Property Name="id_terapia" Type="Int32" Nullable="false" />
           <NavigationProperty Name="TipoTerapia" Relationship="Self.FK_CategoriaClinica_TipoTerapia" FromRole="CategoriaClinica" ToRole="TipoTerapia" />
           <NavigationProperty Name="Ejercicio" Relationship="Self.FK_Ejercicio_CategoriaClinica" FromRole="CategoriaClinica" ToRole="Ejercicio" />
+          <NavigationProperty Name="Terapeuta" Relationship="Self.FK_Terapeuta_Categoria" FromRole="CategoriaClinica" ToRole="Terapeuta" />
         </EntityType>
         <EntityType Name="Ejercicio">
           <Key>
@@ -291,6 +309,8 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <Property Name="telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="email" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="activo" Type="Boolean" />
+          <Property Name="id_categoria" Type="Int32" />
+          <NavigationProperty Name="CategoriaClinica" Relationship="Self.FK_Terapeuta_Categoria" FromRole="Terapeuta" ToRole="CategoriaClinica" />
           <NavigationProperty Name="Ejercicio" Relationship="Self.FK_Ejercicio_Terapeuta" FromRole="Terapeuta" ToRole="Ejercicio" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Terapeuta_Usuario" FromRole="Terapeuta" ToRole="Usuario" />
         </EntityType>
@@ -353,6 +373,18 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
               <PropertyRef Name="id_categoria" />
             </Principal>
             <Dependent Role="Ejercicio">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Terapeuta_Categoria">
+          <End Role="CategoriaClinica" Type="Self.CategoriaClinica" Multiplicity="0..1" />
+          <End Role="Terapeuta" Type="Self.Terapeuta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoriaClinica">
+              <PropertyRef Name="id_categoria" />
+            </Principal>
+            <Dependent Role="Terapeuta">
               <PropertyRef Name="id_categoria" />
             </Dependent>
           </ReferentialConstraint>
@@ -433,6 +465,10 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <AssociationSet Name="FK_Ejercicio_CategoriaClinica" Association="Self.FK_Ejercicio_CategoriaClinica">
             <End Role="CategoriaClinica" EntitySet="CategoriaClinica" />
             <End Role="Ejercicio" EntitySet="Ejercicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Terapeuta_Categoria" Association="Self.FK_Terapeuta_Categoria">
+            <End Role="CategoriaClinica" EntitySet="CategoriaClinica" />
+            <End Role="Terapeuta" EntitySet="Terapeuta" />
           </AssociationSet>
           <AssociationSet Name="FK_Ejercicio_Terapeuta" Association="Self.FK_Ejercicio_Terapeuta">
             <End Role="Terapeuta" EntitySet="Terapeuta" />
@@ -517,6 +553,7 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
                 <ScalarProperty Name="telefono" ColumnName="telefono" />
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
