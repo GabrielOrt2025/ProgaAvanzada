@@ -1,0 +1,83 @@
+/* ===================================
+   Gestion de Terapeutas - Estilos adicionales
+   Extiende ejercicios.css
+   =================================== */
+
+/* Badges de estado */
+.badge-activo {
+    background: #28a745 !important;
+    color: white !important;
+}
+
+.badge-inactivo {
+    background: #6c757d !important;
+    color: white !important;
+}
+
+.terapeuta-inactivo {
+    opacity: 0.85;
+}
+
+.terapeuta-inactivo .ejercicio-card-header {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%) !important;
+}
+
+.terapeuta-card .ejercicio-card-body {
+    overflow: hidden;
+}
+
+/* Boton activar */
+.btn-activar {
+    background: #d4edda !important;
+    color: #155724 !important;
+}
+
+.btn-activar:hover {
+    background: #155724 !important;
+    color: white !important;
+}
+
+/* Boton desactivar */
+.btn-desactivar {
+    background: #fff3cd !important;
+    color: #856404 !important;
+}
+
+.btn-desactivar:hover {
+    background: #856404 !important;
+    color: white !important;
+}
+
+/* Filtro especialidad */
+.filtro-especialidad {
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e8e8e8;
+}
+
+/* Meta boxes en cards de terapeuta - evitar overflow y recorte */
+.terapeuta-card .ejercicio-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.terapeuta-card .meta-box {
+    flex: 1 1 80px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.terapeuta-card .meta-box .value {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.85rem;
+}
+
+.terapeuta-card .ejercicio-info-item p {
+    word-break: break-word;
+    overflow-wrap: break-word;
+}

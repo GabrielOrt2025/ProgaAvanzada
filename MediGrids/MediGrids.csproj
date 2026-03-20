@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
@@ -120,6 +120,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\TerapeutaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\GestionTerapeutaController.cs" />
     <Compile Include="Controllers\PacienteController.cs" />
     <Compile Include="EntityFramework\CategoriaClinica.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -164,6 +165,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CategoriaClinicaViewModel.cs" />
+    <Compile Include="Models\GestionTerapeutaViewModel.cs" />
     <Compile Include="Models\TerapeutaEjercicioViewModel.cs" />
     <Compile Include="Models\TerapeutaViewModel.cs" />
     <Compile Include="Models\TipoTerapiaViewModel.cs" />
@@ -206,6 +208,7 @@
     <Content Include="EntityFramework\Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
+    <Content Include="Scripts\SP_GestionTerapeutas.sql" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -227,6 +230,7 @@
     <Content Include="Template\css\animate.css" />
     <Content Include="Template\css\bootstrap.min.css" />
     <Content Include="Template\css\ejercicios.css" />
+    <Content Include="Template\css\gestion-terapeutas.css" />
     <Content Include="Template\css\glightbox.min.css" />
     <Content Include="Template\css\LineIcons.2.0.css" />
     <Content Include="Template\css\login.css" />
@@ -281,6 +285,9 @@
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\BibliotecaEjercicios.cshtml" />
     <Content Include="Views\Shared\_LayoutInterno.cshtml" />
+    <Content Include="Views\GestionTerapeuta\Editar.cshtml" />
+    <Content Include="Views\GestionTerapeuta\Index.cshtml" />
+    <Content Include="Views\GestionTerapeuta\Registro.cshtml" />
     <Content Include="Views\Paciente\AgendarCitas.cshtml" />
     <Content Include="Views\Terapeuta\GestionarEjercicio.cshtml" />
     <Content Include="Views\Terapeuta\EditarForm.cshtml" />

@@ -1,0 +1,131 @@
+@model List<MediGrids.Models.GestionTerapeutaViewModel>
+@{
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+    ViewBag.Title = "Gestion de Terapeutas";
+    var categorias = ViewBag.Categorias as List<MediGrids.EntityFramework.CategoriaClinica>;
+    var idCategoriaFiltro = ViewBag.IdCategoriaFiltro as int?;
+}
+
+<link rel="stylesheet" href="~/Template/css/ejercicios.css" />
+<link rel="stylesheet" href="~/Template/css/gestion-terapeutas.css" />
+
+<section class="container">
+    <div class="agendar-citas-header">
+        <h1><i class="lni lni-users"></i> Gestion de Terapeutas</h1>
+        <p>Administre los terapeutas registrados, edite datos, active o desactive segun corresponda (RF-09)</p>
+    </div>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Mensaje"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="step-wizard">
+        <div class="form-section ejercicios-section">
+
+            <div class="ejercicios-header-actions">
+                <div>
+                    <h3><i class="lni lni-list"></i> Terapeutas Registrados</h3>
+                    <p class="ejercicios-subtitle">
+                        Filtre por especialidad, edite datos o active/desactive terapeutas.
+                    </p>
+                </div>
+
+                <a href="@Url.Action("Registro", "GestionTerapeuta")" class="btn-crear-ejercicio">
+                    <i class="lni lni-plus"></i> Registrar Terapeuta
+                </a>
+            </div>
+
+            <!-- RF-09.5: Filtro por especialidad (id_categoria) -->
+            <div class="filtro-especialidad mb-4">
+                <form method="get" action="@Url.Action("Index", "GestionTerapeuta")" class="d-flex align-items-center gap-2">
+                    <label for="id_categoria" class="mb-0">Filtrar por especialidad:</label>
+                    <select name="id_categoria" id="id_categoria" class="form-control" style="max-width: 250px;">
+                        <option value="">-- Todas las categorias --</option>
+                        @if (categorias != null)
+                        {
+                            foreach (var c in categorias)
+                            {
+                                <option value="@c.id_categoria" @(idCategoriaFiltro == c.id_categoria ? "selected" : "")>@c.nombre</option>
+                            }
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-primary"><i class="lni lni-search"></i> Filtrar</button>
+                </form>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="ejercicios-grid">
+                    @foreach (var item in Model)
+                    {
+                        <div class="ejercicio-card terapeuta-card @(!item.Activo ? "terapeuta-inactivo" : "")">
+
+                            <div class="ejercicio-card-header">
+                                <div class="ejercicio-badge @(item.Activo ? "badge-activo" : "badge-inactivo")">
+                                    @(item.Activo ? "Activo" : "Inactivo")
+                                </div>
+                                <h4>@item.Nombre @item.Apellidos</h4>
+                            </div>
+
+                            <div class="ejercicio-card-body">
+
+                                <div class="ejercicio-info-item">
+                                    <span class="label">Especialidad</span>
+                                    <p>@(item.NombreCategoria ?? "Sin asignar") - @(item.NombreTipoTerapia ?? "")</p>
+                                </div>
+
+                                <div class="ejercicio-meta">
+                                    <div class="meta-box">
+                                        <span class="label">Telefono</span>
+                                        <span class="value" title="@(item.Telefono ?? "-")">@(item.Telefono ?? "-")</span>
+                                    </div>
+                                    <div class="meta-box">
+                                        <span class="label">Email</span>
+                                        <span class="value" title="@(item.Email ?? "-")">@(item.Email ?? "-")</span>
+                                    </div>
+                                    <div class="meta-box">
+                                        <span class="label">Usuario</span>
+                                        <span class="value" title="@(item.Username ?? "-")">@(item.Username ?? "-")</span>
+                                    </div>
+                                </div>
+
+                                <div class="ejercicio-actions">
+
+                                    <a href="@Url.Action("Editar", "GestionTerapeuta", new { id = item.IdTerapeuta })"
+                                       class="btn-accion btn-editar">
+                                        <i class="lni lni-pencil"></i> Editar
+                                    </a>
+
+                                    @using (Html.BeginForm("CambiarEstado", "GestionTerapeuta", new { id = item.IdTerapeuta }, FormMethod.Post, new { @class = "form-eliminar" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn-accion @(item.Activo ? "btn-desactivar" : "btn-activar")"
+                                                onclick="return confirm('@(item.Activo ? "Desactivar" : "Activar") este terapeuta?');">
+                                            <i class="lni @(item.Activo ? "lni-ban" : "lni-checkmark-circle")"></i>
+                                            @(item.Activo ? "Desactivar" : "Activar")
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-state-ejercicios">
+                    <i class="lni lni-users"></i>
+                    <p>No hay terapeutas registrados@(idCategoriaFiltro.HasValue ? " para esta categoria" : "").</p>
+                    <a href="@Url.Action("Registro", "GestionTerapeuta")" class="btn-crear-ejercicio mt-3">
+                        <i class="lni lni-plus"></i> Registrar el primero
+                    </a>
+                </div>
+            }
+
+        </div>
+    </div>
+</section>
