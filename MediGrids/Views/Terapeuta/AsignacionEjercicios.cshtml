@@ -1,0 +1,328 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+    ViewBag.Title = "Asignación de Ejercicios";
+
+    var pacientes = ViewBag.Pacientes as List<MediGrids.Models.PacienteViewModel>;
+    var tiposTerapia = ViewBag.TiposTerapia as List<MediGrids.Models.TipoTerapiaViewModel>;
+    var categorias = ViewBag.Categorias as List<MediGrids.Models.CategoriaClinicaViewModel>;
+    var asignaciones = ViewBag.Asignaciones as List<MediGrids.Models.AsignacionEjercicioViewModel>;
+    var ejerciciosDisponibles = ViewBag.EjerciciosDisponibles as List<MediGrids.Models.EjercicioViewModel>;
+    var idsAsignados = ViewBag.IdsAsignados as List<int>;
+
+    int? idPaciente = ViewBag.IdPaciente;
+    int? idTerapia = ViewBag.IdTerapia;
+    int? idCategoria = ViewBag.IdCategoria;
+    string pacienteNombre = ViewBag.PacienteNombre;
+    string mensaje = ViewBag.Mensaje;
+    string tipoMensaje = ViewBag.TipoMensaje;
+}
+
+<link rel="stylesheet" href="~/Template/css/asignacion-ejercicios.css" />
+
+<section class="container">
+    <!-- Header -->
+    <div class="asignacion-header">
+        <h1><i class="lni lni-target"></i> Asignación de Ejercicios</h1>
+        <p>Seleccione un paciente y asigne ejercicios terapéuticos personalizados</p>
+    </div>
+
+    <!-- Mensajes de retroalimentación -->
+    @if (!string.IsNullOrEmpty(mensaje))
+    {
+        var alertClass = tipoMensaje == "success" ? "alert-success" : "alert-warning";
+        <div class="alert @alertClass alert-dismissible fade show" role="alert">
+            @mensaje
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- RF-08.1: Selección de Paciente -->
+    <div class="panel-card">
+        <div class="form-section">
+            <h3><i class="lni lni-user"></i> Selección de Paciente</h3>
+            <form method="get" action="@Url.Action("AsignacionEjercicios", "Terapeuta")">
+                <div class="row align-items-end">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="idPaciente">Paciente</label>
+                            <select name="idPaciente" class="form-control" id="selectPaciente">
+                                <option value="">-- Seleccione un paciente --</option>
+                                @if (pacientes != null)
+                                {
+                                    foreach (var p in pacientes)
+                                    {
+                                        <option value="@p.IdPaciente"
+                                                @(idPaciente.HasValue && idPaciente.Value == p.IdPaciente ? "selected=\"selected\"" : "")>
+                                            @p.Nombre @p.Apellidos
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="lni lni-search"></i> Seleccionar
+                        </button>
+                    </div>
+                    @if (idPaciente.HasValue && !string.IsNullOrEmpty(pacienteNombre))
+                    {
+                        <div class="col-md-3 mb-3">
+                            <div class="info-paciente-badge">
+                                <i class="lni lni-checkmark-circle"></i>
+                                <span>@pacienteNombre</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (idPaciente.HasValue)
+    {
+        <!-- RF-08.5: Consulta de Asignaciones Actuales -->
+        <div class="panel-card">
+            <div class="form-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="mb-0"><i class="lni lni-list"></i> Ejercicios Asignados</h3>
+                    <span class="badge-count">@(asignaciones != null ? asignaciones.Count : 0) ejercicio(s)</span>
+                </div>
+
+                @if (asignaciones != null && asignaciones.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Ejercicio</th>
+                                    <th>Terapia</th>
+                                    <th>Categoría</th>
+                                    <th>Dificultad</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var a in asignaciones)
+                                {
+                                    var estadoActual = a.Estado ?? "Pendiente";
+                                    var claseEstado = "pendiente";
+                                    if (estadoActual == "En Progreso") { claseEstado = "en-progreso"; }
+                                    else if (estadoActual == "Completado") { claseEstado = "completado"; }
+
+                                    <tr>
+                                        <td>
+                                            <strong>@a.NombreEjercicio</strong>
+                                            @if (!string.IsNullOrEmpty(a.DescripcionEjercicio))
+                                            {
+                                                <br /><small class="text-muted">@a.DescripcionEjercicio</small>
+                                            }
+                                        </td>
+                                        <td>@a.NombreTerapia</td>
+                                        <td>@a.NombreCategoria</td>
+                                        <td>@(a.DificultadEjercicio ?? "-")</td>
+                                        <td>@(a.FechaAsignacion.HasValue ? a.FechaAsignacion.Value.ToString("dd/MM/yyyy") : "-")</td>
+                                        <td>
+                                            <span class="estado-badge @claseEstado">@estadoActual</span>
+                                        </td>
+                                        <td>
+                                            <div class="acciones-cell">
+                                                <!-- RF-08.6: Cambiar estado -->
+                                                <form method="post" action="@Url.Action("ActualizarEstado", "Terapeuta")" style="display:inline;">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="idPaciente" value="@a.IdPaciente" />
+                                                    <input type="hidden" name="idEjercicio" value="@a.IdEjercicio" />
+                                                    @if (idTerapia.HasValue)
+                                                    {
+                                                        <input type="hidden" name="idTerapia" value="@idTerapia" />
+                                                    }
+                                                    @if (idCategoria.HasValue)
+                                                    {
+                                                        <input type="hidden" name="idCategoria" value="@idCategoria" />
+                                                    }
+                                                    <select name="estado" class="form-control form-control-sm estado-select" onchange="this.form.submit()">
+                                                        <option value="Pendiente" @(estadoActual == "Pendiente" ? "selected" : "")>Pendiente</option>
+                                                        <option value="En Progreso" @(estadoActual == "En Progreso" ? "selected" : "")>En Progreso</option>
+                                                        <option value="Completado" @(estadoActual == "Completado" ? "selected" : "")>Completado</option>
+                                                    </select>
+                                                </form>
+                                                <!-- RF-08.6: Eliminar asignación -->
+                                                <form method="post" action="@Url.Action("EliminarAsignacion", "Terapeuta")"
+                                                      style="display:inline;"
+                                                      onsubmit="return confirm('¿Está seguro de eliminar esta asignación?')">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="idPaciente" value="@a.IdPaciente" />
+                                                    <input type="hidden" name="idEjercicio" value="@a.IdEjercicio" />
+                                                    @if (idTerapia.HasValue)
+                                                    {
+                                                        <input type="hidden" name="idTerapia" value="@idTerapia" />
+                                                    }
+                                                    @if (idCategoria.HasValue)
+                                                    {
+                                                        <input type="hidden" name="idCategoria" value="@idCategoria" />
+                                                    }
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="lni lni-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">No hay ejercicios asignados a este paciente.</div>
+                }
+            </div>
+        </div>
+
+        <!-- RF-08.2: Filtros para Buscar Ejercicios -->
+        <div class="panel-card">
+            <div class="form-section">
+                <h3><i class="lni lni-circle-plus"></i> Asignar Nuevo Ejercicio</h3>
+
+                <form method="get" action="@Url.Action("AsignacionEjercicios", "Terapeuta")">
+                    <input type="hidden" name="idPaciente" value="@idPaciente" />
+                    <div class="row align-items-end">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="idTerapia">Tipo de Terapia</label>
+                                <select name="idTerapia" class="form-control" id="idTerapia">
+                                    <option value="">-- Todas --</option>
+                                    @if (tiposTerapia != null)
+                                    {
+                                        foreach (var t in tiposTerapia)
+                                        {
+                                            <option value="@t.IdTerapia"
+                                                    @(idTerapia.HasValue && idTerapia.Value == t.IdTerapia ? "selected=\"selected\"" : "")>
+                                                @t.Nombre
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="idCategoria">Categoría Clínica</label>
+                                <select name="idCategoria" class="form-control" id="idCategoria">
+                                    <option value="">-- Todas --</option>
+                                    @if (categorias != null)
+                                    {
+                                        foreach (var c in categorias)
+                                        {
+                                            <option value="@c.IdCategoria"
+                                                    data-terapia="@c.IdTerapia"
+                                                    @(idCategoria.HasValue && idCategoria.Value == c.IdCategoria ? "selected=\"selected\"" : "")>
+                                                @c.Nombre
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <button type="submit" class="btn btn-secondary">
+                                <i class="lni lni-search"></i> Buscar Ejercicios
+                            </button>
+                            <a href="@Url.Action("AsignacionEjercicios", "Terapeuta", new { idPaciente })" class="btn btn-outline-secondary">
+                                Limpiar
+                            </a>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- RF-08.2 / RF-08.3: Lista de Ejercicios Disponibles -->
+                @if (ejerciciosDisponibles != null)
+                {
+                    if (ejerciciosDisponibles.Count > 0)
+                    {
+                        <hr />
+                        <form method="post" action="@Url.Action("AsignarEjercicios", "Terapeuta")" onsubmit="return validarSeleccion(this)">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="idPaciente" value="@idPaciente" />
+                            @if (idTerapia.HasValue)
+                            {
+                                <input type="hidden" name="idTerapia" value="@idTerapia" />
+                            }
+                            @if (idCategoria.HasValue)
+                            {
+                                <input type="hidden" name="idCategoria" value="@idCategoria" />
+                            }
+
+                            <div class="row">
+                                @foreach (var e in ejerciciosDisponibles)
+                                {
+                                    var yaAsignado = idsAsignados != null && idsAsignados.Contains(e.IdEjercicio);
+                                    <div class="col-md-6 mb-3">
+                                        <div class="ejercicio-card">
+                                            <div class="d-flex align-items-start">
+                                                @if (!yaAsignado)
+                                                {
+                                                    <input type="checkbox" name="idsEjercicios" value="@e.IdEjercicio" class="checkbox-ejercicio" />
+                                                }
+                                                <div class="flex-grow-1">
+                                                    <h5>@e.Nombre</h5>
+                                                    @if (yaAsignado)
+                                                    {
+                                                        <span class="ya-asignado">Ya asignado</span>
+                                                    }
+                                                    @if (!string.IsNullOrEmpty(e.Descripcion))
+                                                    {
+                                                        <p class="mb-1 mt-1"><small>@e.Descripcion</small></p>
+                                                    }
+                                                    <div class="ejercicio-meta">
+                                                        @if (!string.IsNullOrEmpty(e.NombreCategoria))
+                                                        {
+                                                            <span><i class="lni lni-tag"></i> @e.NombreCategoria</span>
+                                                        }
+                                                        @if (!string.IsNullOrEmpty(e.Dificultad))
+                                                        {
+                                                            <span><i class="lni lni-star"></i> @e.Dificultad</span>
+                                                        }
+                                                        @if (!string.IsNullOrEmpty(e.Objetivo))
+                                                        {
+                                                            <span><i class="lni lni-target"></i> @e.Objetivo</span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            @if (ejerciciosDisponibles.Any(e => idsAsignados == null || !idsAsignados.Contains(e.IdEjercicio)))
+                            {
+                                <div class="d-flex justify-content-end mt-3">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="lni lni-checkmark-circle"></i> Asignar Seleccionados
+                                    </button>
+                                </div>
+                            }
+                        </form>
+                    }
+                    else
+                    {
+                        <hr />
+                        <div class="alert alert-info">No se encontraron ejercicios con los filtros seleccionados.</div>
+                    }
+                }
+                else if (idPaciente.HasValue && !idTerapia.HasValue && !idCategoria.HasValue)
+                {
+                    <hr />
+                    <p class="text-muted">Seleccione filtros y busque ejercicios para asignar.</p>
+                }
+            </div>
+        </div>
+    }
+</section>
+
+<!-- Script mínimo para filtrado de categorías y validación -->
+<script src="~/Template/js/asignacion-ejercicios.js"></script>
