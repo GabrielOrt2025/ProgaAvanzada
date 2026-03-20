@@ -1,0 +1,123 @@
+@{
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+    ViewBag.Title = "Gestionar Ejercicios";
+    var obtenerEjercicios = ViewBag.obtenerEjercicios as List<MediGrids.Models.TerapeutaEjercicioViewModel>;
+}
+
+<link rel="stylesheet" href="~/Template/css/ejercicios.css" />
+
+<section class="container">
+    <div class="agendar-citas-header">
+        <h1><i class="lni lni-grid-alt"></i> Gestionar Ejercicios</h1>
+        <p>Administre los ejercicios registrados en el sistema de manera rapida y organizada</p>
+    </div>
+
+    <div class="step-wizard">
+        <div class="form-section ejercicios-section">
+
+            <div class="ejercicios-header-actions">
+                <div>
+                    <h3><i class="lni lni-list"></i> Ejercicios Disponibles</h3>
+                    <p class="ejercicios-subtitle">
+                        Consulte la informacion de cada ejercicio, edite sus datos o eliminelo del sistema.
+                    </p>
+                </div>
+
+                <a href="@Url.Action("CrearEjercicio", "Terapeuta")" class="btn-crear-ejercicio">
+                    <i class="lni lni-plus"></i> Crear Ejercicio
+                </a>
+            </div>
+
+            @if (obtenerEjercicios != null && obtenerEjercicios.Any())
+            {
+                <div class="ejercicios-grid">
+                    @foreach (var item in obtenerEjercicios)
+                    {
+                        <div class="ejercicio-card">
+
+                            <div class="ejercicio-card-header">
+                                <div class="ejercicio-badge">
+                                    Ejercicio #@item.id_ejercicio
+                                </div>
+                                <h4>@item.nombre</h4>
+                            </div>
+
+                            <div class="ejercicio-card-body">
+
+                                <div class="ejercicio-info-item">
+                                    <span class="label">Descripcion</span>
+                                    <p>@item.descripcion</p>
+                                </div>
+
+                                <div class="ejercicio-info-item">
+                                    <span class="label">Objetivo</span>
+                                    <p>@item.objetivo</p>
+                                </div>
+
+                                <div class="ejercicio-meta">
+                                    <div class="meta-box">
+                                        <span class="label">Dificultad</span>
+                                        <span class="value">@item.dificultad</span>
+                                    </div>
+
+                                    <div class="meta-box">
+                                        <span class="label">Terapia</span>
+                                        <span class="value">@item.id_terapia</span>
+                                    </div>
+
+                                    <div class="meta-box">
+                                        <span class="label">Categoria</span>
+                                        <span class="value">@item.id_categoria</span>
+                                    </div>
+                                </div>
+
+                                <div class="ejercicio-footer">
+                                    <span class="creado-por">
+                                        <i class="lni lni-user"></i> Creado por: @item.creado_por
+                                    </span>
+                                </div>
+
+                                
+                                <div class="ejercicio-actions">
+
+                                    <a href="@Url.Action("EditarForm", "Terapeuta", new { id = item.id_ejercicio })"
+                                       class="btn-accion btn-editar">
+                                        <i class="lni lni-pencil"></i> Editar
+                                    </a>
+
+                                    @using (Html.BeginForm("EliminarEjercicio", "Terapeuta", new { id = item.id_ejercicio }, FormMethod.Post, new { @class = "form-eliminar" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn-accion btn-eliminar"
+                                                onclick="return confirm('Esta seguro de que desea eliminar este ejercicio?');">
+                                            <i class="lni lni-trash-can"></i> Eliminar
+                                        </button>
+                                    }
+
+                                    @if (!string.IsNullOrEmpty(item.video_url))
+                                    {
+                                        <a href="@item.video_url" target="_blank" class="btn-accion btn-video">
+                                            <i class="lni lni-play"></i> Video
+                                        </a>
+                                    }
+
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-state-ejercicios">
+                    <i class="lni lni-inbox"></i>
+                    <p>No hay ejercicios registrados en este momento.</p>
+                </div>
+            }
+
+        </div>
+    </div>
+</section>

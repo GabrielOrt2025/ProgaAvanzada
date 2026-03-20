@@ -1,0 +1,292 @@
+﻿/* ===================================
+   Gestionar Ejercicios - Estilos
+   =================================== */
+
+/* Header */
+.agendar-citas-header {
+    background: linear-gradient(135deg, #0c7a3e 0%, #0a5e2f 100%);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    color: white;
+}
+
+    .agendar-citas-header h1 {
+        color: white;
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .agendar-citas-header p {
+        color: rgba(255,255,255,0.9);
+        font-size: 1.1rem;
+    }
+
+/* Contenedor */
+.step-wizard {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+/* Sección */
+.form-section {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
+}
+
+/* ===================================
+   Header de ejercicios
+   =================================== */
+
+.ejercicios-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.ejercicios-subtitle {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* Botón crear */
+.btn-crear-ejercicio {
+    background: #0c7a3e;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .btn-crear-ejercicio:hover {
+        background: #0a5e2f;
+        color: white;
+    }
+
+/* ===================================
+   Grid
+   =================================== */
+
+.ejercicios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+/* ===================================
+   Cards
+   =================================== */
+
+.ejercicio-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 1px solid #e8e8e8;
+}
+
+    .ejercicio-card:hover {
+        transform: translateY(-5px);
+    }
+
+/* Header card */
+.ejercicio-card-header {
+    background: linear-gradient(135deg, #0c7a3e 0%, #0a5e2f 100%);
+    padding: 20px;
+    color: white;
+}
+
+    .ejercicio-card-header h4 {
+        margin-top: 10px;
+        margin-bottom: 0;
+        font-size: 1.2rem;
+        color: white;
+    }
+
+/* Badge */
+.ejercicio-badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: white;
+}
+
+/* Body */
+.ejercicio-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: #333;
+}
+
+/* Info */
+.ejercicio-info-item .label {
+    font-size: 0.8rem;
+    color: #0c7a3e;
+    font-weight: bold;
+}
+
+.ejercicio-info-item p {
+    color: #444;
+    margin: 0;
+}
+
+/* Meta */
+.ejercicio-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.meta-box {
+    background: #f1f3f5;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+}
+
+    .meta-box .label {
+        font-size: 0.75rem;
+        color: #0c7a3e;
+        font-weight: bold;
+    }
+
+    .meta-box .value {
+        color: #333;
+        font-weight: 600;
+    }
+
+/* Footer */
+.ejercicio-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.creado-por {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* ===================================
+   BOTONES (FIX IMPORTANTE)
+   =================================== */
+
+.ejercicio-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+    align-items: stretch;
+}
+
+    /* Form dentro del flex */
+    .ejercicio-actions .form-eliminar {
+        flex: 1;
+        margin: 0;
+    }
+
+/* Botones base */
+.btn-accion {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+/* Editar */
+.btn-editar {
+    background: #d4edda;
+    color: #155724;
+}
+
+    .btn-editar:hover {
+        background: #155724;
+        color: white;
+    }
+
+/* Eliminar */
+.btn-eliminar {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+    .btn-eliminar:hover {
+        background: #721c24;
+        color: white;
+    }
+
+/* Video */
+.btn-video {
+    background: #dbeafe;
+    color: #0b5ed7;
+}
+
+    .btn-video:hover {
+        background: #0b5ed7;
+        color: white;
+    }
+
+/* ===================================
+   Empty state
+   =================================== */
+
+.empty-state-ejercicios {
+    text-align: center;
+    padding: 40px;
+    border: 2px dashed #ddd;
+    border-radius: 10px;
+}
+
+    .empty-state-ejercicios i {
+        font-size: 2rem;
+        color: #0c7a3e;
+    }
+
+/* ===================================
+   Responsive
+   =================================== */
+
+@media (max-width: 768px) {
+    .ejercicio-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .ejercicios-header-actions {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+
+    .ejercicio-actions {
+        flex-direction: column;
+    }
+
+        .ejercicio-actions .form-eliminar {
+            width: 100%;
+        }
+}
