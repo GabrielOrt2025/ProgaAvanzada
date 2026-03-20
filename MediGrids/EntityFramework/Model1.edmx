@@ -40,6 +40,16 @@
           <Property Name="email" Type="varchar" MaxLength="150" />
           <Property Name="activo" Type="bit" />
         </EntityType>
+        <EntityType Name="PacienteEjercicio">
+          <Key>
+            <PropertyRef Name="id_paciente" />
+            <PropertyRef Name="id_ejercicio" />
+          </Key>
+          <Property Name="id_paciente" Type="int" Nullable="false" />
+          <Property Name="id_ejercicio" Type="int" Nullable="false" />
+          <Property Name="fecha_asignacion" Type="datetime" />
+          <Property Name="estado" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Rol">
           <Key>
             <PropertyRef Name="id_rol" />
@@ -73,7 +83,7 @@
             <PropertyRef Name="id_usuario" />
           </Key>
           <Property Name="id_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="correo" Type="varchar" MaxLength="100" />
           <Property Name="password_hash" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="id_rol" Type="int" Nullable="false" />
           <Property Name="activo" Type="bit" />
@@ -95,16 +105,6 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <Property Name="end_ip_address" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="create_date" Type="datetime" Nullable="false" />
           <Property Name="modify_date" Type="datetime" Nullable="false" />
-        </EntityType>
-        <EntityType Name="PacienteEjercicio">
-          <Key>
-            <PropertyRef Name="id_paciente" />
-            <PropertyRef Name="id_ejercicio" />
-          </Key>
-          <Property Name="id_paciente" Type="int" Nullable="false" />
-          <Property Name="id_ejercicio" Type="int" Nullable="false" />
-          <Property Name="fecha_asignacion" Type="datetime" />
-          <Property Name="estado" Type="varchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_CategoriaClinica_TipoTerapia">
           <End Role="TipoTerapia" Type="Self.TipoTerapia" Multiplicity="1" />
@@ -166,6 +166,30 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PacienteEjercicio_Ejercicio">
+          <End Role="Ejercicio" Type="Self.Ejercicio" Multiplicity="1" />
+          <End Role="PacienteEjercicio" Type="Self.PacienteEjercicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ejercicio">
+              <PropertyRef Name="id_ejercicio" />
+            </Principal>
+            <Dependent Role="PacienteEjercicio">
+              <PropertyRef Name="id_ejercicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PacienteEjercicio_Paciente">
+          <End Role="Paciente" Type="Self.Paciente" Multiplicity="1" />
+          <End Role="PacienteEjercicio" Type="Self.PacienteEjercicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Paciente">
+              <PropertyRef Name="id_paciente" />
+            </Principal>
+            <Dependent Role="PacienteEjercicio">
+              <PropertyRef Name="id_paciente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Terapeuta_Categoria">
           <End Role="CategoriaClinica" Type="Self.CategoriaClinica" Multiplicity="0..1" />
           <End Role="Terapeuta" Type="Self.Terapeuta" Multiplicity="*" />
@@ -202,39 +226,15 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PacienteEjercicio_Paciente">
-          <End Role="Paciente" Type="Self.Paciente" Multiplicity="1" />
-          <End Role="PacienteEjercicio" Type="Self.PacienteEjercicio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Paciente">
-              <PropertyRef Name="id_paciente" />
-            </Principal>
-            <Dependent Role="PacienteEjercicio">
-              <PropertyRef Name="id_paciente" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PacienteEjercicio_Ejercicio">
-          <End Role="Ejercicio" Type="Self.Ejercicio" Multiplicity="1" />
-          <End Role="PacienteEjercicio" Type="Self.PacienteEjercicio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Ejercicio">
-              <PropertyRef Name="id_ejercicio" />
-            </Principal>
-            <Dependent Role="PacienteEjercicio">
-              <PropertyRef Name="id_ejercicio" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="CategoriaClinica" EntityType="Self.CategoriaClinica" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ejercicio" EntityType="Self.Ejercicio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Paciente" EntityType="Self.Paciente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PacienteEjercicio" EntityType="Self.PacienteEjercicio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Terapeuta" EntityType="Self.Terapeuta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoTerapia" EntityType="Self.TipoTerapia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PacienteEjercicio" EntityType="Self.PacienteEjercicio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" store:Type="Views" store:Schema="sys">
             <DefiningQuery>SELECT 
     [database_firewall_rules].[id] AS [id], 
@@ -265,6 +265,14 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Paciente" EntitySet="Paciente" />
           </AssociationSet>
+          <AssociationSet Name="FK_PacienteEjercicio_Ejercicio" Association="Self.FK_PacienteEjercicio_Ejercicio">
+            <End Role="Ejercicio" EntitySet="Ejercicio" />
+            <End Role="PacienteEjercicio" EntitySet="PacienteEjercicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PacienteEjercicio_Paciente" Association="Self.FK_PacienteEjercicio_Paciente">
+            <End Role="Paciente" EntitySet="Paciente" />
+            <End Role="PacienteEjercicio" EntitySet="PacienteEjercicio" />
+          </AssociationSet>
           <AssociationSet Name="FK_Terapeuta_Categoria" Association="Self.FK_Terapeuta_Categoria">
             <End Role="CategoriaClinica" EntitySet="CategoriaClinica" />
             <End Role="Terapeuta" EntitySet="Terapeuta" />
@@ -276,14 +284,6 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <AssociationSet Name="FK_Usuario_Rol" Association="Self.FK_Usuario_Rol">
             <End Role="Rol" EntitySet="Rol" />
             <End Role="Usuario" EntitySet="Usuario" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PacienteEjercicio_Paciente" Association="Self.FK_PacienteEjercicio_Paciente">
-            <End Role="Paciente" EntitySet="Paciente" />
-            <End Role="PacienteEjercicio" EntitySet="PacienteEjercicio" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PacienteEjercicio_Ejercicio" Association="Self.FK_PacienteEjercicio_Ejercicio">
-            <End Role="Ejercicio" EntitySet="Ejercicio" />
-            <End Role="PacienteEjercicio" EntitySet="PacienteEjercicio" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -319,6 +319,7 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <NavigationProperty Name="CategoriaClinica" Relationship="Self.FK_Ejercicio_CategoriaClinica" FromRole="Ejercicio" ToRole="CategoriaClinica" />
           <NavigationProperty Name="Terapeuta" Relationship="Self.FK_Ejercicio_Terapeuta" FromRole="Ejercicio" ToRole="Terapeuta" />
           <NavigationProperty Name="TipoTerapia" Relationship="Self.FK_Ejercicio_TipoTerapia" FromRole="Ejercicio" ToRole="TipoTerapia" />
+          <NavigationProperty Name="PacienteEjercicio" Relationship="Self.FK_PacienteEjercicio_Ejercicio" FromRole="Ejercicio" ToRole="PacienteEjercicio" />
         </EntityType>
         <EntityType Name="Paciente">
           <Key>
@@ -332,6 +333,19 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <Property Name="email" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="activo" Type="Boolean" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Paciente_Usuario" FromRole="Paciente" ToRole="Usuario" />
+          <NavigationProperty Name="PacienteEjercicio" Relationship="Self.FK_PacienteEjercicio_Paciente" FromRole="Paciente" ToRole="PacienteEjercicio" />
+        </EntityType>
+        <EntityType Name="PacienteEjercicio">
+          <Key>
+            <PropertyRef Name="id_paciente" />
+            <PropertyRef Name="id_ejercicio" />
+          </Key>
+          <Property Name="id_paciente" Type="Int32" Nullable="false" />
+          <Property Name="id_ejercicio" Type="Int32" Nullable="false" />
+          <Property Name="fecha_asignacion" Type="DateTime" Precision="3" />
+          <Property Name="estado" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Ejercicio" Relationship="Self.FK_PacienteEjercicio_Ejercicio" FromRole="PacienteEjercicio" ToRole="Ejercicio" />
+          <NavigationProperty Name="Paciente" Relationship="Self.FK_PacienteEjercicio_Paciente" FromRole="PacienteEjercicio" ToRole="Paciente" />
         </EntityType>
         <EntityType Name="Rol">
           <Key>
@@ -372,7 +386,7 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             <PropertyRef Name="id_usuario" />
           </Key>
           <Property Name="id_usuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="password_hash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="id_rol" Type="Int32" Nullable="false" />
           <Property Name="activo" Type="Boolean" />
@@ -395,18 +409,6 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <Property Name="end_ip_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="create_date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="modify_date" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="PacienteEjercicio">
-          <Key>
-            <PropertyRef Name="id_paciente" />
-            <PropertyRef Name="id_ejercicio" />
-          </Key>
-          <Property Name="id_paciente" Type="Int32" Nullable="false" />
-          <Property Name="id_ejercicio" Type="Int32" Nullable="false" />
-          <Property Name="fecha_asignacion" Type="DateTime" Precision="3" />
-          <Property Name="estado" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Paciente" Relationship="Self.FK_PacienteEjercicio_Paciente" FromRole="PacienteEjercicio" ToRole="Paciente" />
-          <NavigationProperty Name="Ejercicio" Relationship="Self.FK_PacienteEjercicio_Ejercicio" FromRole="PacienteEjercicio" ToRole="Ejercicio" />
         </EntityType>
         <Association Name="FK_CategoriaClinica_TipoTerapia">
           <End Role="TipoTerapia" Type="Self.TipoTerapia" Multiplicity="1" />
@@ -468,6 +470,18 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PacienteEjercicio_Ejercicio">
+          <End Role="Ejercicio" Type="Self.Ejercicio" Multiplicity="1" />
+          <End Role="PacienteEjercicio" Type="Self.PacienteEjercicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ejercicio">
+              <PropertyRef Name="id_ejercicio" />
+            </Principal>
+            <Dependent Role="PacienteEjercicio">
+              <PropertyRef Name="id_ejercicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Paciente_Usuario">
           <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
           <End Role="Paciente" Type="Self.Paciente" Multiplicity="*" />
@@ -477,6 +491,18 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             </Principal>
             <Dependent Role="Paciente">
               <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PacienteEjercicio_Paciente">
+          <End Role="Paciente" Type="Self.Paciente" Multiplicity="1" />
+          <End Role="PacienteEjercicio" Type="Self.PacienteEjercicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Paciente">
+              <PropertyRef Name="id_paciente" />
+            </Principal>
+            <Dependent Role="PacienteEjercicio">
+              <PropertyRef Name="id_paciente" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -504,40 +530,16 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PacienteEjercicio_Paciente">
-          <End Role="Paciente" Type="Self.Paciente" Multiplicity="1" />
-          <End Role="PacienteEjercicio" Type="Self.PacienteEjercicio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Paciente">
-              <PropertyRef Name="id_paciente" />
-            </Principal>
-            <Dependent Role="PacienteEjercicio">
-              <PropertyRef Name="id_paciente" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PacienteEjercicio_Ejercicio">
-          <End Role="Ejercicio" Type="Self.Ejercicio" Multiplicity="1" />
-          <End Role="PacienteEjercicio" Type="Self.PacienteEjercicio" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Ejercicio">
-              <PropertyRef Name="id_ejercicio" />
-            </Principal>
-            <Dependent Role="PacienteEjercicio">
-              <PropertyRef Name="id_ejercicio" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="CategoriaClinica" EntityType="Self.CategoriaClinica" />
           <EntitySet Name="Ejercicio" EntityType="Self.Ejercicio" />
           <EntitySet Name="Paciente" EntityType="Self.Paciente" />
+          <EntitySet Name="PacienteEjercicio" EntityType="Self.PacienteEjercicio" />
           <EntitySet Name="Rol" EntityType="Self.Rol" />
           <EntitySet Name="Terapeuta" EntityType="Self.Terapeuta" />
           <EntitySet Name="TipoTerapia" EntityType="Self.TipoTerapia" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" />
           <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" />
-          <EntitySet Name="PacienteEjercicio" EntityType="Self.PacienteEjercicio" />
           <AssociationSet Name="FK_CategoriaClinica_TipoTerapia" Association="Self.FK_CategoriaClinica_TipoTerapia">
             <End Role="TipoTerapia" EntitySet="TipoTerapia" />
             <End Role="CategoriaClinica" EntitySet="CategoriaClinica" />
@@ -558,9 +560,17 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             <End Role="TipoTerapia" EntitySet="TipoTerapia" />
             <End Role="Ejercicio" EntitySet="Ejercicio" />
           </AssociationSet>
+          <AssociationSet Name="FK_PacienteEjercicio_Ejercicio" Association="Self.FK_PacienteEjercicio_Ejercicio">
+            <End Role="Ejercicio" EntitySet="Ejercicio" />
+            <End Role="PacienteEjercicio" EntitySet="PacienteEjercicio" />
+          </AssociationSet>
           <AssociationSet Name="FK_Paciente_Usuario" Association="Self.FK_Paciente_Usuario">
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Paciente" EntitySet="Paciente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PacienteEjercicio_Paciente" Association="Self.FK_PacienteEjercicio_Paciente">
+            <End Role="Paciente" EntitySet="Paciente" />
+            <End Role="PacienteEjercicio" EntitySet="PacienteEjercicio" />
           </AssociationSet>
           <AssociationSet Name="FK_Usuario_Rol" Association="Self.FK_Usuario_Rol">
             <End Role="Rol" EntitySet="Rol" />
@@ -569,14 +579,6 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <AssociationSet Name="FK_Terapeuta_Usuario" Association="Self.FK_Terapeuta_Usuario">
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Terapeuta" EntitySet="Terapeuta" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PacienteEjercicio_Paciente" Association="Self.FK_PacienteEjercicio_Paciente">
-            <End Role="Paciente" EntitySet="Paciente" />
-            <End Role="PacienteEjercicio" EntitySet="PacienteEjercicio" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PacienteEjercicio_Ejercicio" Association="Self.FK_PacienteEjercicio_Ejercicio">
-            <End Role="Ejercicio" EntitySet="Ejercicio" />
-            <End Role="PacienteEjercicio" EntitySet="PacienteEjercicio" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -623,6 +625,16 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PacienteEjercicio">
+            <EntityTypeMapping TypeName="Model.PacienteEjercicio">
+              <MappingFragment StoreEntitySet="PacienteEjercicio">
+                <ScalarProperty Name="id_paciente" ColumnName="id_paciente" />
+                <ScalarProperty Name="id_ejercicio" ColumnName="id_ejercicio" />
+                <ScalarProperty Name="fecha_asignacion" ColumnName="fecha_asignacion" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Rol">
             <EntityTypeMapping TypeName="Model.Rol">
               <MappingFragment StoreEntitySet="Rol">
@@ -658,7 +670,7 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             <EntityTypeMapping TypeName="Model.Usuario">
               <MappingFragment StoreEntitySet="Usuario">
                 <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
-                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
                 <ScalarProperty Name="password_hash" ColumnName="password_hash" />
                 <ScalarProperty Name="id_rol" ColumnName="id_rol" />
                 <ScalarProperty Name="activo" ColumnName="activo" />
@@ -674,16 +686,6 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
                 <ScalarProperty Name="end_ip_address" ColumnName="end_ip_address" />
                 <ScalarProperty Name="create_date" ColumnName="create_date" />
                 <ScalarProperty Name="modify_date" ColumnName="modify_date" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PacienteEjercicio">
-            <EntityTypeMapping TypeName="Model.PacienteEjercicio">
-              <MappingFragment StoreEntitySet="PacienteEjercicio">
-                <ScalarProperty Name="id_paciente" ColumnName="id_paciente" />
-                <ScalarProperty Name="id_ejercicio" ColumnName="id_ejercicio" />
-                <ScalarProperty Name="fecha_asignacion" ColumnName="fecha_asignacion" />
-                <ScalarProperty Name="estado" ColumnName="estado" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

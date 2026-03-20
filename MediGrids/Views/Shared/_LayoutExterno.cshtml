@@ -73,16 +73,7 @@
                                         </ul>
                                     </li>
 
-                                    <li class="nav-item">
-                                        <a class="page-scroll dd-menu collapsed" href="javascript:void(0)"
-                                           data-bs-toggle="collapse" data-bs-target="#submenu-1-2"
-                                           aria-controls="navbarSupportedContent" aria-expanded="false"
-                                           aria-label="Toggle navigation">Páginas</a>
-                                        <ul class="sub-menu collapse" id="submenu-1-2">
-                                            <li class="nav-item"><a href="@Url.Action("Login", "Home")">Iniciar sesión</a></li>
-                                            <li class="nav-item"><a href="@Url.Action("Register", "Home")">Registro</a></li>
-                                        </ul>
-                                    </li>
+                               
 
                                     <li class="nav-item">
                                         <a href="javascript:void(0)" aria-label="Toggle navigation">Servicios</a>
@@ -103,7 +94,9 @@
                             </div> <!-- navbar collapse -->
 
                             <div class="button add-list-button">
-                                <a href="javascript:void(0)" class="btn">Agendar cita</a>
+                                <a href="@Url.Action("Login", "Home")" class="btn">Iniciar Sesión</a>
+                                <a href="@Url.Action("Register", "Home")"class="btn">Registrarse</a>
+
                             </div>
                         </nav>
                         <!-- End Navbar -->

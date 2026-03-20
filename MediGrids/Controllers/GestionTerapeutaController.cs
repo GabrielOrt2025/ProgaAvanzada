@@ -38,7 +38,7 @@ namespace MediGrids.Controllers
                     NombreCategoria = t.CategoriaClinica != null ? t.CategoriaClinica.nombre : null,
                     NombreTipoTerapia = t.CategoriaClinica != null && t.CategoriaClinica.TipoTerapia != null
                         ? t.CategoriaClinica.TipoTerapia.nombre : null,
-                    Username = t.Usuario != null ? t.Usuario.username : null
+                    Username = t.Usuario != null ? t.Usuario.correo : null
                 })
                 .OrderBy(t => t.Apellidos)
                 .ThenBy(t => t.Nombre)
@@ -69,7 +69,7 @@ namespace MediGrids.Controllers
                 return View("Registro", model);
             }
 
-            if (db.Usuario.Any(u => u.username == model.UsernameRegistro))
+            if (db.Usuario.Any(u => u.correo == model.UsernameRegistro))
             {
                 ModelState.AddModelError("UsernameRegistro", "El usuario ya existe");
                 ViewBag.Categorias = db.CategoriaClinica.OrderBy(c => c.nombre).ToList();
@@ -80,7 +80,7 @@ namespace MediGrids.Controllers
             {
                 var usuario = new Usuario
                 {
-                    username = model.UsernameRegistro,
+                    correo = model.UsernameRegistro,
                     password_hash = model.Password,
                     id_rol = 2,
                     activo = true
@@ -136,7 +136,7 @@ namespace MediGrids.Controllers
                 IdCategoria = terapeuta.id_categoria,
                 NombreCategoria = terapeuta.CategoriaClinica?.nombre,
                 NombreTipoTerapia = terapeuta.CategoriaClinica?.TipoTerapia?.nombre,
-                Username = terapeuta.Usuario?.username
+                Username = terapeuta.Usuario?.correo
             };
 
             ViewBag.Categorias = db.CategoriaClinica.OrderBy(c => c.nombre).ToList();
