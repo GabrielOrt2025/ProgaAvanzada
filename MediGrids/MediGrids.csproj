@@ -122,7 +122,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\GestionTerapeutaController.cs" />
     <Compile Include="Controllers\PacienteController.cs" />
-    <Compile Include="Controllers\TerapeutaController.cs" />
     <Compile Include="EntityFramework\CategoriaClinica.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
