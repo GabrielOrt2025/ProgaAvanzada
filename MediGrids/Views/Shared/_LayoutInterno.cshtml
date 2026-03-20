@@ -9,12 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" type="image/x-icon" href="~/Template/images/favicon.svg" />
 
-    <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet">
-    <link
-    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
-    rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="~/Template/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/Template/css/LineIcons.2.0.css" />
@@ -24,10 +20,10 @@
     <link rel="stylesheet" href="~/Template/css/main.css" />
 
     <style>
-            .internal-page-wrapper {
-                padding-top: 140px;
-                padding-bottom: 40px;
-            }
+        .internal-page-wrapper {
+            padding-top: 140px;
+            padding-bottom: 40px;
+        }
     </style>
 </head>
 
@@ -79,103 +75,97 @@
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="@Url.Action("AsignacionEjercicios", "Terapeuta")">Asignación
-                                            Ejercicios</a>
-                                        </li>
+                                        <a href="@Url.Action("AgendarCitas", "Paciente")">Agendar Cita</a>
+                                    </li>
+                                </ul>
+                            </div>
 
-                                        <li class="nav-item">
-                                            <a href="@Url.Action("AgendarCitas", "Paciente")">Agendar Cita</a>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <div class="button add-list-button">
-                                    <a href="@Url.Action("Index", "Home")" class="btn">Cerrar sesión</a>
-                                </div>
-                            </nav>
-                        </div>
+                            <div class="button add-list-button">
+                                <a href="@Url.Action("Index", "Home")" class="btn">Cerrar sesión</a>
+                            </div>
+                        </nav>
                     </div>
                 </div>
             </div>
-        </header>
-
-        <div class="internal-page-wrapper">
-            @RenderBody()
         </div>
+    </header>
 
-        <footer class="footer overlay">
-            <div class="footer-middle">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <div class="single-footer f-about">
-                                <div class="logo">
-                                    <a href="@Url.Action("BibliotecaEjercicios", "Home")">
-                                        <img src="~/Template/images/logo/white-logo.svg" alt="#">
-                                    </a>
-                                </div>
-                                <p>MediGrids - Panel interno del sistema.</p>
-                                <ul class="social">
-                                    <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="lni lni-instagram"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="lni lni-linkedin-original"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="lni lni-youtube"></i></a></li>
-                                </ul>
+    <div class="internal-page-wrapper">
+        @RenderBody()
+    </div>
+
+    <footer class="footer overlay">
+        <div class="footer-middle">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer f-about">
+                            <div class="logo">
+                                <a href="@Url.Action("BibliotecaEjercicios","Home")">
+                                    <img src="~/Template/images/logo/white-logo.svg" alt="#">
+                                </a>
                             </div>
+                            <p>MediGrids - Panel interno del sistema.</p>
+                            <ul class="social">
+                                <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="lni lni-instagram"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="lni lni-linkedin-original"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="lni lni-youtube"></i></a></li>
+                            </ul>
                         </div>
+                    </div>
 
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <div class="single-footer f-link">
-                                <h3>Módulos internos</h3>
-                                <ul>
-                                    <li><a href="@Url.Action("BibliotecaEjercicios", "Home")">Biblioteca</a></li>
-                                    <li><a href="javascript:void(0)">Terapeutas</a></li>
-                                    <li><a href="javascript:void(0)">Roles</a></li>
-                                    <li><a href="javascript:void(0)">Pacientes</a></li>
-                                </ul>
-                            </div>
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer f-link">
+                            <h3>Módulos internos</h3>
+                            <ul>
+                                <li><a href="@Url.Action("BibliotecaEjercicios", "Home")">Biblioteca</a></li>
+                                <li><a href="javascript:void(0)">Terapeutas</a></li>
+                                <li><a href="javascript:void(0)">Roles</a></li>
+                                <li><a href="javascript:void(0)">Pacientes</a></li>
+                            </ul>
                         </div>
+                    </div>
 
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <div class="single-footer opening-hours">
-                                <h3>Acceso interno</h3>
-                                <ul>
-                                    <li><span class="day"><i class="lni lni-checkmark-circle"></i> Biblioteca</span></li>
-                                    <li><span class="day"><i class="lni lni-checkmark-circle"></i> Terapeutas</span></li>
-                                    <li><span class="day"><i class="lni lni-checkmark-circle"></i> Roles</span></li>
-                                    <li><span class="day"><i class="lni lni-checkmark-circle"></i> Permisos</span></li>
-                                </ul>
-                            </div>
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer opening-hours">
+                            <h3>Acceso interno</h3>
+                            <ul>
+                                <li><span class="day"><i class="lni lni-checkmark-circle"></i> Biblioteca</span></li>
+                                <li><span class="day"><i class="lni lni-checkmark-circle"></i> Terapeutas</span></li>
+                                <li><span class="day"><i class="lni lni-checkmark-circle"></i> Roles</span></li>
+                                <li><span class="day"><i class="lni lni-checkmark-circle"></i> Permisos</span></li>
+                            </ul>
                         </div>
+                    </div>
 
-                        <div class="col-lg-3 col-md-6 col-12">
-                            <div class="single-footer last f-contact">
-                                <h3>Estado</h3>
-                                <ul>
-                                    <li><i class="lni lni-shield"></i> Modo interno del sistema</li>
-                                    <li><i class="lni lni-user"></i> Perfil autenticado</li>
-                                    <li><i class="lni lni-lock"></i> Acceso restringido</li>
-                                </ul>
-                            </div>
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer last f-contact">
+                            <h3>Estado</h3>
+                            <ul>
+                                <li><i class="lni lni-shield"></i> Modo interno del sistema</li>
+                                <li><i class="lni lni-user"></i> Perfil autenticado</li>
+                                <li><i class="lni lni-lock"></i> Acceso restringido</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-        </footer>
+        </div>
+    </footer>
 
-        <a href="#" class="scroll-top">
-            <i class="lni lni-chevron-up"></i>
-        </a>
+    <a href="#" class="scroll-top">
+        <i class="lni lni-chevron-up"></i>
+    </a>
 
-        <script src="~/Template/js/bootstrap.min.js"></script>
-        <script src="~/Template/js/wow.min.js"></script>
-        <script src="~/Template/js/tiny-slider.js"></script>
-        <script src="~/Template/js/glightbox.min.js"></script>
-        <script src="~/Template/js/count-up.min.js"></script>
-        <script src="~/Template/js/imagesloaded.min.js"></script>
-        <script src="~/Template/js/isotope.min.js"></script>
-        <script src="~/Template/js/main.js"></script>
-    </body>
-
+    <script src="~/Template/js/bootstrap.min.js"></script>
+    <script src="~/Template/js/wow.min.js"></script>
+    <script src="~/Template/js/tiny-slider.js"></script>
+    <script src="~/Template/js/glightbox.min.js"></script>
+    <script src="~/Template/js/count-up.min.js"></script>
+    <script src="~/Template/js/imagesloaded.min.js"></script>
+    <script src="~/Template/js/isotope.min.js"></script>
+    <script src="~/Template/js/main.js"></script>
+</body>
 </html>

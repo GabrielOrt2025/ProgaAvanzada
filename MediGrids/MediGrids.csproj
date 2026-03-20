@@ -121,7 +121,6 @@
     <Compile Include="Controllers\TerapeutaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PacienteController.cs" />
-    <Compile Include="Controllers\TerapeutaController.cs" />
     <Compile Include="EntityFramework\CategoriaClinica.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -161,9 +160,6 @@
     <Compile Include="EntityFramework\Usuario.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityFramework\PacienteEjercicio.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -171,9 +167,6 @@
     <Compile Include="Models\TerapeutaEjercicioViewModel.cs" />
     <Compile Include="Models\TerapeutaViewModel.cs" />
     <Compile Include="Models\TipoTerapiaViewModel.cs" />
-    <Compile Include="Models\PacienteViewModel.cs" />
-    <Compile Include="Models\EjercicioViewModel.cs" />
-    <Compile Include="Models\AsignacionEjercicioViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -291,7 +284,6 @@
     <Content Include="Views\Paciente\AgendarCitas.cshtml" />
     <Content Include="Views\Terapeuta\GestionarEjercicio.cshtml" />
     <Content Include="Views\Terapeuta\EditarForm.cshtml" />
-    <Content Include="Views\Terapeuta\AsignacionEjercicios.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -12,19 +12,19 @@ namespace MediGrids.EntityFramework
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-
+    
     public partial class Entities : DbContext
     {
         public Entities()
             : base("name=Entities")
         {
         }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-
+    
         public virtual DbSet<CategoriaClinica> CategoriaClinica { get; set; }
         public virtual DbSet<Ejercicio> Ejercicio { get; set; }
         public virtual DbSet<Paciente> Paciente { get; set; }
@@ -33,6 +33,5 @@ namespace MediGrids.EntityFramework
         public virtual DbSet<TipoTerapia> TipoTerapia { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<database_firewall_rules> database_firewall_rules { get; set; }
-        public virtual DbSet<PacienteEjercicio> PacienteEjercicio { get; set; }
     }
 }
