@@ -119,6 +119,42 @@ namespace MediGrids.Controllers
             return View(model);
         }
 
+
+        //Metodo get para crear el formulario vacio para poder agregar un ejercicio
+        [HttpGet]
+        public ActionResult CrearEjercicio()
+        {
+            return View(new TerapeutaEjercicioViewModel());
+        }
+
+
+        //Metodo post que se encarga de guardar el nuevo ejercico en la BD, se utiliza .add y .savechanches para que funcione
+        [HttpPost]
+        public ActionResult CrearEjercicio(TerapeutaEjercicioViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var ejercicio = new Ejercicio
+                {
+                    nombre = model.nombre,
+                    descripcion = model.descripcion,
+                    objetivo = model.objetivo,
+                    dificultad = model.dificultad,
+                    video_url = model.video_url,
+                    id_terapia = model.id_terapia,
+                    id_categoria = model.id_categoria,
+                    creado_por = model.creado_por
+                };
+
+                db.Ejercicio.Add(ejercicio);
+                db.SaveChanges();
+
+                return RedirectToAction("GestionarEjercicio");
+            }
+
+            return View(model);
+        }
+
         // =============================================
         // Asignación de Ejercicios a Pacientes
         // =============================================

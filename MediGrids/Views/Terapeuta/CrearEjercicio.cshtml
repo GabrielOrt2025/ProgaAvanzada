@@ -1,0 +1,102 @@
+@model MediGrids.Models.TerapeutaEjercicioViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+    ViewBag.Title = "Crear Ejercicio";
+}
+
+<link rel="stylesheet" href="~/Template/css/ejercicios.css" />
+
+<section class="container">
+    <div class="agendar-citas-header">
+        <h1><i class="lni lni-plus"></i> Crear Ejercicio</h1>
+        <p>Complete la informacion para registrar un nuevo ejercicio en el sistema.</p>
+    </div>
+
+    <div class="step-wizard">
+        <div class="form-section ejercicios-section">
+
+            @using (Html.BeginForm("CrearEjercicio", "Terapeuta", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.nombre, "Nombre")
+                        @Html.TextBoxFor(m => m.nombre, new { @class = "form-control", placeholder = "Ingrese el nombre del ejercicio" })
+                        @Html.ValidationMessageFor(m => m.nombre, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.descripcion, "Descripcion")
+                        @Html.TextAreaFor(m => m.descripcion, new
+                        {
+                            @class = "form-control",
+                            rows = 4,
+                            placeholder = "Ingrese la descripcion del ejercicio"
+                        })
+                        @Html.ValidationMessageFor(m => m.descripcion, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.objetivo, "Objetivo")
+                        @Html.TextAreaFor(m => m.objetivo, new
+                        {
+                            @class = "form-control",
+                            rows = 3,
+                            placeholder = "Ingrese el objetivo del ejercicio"
+                        })
+                        @Html.ValidationMessageFor(m => m.objetivo, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.dificultad, "Dificultad")
+                        @Html.TextBoxFor(m => m.dificultad, new { @class = "form-control", placeholder = "Ejemplo: Baja, Media o Alta" })
+                        @Html.ValidationMessageFor(m => m.dificultad, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.video_url, "URL del Video")
+                        @Html.TextBoxFor(m => m.video_url, new { @class = "form-control", placeholder = "Ingrese la URL del video" })
+                        @Html.ValidationMessageFor(m => m.video_url, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.id_terapia, "Id Terapia")
+                        @Html.TextBoxFor(m => m.id_terapia, new { @class = "form-control", type = "number", placeholder = "Ingrese el id de la terapia" })
+                        @Html.ValidationMessageFor(m => m.id_terapia, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.id_categoria, "Id Categoria")
+                        @Html.TextBoxFor(m => m.id_categoria, new { @class = "form-control", type = "number", placeholder = "Ingrese el id de la categoria" })
+                        @Html.ValidationMessageFor(m => m.id_categoria, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.creado_por, "Creado por")
+                        @Html.TextBoxFor(m => m.creado_por, new { @class = "form-control", placeholder = "Ingrese el nombre del creador" })
+                        @Html.ValidationMessageFor(m => m.creado_por, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+
+                <div class="ejercicio-actions" style="margin-top: 20px;">
+                    <button type="submit" class="btn-accion btn-editar">
+                        <i class="lni lni-save"></i> Guardar Ejercicio
+                    </button>
+
+                    <a href="@Url.Action("GestionarEjercicio", "Terapeuta")" class="btn-accion btn-eliminar">
+                        <i class="lni lni-arrow-left"></i> Cancelar
+                    </a>
+                </div>
+            }
+
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
