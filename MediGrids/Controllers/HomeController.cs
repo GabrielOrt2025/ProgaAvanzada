@@ -1,4 +1,5 @@
 ﻿using MediGrids.EntityFramework;
+using Microsoft.Ajax.Utilities;
 using System.Data.Entity;
 using System.Linq;
 using System.Security.Cryptography;
@@ -59,7 +60,25 @@ namespace MediGrids.Controllers
             Session["UserEmail"] = user.correo;
             Session["Rol"] = user.id_rol;
 
-            return RedirectToAction("PanelInterno");
+            //Condicionales los cuales se encargan que dependiendo del rol, el usuario que inicie sesion vera una panel u otro
+            if(user.id_rol == 2)
+            {
+
+                return RedirectToAction("PanelTerapeuta");
+            }
+
+            else if(user.id_rol == 1 || user.id_rol == 3)
+            {
+
+                return RedirectToAction("PanelInterno");
+            }
+            else
+            {
+
+                ViewBag.Error = "El usuario no tiene un rol válido.";
+                return View();
+            }
+               
         }
 
         [HttpGet]
@@ -70,8 +89,34 @@ namespace MediGrids.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
+            int rol = (int)Session["Rol"];
+
+            if (rol != 1 && rol != 3)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
             return View();
         }
+
+        [HttpGet]
+        public ActionResult PanelTerapeuta()
+        {
+
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            if ((int)Session["Rol"] != 2)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+
+            return View();
+        }
+       
 
         [HttpGet]
         public ActionResult BibliotecaEjercicios(int? idTerapia, int? idCategoria)

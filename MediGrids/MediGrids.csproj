@@ -300,6 +300,7 @@
     <Content Include="Views\Terapeuta\AsignacionEjercicios.cshtml" />
     <Content Include="Views\Home\PanelInterno.cshtml" />
     <Content Include="Views\Terapeuta\CrearEjercicio.cshtml" />
+    <Content Include="Views\Home\PanelTerapeuta.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

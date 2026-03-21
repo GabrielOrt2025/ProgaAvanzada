@@ -1,0 +1,66 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+    ViewBag.Title = "Panel Terapeuta";
+}
+
+<style>
+    .panel-hero {
+        background: #0c7a3e;
+        padding: 35px;
+        border-radius: 12px;
+        color: white;
+        margin-bottom: 35px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+        .panel-hero h1 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+    .panel-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        height: 100%;
+        transition: 0.3s ease;
+        text-align: center;
+    }
+
+        .panel-card:hover {
+            transform: translateY(-4px);
+        }
+
+    .panel-icon {
+        font-size: 40px;
+        color: #88c34a;
+        margin-bottom: 15px;
+    }
+</style>
+
+<section class="container">
+    <div class="panel-hero">
+        <h1>Panel del Terapeuta</h1>
+        <p>Acceda al módulo de gestión de ejercicios terapéuticos.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6 col-12">
+            <div class="panel-card">
+                <div class="panel-icon">
+                    <i class="lni lni-grid-alt"></i>
+                </div>
+
+                <h4>Gestión de Ejercicios</h4>
+                <p>
+                    Administre, cree, edite y elimine ejercicios terapéuticos del sistema.
+                </p>
+
+                <a href="@Url.Action("GestionarEjercicio", "Terapeuta")" class="btn btn-success">
+                    Ingresar
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

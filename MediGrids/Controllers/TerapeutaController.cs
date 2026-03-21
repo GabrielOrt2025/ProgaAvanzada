@@ -23,22 +23,51 @@ namespace MediGrids.Controllers
         [HttpGet]
         public ActionResult GestionarEjercicio()
         {
-            // Se traen los valores puestos en la tabla de Ejercicio en la base de datos
-            var obtenerEjercicios = db.Ejercicio.Select(t => new TerapeutaEjercicioViewModel
+            if (Session["UserId"] == null || Session["Rol"] == null)
             {
-                id_ejercicio = t.id_ejercicio,
-                nombre = t.nombre,
-                descripcion = t.descripcion,
-                objetivo = t.objetivo,
-                dificultad = t.dificultad,
-                video_url = t.video_url,
-                id_terapia = t.id_terapia,
-                id_categoria = t.id_categoria,
-                creado_por = t.creado_por
-            })
-            .ToList();
+                return RedirectToAction("Login", "Home");
+            }
 
-            ViewBag.obtenerEjercicios = obtenerEjercicios;
+            int rol = (int)Session["Rol"];
+            int userId = (int)Session["UserId"];
+
+            if (rol == 1 || rol == 3) 
+            {
+                ViewBag.obtenerEjercicios = db.Ejercicio.Select(t => new TerapeutaEjercicioViewModel
+                {
+                    id_ejercicio = t.id_ejercicio,
+                    nombre = t.nombre,
+                    descripcion = t.descripcion,
+                    objetivo = t.objetivo,
+                    dificultad = t.dificultad,
+                    video_url = t.video_url,
+                    id_terapia = t.id_terapia,
+                    id_categoria = t.id_categoria,
+                    creado_por = t.creado_por
+                }).ToList();
+            }
+            else if (rol == 2) 
+            {
+                ViewBag.obtenerEjercicios = db.Ejercicio
+                    .Where(t => t.creado_por == userId)
+                    .Select(t => new TerapeutaEjercicioViewModel
+                    {
+                        id_ejercicio = t.id_ejercicio,
+                        nombre = t.nombre,
+                        descripcion = t.descripcion,
+                        objetivo = t.objetivo,
+                        dificultad = t.dificultad,
+                        video_url = t.video_url,
+                        id_terapia = t.id_terapia,
+                        id_categoria = t.id_categoria,
+                        creado_por = t.creado_por
+                    })
+                    .ToList();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
 
             return View();
         }
