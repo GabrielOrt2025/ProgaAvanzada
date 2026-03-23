@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="CategoriaClinica">
           <Key>
             <PropertyRef Name="id_categoria" />
@@ -27,6 +27,7 @@
           <Property Name="id_terapia" Type="int" Nullable="false" />
           <Property Name="id_categoria" Type="int" Nullable="false" />
           <Property Name="creado_por" Type="int" Nullable="false" />
+          <Property Name="activo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Paciente">
           <Key>
@@ -286,8 +287,7 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -320,6 +320,7 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <NavigationProperty Name="Terapeuta" Relationship="Self.FK_Ejercicio_Terapeuta" FromRole="Ejercicio" ToRole="Terapeuta" />
           <NavigationProperty Name="TipoTerapia" Relationship="Self.FK_Ejercicio_TipoTerapia" FromRole="Ejercicio" ToRole="TipoTerapia" />
           <NavigationProperty Name="PacienteEjercicio" Relationship="Self.FK_PacienteEjercicio_Ejercicio" FromRole="Ejercicio" ToRole="PacienteEjercicio" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Paciente">
           <Key>
@@ -600,6 +601,7 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <EntitySetMapping Name="Ejercicio">
             <EntityTypeMapping TypeName="Model.Ejercicio">
               <MappingFragment StoreEntitySet="Ejercicio">
+                <ScalarProperty Name="activo" ColumnName="activo" />
                 <ScalarProperty Name="id_ejercicio" ColumnName="id_ejercicio" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="descripcion" ColumnName="descripcion" />

@@ -25,6 +25,9 @@
     <link rel="stylesheet" href="~/Template/css/glightbox.min.css" />
     <link rel="stylesheet" href="~/Template/css/main.css" />
 
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.7/css/dataTables.dataTables.css" />
+
 </head>
 
 <body>
@@ -73,7 +76,7 @@
                                         </ul>
                                     </li>
 
-                               
+
 
                                     <li class="nav-item">
                                         <a href="javascript:void(0)" aria-label="Toggle navigation">Servicios</a>
@@ -95,7 +98,7 @@
 
                             <div class="button add-list-button">
                                 <a href="@Url.Action("Login", "Home")" class="btn">Iniciar Sesión</a>
-                                <a href="@Url.Action("Register", "Home")"class="btn">Registrarse</a>
+                                <a href="@Url.Action("Register", "Home")" class="btn">Registrarse</a>
 
                             </div>
                         </nav>
@@ -115,31 +118,31 @@
     <footer class="footer overlay">
         <!-- Start Footer Top -->
         @*<div class="footer-top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-12">
-                        <div class="cta">
-                            <h3>Need Help?</h3>
-                            <p>
-                                Please feel free to contact our friendly reception staff with any medical enquiry, or
-                                call <a href="javascript:void(0)">+880 12345678901</a>
-                            </p>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <div class="cta">
+                                <h3>Need Help?</h3>
+                                <p>
+                                    Please feel free to contact our friendly reception staff with any medical enquiry, or
+                                    call <a href="javascript:void(0)">+880 12345678901</a>
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-12">
-                        <div class="form">
-                            <h3>Subscribe Newsletter</h3>
-                            <form action="#" method="get" target="_blank" class="newsletter-form">
-                                <input name="EMAIL" placeholder="Your email address" type="email">
-                                <div class="button">
-                                    <button class="btn">Subscribe<span class="dir-part"></span></button>
-                                </div>
-                            </form>
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <div class="form">
+                                <h3>Subscribe Newsletter</h3>
+                                <form action="#" method="get" target="_blank" class="newsletter-form">
+                                    <input name="EMAIL" placeholder="Your email address" type="email">
+                                    <div class="button">
+                                        <button class="btn">Subscribe<span class="dir-part"></span></button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>*@
+            </div>*@
         <!-- End Footer Top -->
         <!-- Start Footer Middle -->
         <div class="footer-middle">
@@ -240,7 +243,7 @@
                             <div class="content">
                                 <p class="copyright-text">
                                     Diseñado y Desarrollado por <a href="https://graygrids.com/"
-                                                                 rel="nofollow" target="_blank">GrayGrids</a>
+                                                                   rel="nofollow" target="_blank">GrayGrids</a>
                                 </p>
                             </div>
                         </div>
@@ -270,6 +273,12 @@
     <script src="~/Template/js/imagesloaded.min.js"></script>
     <script src="~/Template/js/isotope.min.js"></script>
     <script src="~/Template/js/main.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.3.7/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.3.7/js/dataTables.bootstrap5.js"></script>
+
+    @RenderSection("Scripts", required: false)
 
     <script type="text/javascript">
         //======== Hero Slider
@@ -357,6 +366,7 @@
             });
         }
     </script>
+
 </body>
 </html>
 

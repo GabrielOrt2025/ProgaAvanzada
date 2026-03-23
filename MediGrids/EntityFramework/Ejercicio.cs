@@ -29,6 +29,7 @@ namespace MediGrids.EntityFramework
         public int id_terapia { get; set; }
         public int id_categoria { get; set; }
         public int creado_por { get; set; }
+        public bool activo { get; set; }
     
         public virtual CategoriaClinica CategoriaClinica { get; set; }
         public virtual Terapeuta Terapeuta { get; set; }

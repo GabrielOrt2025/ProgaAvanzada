@@ -12,10 +12,11 @@ namespace MediGrids.Controllers
     {
         private Entities db = new Entities();
 
+        #region Vistas Públicas
+
         [HttpGet]
         public ActionResult Index()
         {
-            Session.Clear(); //limpia sesión
             return View();
         }
 
@@ -30,6 +31,10 @@ namespace MediGrids.Controllers
         {
             return View();
         }
+
+        #endregion
+
+        #region Autenticación
 
         [HttpPost]
         public ActionResult Login(string email, string password)
@@ -60,26 +65,37 @@ namespace MediGrids.Controllers
             Session["UserEmail"] = user.correo;
             Session["Rol"] = user.id_rol;
 
-            //Condicionales los cuales se encargan que dependiendo del rol, el usuario que inicie sesion vera una panel u otro
-            if(user.id_rol == 2)
+            // Dependiendo del rol, el usuario verá un panel distinto
+            if (user.id_rol == 2)
             {
-
                 return RedirectToAction("PanelTerapeuta");
             }
-
-            else if(user.id_rol == 1 || user.id_rol == 3)
+            else if (user.id_rol == 1) // Admin
             {
-
                 return RedirectToAction("PanelInterno");
+            }
+            else if (user.id_rol == 3) // Paciente
+            {
+                return RedirectToAction("PanelPaciente");
             }
             else
             {
-
                 ViewBag.Error = "El usuario no tiene un rol válido.";
                 return View();
             }
-               
         }
+
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            Session.Abandon();
+            return RedirectToAction("Index", "Home");
+        }
+
+        #endregion
+
+        #region Paneles Internos
 
         [HttpGet]
         public ActionResult PanelInterno()
@@ -102,7 +118,6 @@ namespace MediGrids.Controllers
         [HttpGet]
         public ActionResult PanelTerapeuta()
         {
-
             if (Session["UserId"] == null)
             {
                 return RedirectToAction("Login", "Home");
@@ -113,10 +128,12 @@ namespace MediGrids.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-
             return View();
         }
-       
+
+        #endregion
+
+        #region Biblioteca de Ejercicios - Consulta
 
         [HttpGet]
         public ActionResult BibliotecaEjercicios(int? idTerapia, int? idCategoria)
@@ -126,6 +143,8 @@ namespace MediGrids.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
+            // Esta vista corresponde a la consulta de la biblioteca de ejercicios
+            // Aquí luego se puede dejar únicamente la visualización de ejercicios activos
             var ejercicios = db.Ejercicio
                 .Include(e => e.CategoriaClinica)
                 .AsQueryable();
@@ -156,13 +175,31 @@ namespace MediGrids.Controllers
             return View(ejercicios.ToList());
         }
 
+        #endregion
+
+        #region Panel Paciente 
+
         [HttpGet]
-        public ActionResult Logout()
+        public ActionResult PanelPaciente()
         {
-            Session.Clear();
-            Session.Abandon();
-            return RedirectToAction("Index", "Home");
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            if ((int)Session["Rol"] != 3) 
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            return View();
         }
+
+
+
+        #endregion
+
+        #region Métodos Privados de Seguridad
 
         private bool VerifyPassword(string providedPassword, string storedHash)
         {
@@ -203,5 +240,7 @@ namespace MediGrids.Controllers
                 return sb.ToString();
             }
         }
+
+        #endregion
     }
 }
