@@ -85,3 +85,9 @@
     .ejercicio-card-body p {
         margin-bottom: 8px;
     }
+
+.ejercicio-card-thumb iframe {
+    width: 100%;
+    height: 220px;
+    border: 0;
+}

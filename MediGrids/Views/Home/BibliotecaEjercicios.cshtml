@@ -56,8 +56,8 @@
     </div>
 
     <div class="vista-toggle">
-        <button type="button" id="btnVistaTabla" class="btn btn-success btn-sm">Tabla</button>
-        <button type="button" id="btnVistaCards" class="btn btn-outline-success btn-sm">Cards</button>
+        <button type="button" id="btnVistaTabla" class="btn btn-success btn-sm">Lista</button>
+        <button type="button" id="btnVistaCards" class="btn btn-outline-success btn-sm">Videos</button>
     </div>
 
     @if (Model != null && Model.Count > 0)
@@ -110,7 +110,7 @@
             <div class="row">
                 @foreach (var item in Model)
                 {
-                    var thumbUrl = "";
+                    var embedUrl = "";
 
                     if (!string.IsNullOrEmpty(item.video_url))
                     {
@@ -121,7 +121,7 @@
                             {
                                 videoId = videoId.Split('&')[0];
                             }
-                            thumbUrl = "https://img.youtube.com/vi/" + videoId + "/hqdefault.jpg";
+                            embedUrl = "https://www.youtube.com/embed/" + videoId;
                         }
                         else if (item.video_url.Contains("youtu.be/"))
                         {
@@ -130,20 +130,20 @@
                             {
                                 videoId = videoId.Split('?')[0];
                             }
-                            thumbUrl = "https://img.youtube.com/vi/" + videoId + "/hqdefault.jpg";
+                            embedUrl = "https://www.youtube.com/embed/" + videoId;
                         }
                     }
 
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="ejercicio-card">
                             <div class="ejercicio-card-thumb">
-                                @if (!string.IsNullOrEmpty(thumbUrl))
+                                @if (!string.IsNullOrEmpty(embedUrl))
                                 {
-                                    <img src="@thumbUrl" alt="Video de @item.nombre" />
-                                }
-                                else if (!string.IsNullOrEmpty(item.video_url))
-                                {
-                                    <div class="sin-thumb">Video disponible</div>
+                                    <iframe src="@embedUrl"
+                                            title="Video de @item.nombre"
+                                            frameborder="0"
+                                            allowfullscreen>
+                                    </iframe>
                                 }
                                 else
                                 {
@@ -157,22 +157,6 @@
                                 <p><strong>Objetivo:</strong> @item.objetivo</p>
                                 <p><strong>Dificultad:</strong> @item.dificultad</p>
                                 <p><strong>Categoría:</strong> @(item.CategoriaClinica != null ? item.CategoriaClinica.nombre : "")</p>
-
-                                @if (!string.IsNullOrEmpty(item.video_url))
-                                {
-                                    <button type="button"
-                                            class="btn btn-primary btn-sm btn-ver-video"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#videoModal"
-                                            data-video="@item.video_url"
-                                            data-nombre="@item.nombre">
-                                        Ver video
-                                    </button>
-                                }
-                                else
-                                {
-                                    <span>No disponible</span>
-                                }
                             </div>
                         </div>
                     </div>
