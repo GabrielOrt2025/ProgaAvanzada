@@ -55,12 +55,34 @@
                                         Puedes iniciar sesion y tener acceso seguro a nuestros modulos
                                     </p>
                                     <div class="button">
-                                        <a href="@Url.Action("Login", "Home")" class="btn">Iniciar Sesion</a>
-                                        <a href="@Url.Action("Register", "Home")" class="btn">Registro</a>
+                                        @if (Session["UserId"] == null)
+                                        {
+                                            <a href="@Url.Action("Login", "Home")" class="btn">Iniciar Sesión</a>
+                                            <a href="@Url.Action("Register", "Home")" class="btn">Registrarse</a>
+                                        }
+                                        else
+                                        {
+                                            if (Session["Rol"] != null && Convert.ToInt32(Session["Rol"]) == 1)
+                                            {
+                                                <a href="@Url.Action("PanelInterno", "Home")" class="btn">Mi Panel</a>
+                                            }
+                                            else if (Session["Rol"] != null && Convert.ToInt32(Session["Rol"]) == 2)
+                                            {
+                                                <a href="@Url.Action("PanelTerapeuta", "Home")" class="btn">Mi Panel</a>
+                                            }
+                                            else if (Session["Rol"] != null && Convert.ToInt32(Session["Rol"]) == 3)
+                                            {
+                                                <a href="@Url.Action("PanelPaciente", "Home")" class="btn">Mi Panel</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="@Url.Action("Index", "Home")" class="btn">Inicio</a>
+                                            }
+
+                                            <a href="@Url.Action("Logout", "Home")" class="btn btn-danger">Cerrar sesión</a>
+                                        }
+                                        <!-- End Hero Text -->
                                     </div>
-                                </div>
-                                <!-- End Hero Text -->
-                            </div>
                         </div>
                         <div class="col-lg-6 col-md-12 col-12">
                             <div class="hero-image">

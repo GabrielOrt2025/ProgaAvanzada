@@ -4208,3 +4208,22 @@ ol {
         background: #e5e5e5;
         z-index: 0;
     }
+
+/* Navbar botones sesión */
+.btn-outline-danger {
+    margin-left: 8px;
+}
+
+.button.d-flex .btn {
+    white-space: nowrap;
+}
+
+.button .btn-success {
+    background-color: #0c7a3e;
+    border-color: #0c7a3e;
+}
+
+    .button .btn-success:hover {
+        background-color: #095c2f;
+        border-color: #095c2f;
+    }

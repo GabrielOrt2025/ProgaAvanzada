@@ -234,6 +234,7 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Template\css\agendar-citas.css" />
     <Content Include="Template\css\animate.css" />
+    <Content Include="Template\css\BibliotecaEjercicios.css" />
     <Content Include="Template\css\bootstrap.min.css" />
     <Content Include="Template\css\ejercicios.css" />
     <Content Include="Template\css\gestion-terapeutas.css" />
@@ -263,6 +264,7 @@
     <Content Include="Template\images\logo\logo.svg" />
     <Content Include="Template\images\logo\white-logo.svg" />
     <Content Include="Template\js\agendar-citas.js" />
+    <Content Include="Template\js\BibliotecaEjercicios.js" />
     <Content Include="Template\js\bootstrap.min.js" />
     <Content Include="Template\js\count-up.min.js" />
     <Content Include="Template\js\glightbox.min.js" />

@@ -7,39 +7,7 @@
     var categorias = ViewBag.Categorias as List<MediGrids.EntityFramework.CategoriaClinica>;
 }
 
-<style>
-    .biblioteca-header-box {
-        background: #0c7a3e;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        margin-bottom: 30px;
-    }
-
-        .biblioteca-header-box h1 {
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        .biblioteca-header-box label {
-            color: white;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-
-    .tabla-box {
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-
-    .video-modal iframe {
-        width: 100%;
-        height: 450px;
-        border: 0;
-    }
-</style>
+<link href="~/Template/css/BibliotecaEjercicios.css" rel="stylesheet" />
 
 <section class="container mt-5 pt-5">
     <div class="biblioteca-header-box">
@@ -87,9 +55,14 @@
         </form>
     </div>
 
-    <div class="tabla-box">
-        @if (Model != null && Model.Count > 0)
-        {
+    <div class="vista-toggle">
+        <button type="button" id="btnVistaTabla" class="btn btn-success btn-sm">Tabla</button>
+        <button type="button" id="btnVistaCards" class="btn btn-outline-success btn-sm">Cards</button>
+    </div>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div id="vistaTabla" class="tabla-box">
             <table id="TablaBibliotecaEjercicios" class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -117,7 +90,8 @@
                                             class="btn btn-primary btn-sm btn-ver-video"
                                             data-bs-toggle="modal"
                                             data-bs-target="#videoModal"
-                                            data-video="@item.video_url">
+                                            data-video="@item.video_url"
+                                            data-nombre="@item.nombre">
                                         Ver video
                                     </button>
                                 }
@@ -130,14 +104,88 @@
                     }
                 </tbody>
             </table>
-        }
-        else
-        {
-            <div class="alert alert-warning">
-                No hay ejercicios disponibles con los filtros seleccionados.
+        </div>
+
+        <div id="vistaCards" class="d-none">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    var thumbUrl = "";
+
+                    if (!string.IsNullOrEmpty(item.video_url))
+                    {
+                        if (item.video_url.Contains("youtube.com/watch?v="))
+                        {
+                            var videoId = item.video_url.Split(new[] { "watch?v=" }, StringSplitOptions.None)[1];
+                            if (videoId.Contains("&"))
+                            {
+                                videoId = videoId.Split('&')[0];
+                            }
+                            thumbUrl = "https://img.youtube.com/vi/" + videoId + "/hqdefault.jpg";
+                        }
+                        else if (item.video_url.Contains("youtu.be/"))
+                        {
+                            var videoId = item.video_url.Split(new[] { "youtu.be/" }, StringSplitOptions.None)[1];
+                            if (videoId.Contains("?"))
+                            {
+                                videoId = videoId.Split('?')[0];
+                            }
+                            thumbUrl = "https://img.youtube.com/vi/" + videoId + "/hqdefault.jpg";
+                        }
+                    }
+
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="ejercicio-card">
+                            <div class="ejercicio-card-thumb">
+                                @if (!string.IsNullOrEmpty(thumbUrl))
+                                {
+                                    <img src="@thumbUrl" alt="Video de @item.nombre" />
+                                }
+                                else if (!string.IsNullOrEmpty(item.video_url))
+                                {
+                                    <div class="sin-thumb">Video disponible</div>
+                                }
+                                else
+                                {
+                                    <div class="sin-thumb">Sin video</div>
+                                }
+                            </div>
+
+                            <div class="ejercicio-card-body">
+                                <h5>@item.nombre</h5>
+                                <p class="descripcion">@item.descripcion</p>
+                                <p><strong>Objetivo:</strong> @item.objetivo</p>
+                                <p><strong>Dificultad:</strong> @item.dificultad</p>
+                                <p><strong>Categoría:</strong> @(item.CategoriaClinica != null ? item.CategoriaClinica.nombre : "")</p>
+
+                                @if (!string.IsNullOrEmpty(item.video_url))
+                                {
+                                    <button type="button"
+                                            class="btn btn-primary btn-sm btn-ver-video"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#videoModal"
+                                            data-video="@item.video_url"
+                                            data-nombre="@item.nombre">
+                                        Ver video
+                                    </button>
+                                }
+                                else
+                                {
+                                    <span>No disponible</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
-        }
-    </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            No hay ejercicios disponibles con los filtros seleccionados.
+        </div>
+    }
 </section>
 
 <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
@@ -148,14 +196,15 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <iframe id="videoFrame" src="" allowfullscreen></iframe>
+                <iframe id="videoFrame"
+                        src=""
+                        allowfullscreen
+                        style="width:100%; height:420px; border:none; border-radius:10px;">
+                </iframe>
             </div>
         </div>
     </div>
 </div>
 
-</html>
 
-
-
-}
+<script src="~/Template/js/BibliotecaEjercicios.js"></script>

@@ -1,0 +1,87 @@
+﻿
+.biblioteca-header-box {
+    background: #0c7a3e;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+    .biblioteca-header-box h1 {
+        color: white;
+        margin-bottom: 20px;
+    }
+
+    .biblioteca-header-box label {
+        color: white;
+        font-weight: 500;
+        margin-bottom: 6px;
+    }
+
+.tabla-box {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.video-modal iframe {
+    width: 100%;
+    height: 450px;
+    border: 0;
+}
+
+.vista-toggle {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.ejercicio-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    overflow: hidden;
+    height: 100%;
+    border: 1px solid #e9ecef;
+}
+
+.ejercicio-card-thumb {
+    width: 100%;
+    height: 220px;
+    background: #f3f4f6;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .ejercicio-card-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.sin-thumb {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.ejercicio-card-body {
+    padding: 18px;
+}
+
+    .ejercicio-card-body h5 {
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .ejercicio-card-body .descripcion {
+        color: #6c757d;
+        margin-bottom: 12px;
+    }
+
+    .ejercicio-card-body p {
+        margin-bottom: 8px;
+    }

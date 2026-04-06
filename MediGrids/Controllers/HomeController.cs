@@ -105,9 +105,7 @@ namespace MediGrids.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            int rol = (int)Session["Rol"];
-
-            if (rol != 1 && rol != 3)
+            if ((int)Session["Rol"] != 1) // Solo Admin
             {
                 return RedirectToAction("Login", "Home");
             }
@@ -123,7 +121,9 @@ namespace MediGrids.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            if ((int)Session["Rol"] != 2)
+            int rol = (int)Session["Rol"];
+
+            if (rol != 1 && rol != 2) // Admin o Terapeuta
             {
                 return RedirectToAction("Login", "Home");
             }
@@ -187,14 +187,13 @@ namespace MediGrids.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            if ((int)Session["Rol"] != 3) 
+            if ((int)Session["Rol"] != 3) // Solo Paciente
             {
                 return RedirectToAction("Login", "Home");
             }
 
             return View();
         }
-
 
 
         #endregion
