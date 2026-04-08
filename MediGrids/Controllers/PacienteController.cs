@@ -146,6 +146,48 @@ namespace MediGrids.Controllers
             }
         }
 
+        // POST: Paciente/ConfirmarCita
+        [HttpPost]
+        public JsonResult ConfirmarCita(int idTerapeuta, string fecha, string horaInicio)
+        {
+            try
+            {
+                DateTime fechaCita = DateTime.Parse(fecha);
+                TimeSpan hora = TimeSpan.Parse(horaInicio);
+                TimeSpan horaFin = hora.Add(TimeSpan.FromHours(1));
+
+                // Verificar que no exista ya un bloqueo para ese horario
+                bool yaExiste = db.BloqueHorario.Any(b =>
+                    b.id_terapeuta == idTerapeuta
+                    && b.fecha == fechaCita
+                    && b.hora_inicio == hora);
+
+                if (yaExiste)
+                {
+                    return Json(new { success = false, mensaje = "Este horario ya se encuentra bloqueado" });
+                }
+
+                // Insertar en BloqueHorario
+                var bloqueo = new BloqueHorario
+                {
+                    id_terapeuta = idTerapeuta,
+                    fecha = fechaCita,
+                    hora_inicio = hora,
+                    hora_fin = horaFin,
+                    motivo = "Confirmada"
+                };
+
+                db.BloqueHorario.Add(bloqueo);
+                db.SaveChanges();
+
+                return Json(new { success = true, mensaje = "Cita confirmada exitosamente" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, mensaje = "Error al confirmar la cita: " + ex.Message });
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -344,7 +344,7 @@ function mostrarHorarios(horarios, mensaje) {
 }
 
 /**
- * Maneja el envío del formulario de confirmación
+ * Maneja el envio del formulario de confirmacion
  */
 function onSubmitFormulario(e) {
     e.preventDefault();
@@ -354,8 +354,48 @@ function onSubmitFormulario(e) {
         return;
     }
 
-    alert(`Cita agendada exitosamente!\n\nTerapia: ${selectedTerapia}\nCategoría: ${selectedCategoria}\nTerapeuta: ${selectedTerapeuta}\nFecha: ${selectedFecha}\nHora: ${selectedHora}`);
+    if (!selectedTerapeutaId) {
+        alert('No se ha seleccionado un terapeuta');
+        return;
+    }
 
-    // Aquí iría la lógica para enviar los datos al servidor
-    // window.location.href = urlRedirect;
+    var fechaValue = document.getElementById('fechaCita').value;
+
+    // Deshabilitar boton para evitar doble click
+    var btnConfirmar = document.querySelector('#form-paso-2 button[type="submit"]');
+    btnConfirmar.disabled = true;
+    btnConfirmar.innerHTML = '<i class="lni lni-spinner-arrow"></i> Confirmando...';
+
+    var datos = 'idTerapeuta=' + selectedTerapeutaId + '&fecha=' + fechaValue + '&horaInicio=' + selectedHora;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/Paciente/ConfirmarCita', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            btnConfirmar.disabled = false;
+            btnConfirmar.innerHTML = '<i class="lni lni-checkmark-circle"></i> Confirmar Cita';
+
+            if (xhr.status === 200) {
+                var respuesta = JSON.parse(xhr.responseText);
+                if (respuesta.success) {
+                    alert('Cita agendada exitosamente!\n\n' +
+                        'Terapia: ' + selectedTerapia + '\n' +
+                        'Categoria: ' + selectedCategoria + '\n' +
+                        'Terapeuta: ' + selectedTerapeuta + '\n' +
+                        'Fecha: ' + selectedFecha + '\n' +
+                        'Hora: ' + selectedHora);
+
+                    // Refrescar horarios para mostrar el slot como ocupado
+                    consultarHorariosServidor(selectedTerapeutaId, fechaValue);
+                    selectedHora = null;
+                } else {
+                    alert(respuesta.mensaje || 'Error al confirmar la cita');
+                }
+            } else {
+                alert('Error de conexion al confirmar la cita');
+            }
+        }
+    };
+    xhr.send(datos);
 }
