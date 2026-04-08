@@ -5,6 +5,17 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BloqueHorario">
+          <Key>
+            <PropertyRef Name="id_bloque" />
+          </Key>
+          <Property Name="id_bloque" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fecha" Type="date" Nullable="false" />
+          <Property Name="hora_inicio" Type="time" Precision="7" Nullable="false" />
+          <Property Name="hora_fin" Type="time" Precision="7" Nullable="false" />
+          <Property Name="motivo" Type="varchar" MaxLength="255" />
+          <Property Name="id_terapeuta" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="CategoriaClinica">
           <Key>
             <PropertyRef Name="id_categoria" />
@@ -13,6 +24,21 @@
           <Property Name="nombre" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="descripcion" Type="varchar" MaxLength="255" />
           <Property Name="id_terapia" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cita">
+          <Key>
+            <PropertyRef Name="id_cita" />
+          </Key>
+          <Property Name="id_cita" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fecha" Type="date" Nullable="false" />
+          <Property Name="hora_inicio" Type="time" Precision="7" Nullable="false" />
+          <Property Name="hora_fin" Type="time" Precision="7" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="30" />
+          <Property Name="motivo_cancelacion" Type="varchar" MaxLength="255" />
+          <Property Name="id_paciente" Type="int" Nullable="false" />
+          <Property Name="id_terapeuta" Type="int" Nullable="false" />
+          <Property Name="id_terapia" Type="int" Nullable="false" />
+          <Property Name="id_categoria" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Ejercicio">
           <Key>
@@ -27,6 +53,17 @@
           <Property Name="id_terapia" Type="int" Nullable="false" />
           <Property Name="id_categoria" Type="int" Nullable="false" />
           <Property Name="creado_por" Type="int" Nullable="false" />
+          <Property Name="activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HorarioTerapeuta">
+          <Key>
+            <PropertyRef Name="id_horario" />
+          </Key>
+          <Property Name="id_horario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_terapeuta" Type="int" Nullable="false" />
+          <Property Name="dia_semana" Type="int" Nullable="false" />
+          <Property Name="hora_inicio" Type="time" Precision="0" Nullable="false" />
+          <Property Name="hora_fin" Type="time" Precision="0" Nullable="false" />
           <Property Name="activo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Paciente">
@@ -107,6 +144,18 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <Property Name="create_date" Type="datetime" Nullable="false" />
           <Property Name="modify_date" Type="datetime" Nullable="false" />
         </EntityType>
+        <Association Name="FK_BloqueHorario_Terapeuta">
+          <End Role="Terapeuta" Type="Self.Terapeuta" Multiplicity="1" />
+          <End Role="BloqueHorario" Type="Self.BloqueHorario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terapeuta">
+              <PropertyRef Name="id_terapeuta" />
+            </Principal>
+            <Dependent Role="BloqueHorario">
+              <PropertyRef Name="id_terapeuta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CategoriaClinica_TipoTerapia">
           <End Role="TipoTerapia" Type="Self.TipoTerapia" Multiplicity="1" />
           <End Role="CategoriaClinica" Type="Self.CategoriaClinica" Multiplicity="*" />
@@ -115,6 +164,54 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
               <PropertyRef Name="id_terapia" />
             </Principal>
             <Dependent Role="CategoriaClinica">
+              <PropertyRef Name="id_terapia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cita_CategoriaClinica">
+          <End Role="CategoriaClinica" Type="Self.CategoriaClinica" Multiplicity="1" />
+          <End Role="Cita" Type="Self.Cita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoriaClinica">
+              <PropertyRef Name="id_categoria" />
+            </Principal>
+            <Dependent Role="Cita">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cita_Paciente">
+          <End Role="Paciente" Type="Self.Paciente" Multiplicity="1" />
+          <End Role="Cita" Type="Self.Cita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Paciente">
+              <PropertyRef Name="id_paciente" />
+            </Principal>
+            <Dependent Role="Cita">
+              <PropertyRef Name="id_paciente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cita_Terapeuta">
+          <End Role="Terapeuta" Type="Self.Terapeuta" Multiplicity="1" />
+          <End Role="Cita" Type="Self.Cita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terapeuta">
+              <PropertyRef Name="id_terapeuta" />
+            </Principal>
+            <Dependent Role="Cita">
+              <PropertyRef Name="id_terapeuta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cita_TipoTerapia">
+          <End Role="TipoTerapia" Type="Self.TipoTerapia" Multiplicity="1" />
+          <End Role="Cita" Type="Self.Cita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoTerapia">
+              <PropertyRef Name="id_terapia" />
+            </Principal>
+            <Dependent Role="Cita">
               <PropertyRef Name="id_terapia" />
             </Dependent>
           </ReferentialConstraint>
@@ -152,6 +249,18 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             </Principal>
             <Dependent Role="Ejercicio">
               <PropertyRef Name="id_terapia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HorarioTerapeuta_Terapeuta">
+          <End Role="Terapeuta" Type="Self.Terapeuta" Multiplicity="1" />
+          <End Role="HorarioTerapeuta" Type="Self.HorarioTerapeuta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terapeuta">
+              <PropertyRef Name="id_terapeuta" />
+            </Principal>
+            <Dependent Role="HorarioTerapeuta">
+              <PropertyRef Name="id_terapeuta" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -228,8 +337,11 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="BloqueHorario" EntityType="Self.BloqueHorario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CategoriaClinica" EntityType="Self.CategoriaClinica" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cita" EntityType="Self.Cita" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ejercicio" EntityType="Self.Ejercicio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HorarioTerapeuta" EntityType="Self.HorarioTerapeuta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Paciente" EntityType="Self.Paciente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PacienteEjercicio" EntityType="Self.PacienteEjercicio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
@@ -246,9 +358,29 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
     [database_firewall_rules].[modify_date] AS [modify_date]
     FROM [sys].[database_firewall_rules] AS [database_firewall_rules]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_BloqueHorario_Terapeuta" Association="Self.FK_BloqueHorario_Terapeuta">
+            <End Role="Terapeuta" EntitySet="Terapeuta" />
+            <End Role="BloqueHorario" EntitySet="BloqueHorario" />
+          </AssociationSet>
           <AssociationSet Name="FK_CategoriaClinica_TipoTerapia" Association="Self.FK_CategoriaClinica_TipoTerapia">
             <End Role="TipoTerapia" EntitySet="TipoTerapia" />
             <End Role="CategoriaClinica" EntitySet="CategoriaClinica" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cita_CategoriaClinica" Association="Self.FK_Cita_CategoriaClinica">
+            <End Role="CategoriaClinica" EntitySet="CategoriaClinica" />
+            <End Role="Cita" EntitySet="Cita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cita_Paciente" Association="Self.FK_Cita_Paciente">
+            <End Role="Paciente" EntitySet="Paciente" />
+            <End Role="Cita" EntitySet="Cita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cita_Terapeuta" Association="Self.FK_Cita_Terapeuta">
+            <End Role="Terapeuta" EntitySet="Terapeuta" />
+            <End Role="Cita" EntitySet="Cita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cita_TipoTerapia" Association="Self.FK_Cita_TipoTerapia">
+            <End Role="TipoTerapia" EntitySet="TipoTerapia" />
+            <End Role="Cita" EntitySet="Cita" />
           </AssociationSet>
           <AssociationSet Name="FK_Ejercicio_CategoriaClinica" Association="Self.FK_Ejercicio_CategoriaClinica">
             <End Role="CategoriaClinica" EntitySet="CategoriaClinica" />
@@ -261,6 +393,10 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <AssociationSet Name="FK_Ejercicio_TipoTerapia" Association="Self.FK_Ejercicio_TipoTerapia">
             <End Role="TipoTerapia" EntitySet="TipoTerapia" />
             <End Role="Ejercicio" EntitySet="Ejercicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HorarioTerapeuta_Terapeuta" Association="Self.FK_HorarioTerapeuta_Terapeuta">
+            <End Role="Terapeuta" EntitySet="Terapeuta" />
+            <End Role="HorarioTerapeuta" EntitySet="HorarioTerapeuta" />
           </AssociationSet>
           <AssociationSet Name="FK_Paciente_Usuario" Association="Self.FK_Paciente_Usuario">
             <End Role="Usuario" EntitySet="Usuario" />
@@ -302,6 +438,7 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <NavigationProperty Name="TipoTerapia" Relationship="Self.FK_CategoriaClinica_TipoTerapia" FromRole="CategoriaClinica" ToRole="TipoTerapia" />
           <NavigationProperty Name="Ejercicio" Relationship="Self.FK_Ejercicio_CategoriaClinica" FromRole="CategoriaClinica" ToRole="Ejercicio" />
           <NavigationProperty Name="Terapeuta" Relationship="Self.FK_Terapeuta_Categoria" FromRole="CategoriaClinica" ToRole="Terapeuta" />
+          <NavigationProperty Name="Cita" Relationship="Model.FK_Cita_CategoriaClinica" FromRole="CategoriaClinica" ToRole="Cita" />
         </EntityType>
         <EntityType Name="Ejercicio">
           <Key>
@@ -335,6 +472,7 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <Property Name="activo" Type="Boolean" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Paciente_Usuario" FromRole="Paciente" ToRole="Usuario" />
           <NavigationProperty Name="PacienteEjercicio" Relationship="Self.FK_PacienteEjercicio_Paciente" FromRole="Paciente" ToRole="PacienteEjercicio" />
+          <NavigationProperty Name="Cita" Relationship="Model.FK_Cita_Paciente" FromRole="Paciente" ToRole="Cita" />
         </EntityType>
         <EntityType Name="PacienteEjercicio">
           <Key>
@@ -371,6 +509,9 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <NavigationProperty Name="CategoriaClinica" Relationship="Self.FK_Terapeuta_Categoria" FromRole="Terapeuta" ToRole="CategoriaClinica" />
           <NavigationProperty Name="Ejercicio" Relationship="Self.FK_Ejercicio_Terapeuta" FromRole="Terapeuta" ToRole="Ejercicio" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Terapeuta_Usuario" FromRole="Terapeuta" ToRole="Usuario" />
+          <NavigationProperty Name="BloqueHorario" Relationship="Model.FK_BloqueHorario_Terapeuta" FromRole="Terapeuta" ToRole="BloqueHorario" />
+          <NavigationProperty Name="Cita" Relationship="Model.FK_Cita_Terapeuta" FromRole="Terapeuta" ToRole="Cita" />
+          <NavigationProperty Name="HorarioTerapeuta" Relationship="Model.FK_HorarioTerapeuta_Terapeuta" FromRole="Terapeuta" ToRole="HorarioTerapeuta" />
         </EntityType>
         <EntityType Name="TipoTerapia">
           <Key>
@@ -381,6 +522,7 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           <Property Name="descripcion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="CategoriaClinica" Relationship="Self.FK_CategoriaClinica_TipoTerapia" FromRole="TipoTerapia" ToRole="CategoriaClinica" />
           <NavigationProperty Name="Ejercicio" Relationship="Self.FK_Ejercicio_TipoTerapia" FromRole="TipoTerapia" ToRole="Ejercicio" />
+          <NavigationProperty Name="Cita" Relationship="Model.FK_Cita_TipoTerapia" FromRole="TipoTerapia" ToRole="Cita" />
         </EntityType>
         <EntityType Name="Usuario">
           <Key>
@@ -581,7 +723,149 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Terapeuta" EntitySet="Terapeuta" />
           </AssociationSet>
+          <EntitySet Name="BloqueHorario" EntityType="Model.BloqueHorario" />
+          <EntitySet Name="Cita" EntityType="Model.Cita" />
+          <EntitySet Name="HorarioTerapeuta" EntityType="Model.HorarioTerapeuta" />
+          <AssociationSet Name="FK_BloqueHorario_Terapeuta" Association="Model.FK_BloqueHorario_Terapeuta">
+            <End Role="Terapeuta" EntitySet="Terapeuta" />
+            <End Role="BloqueHorario" EntitySet="BloqueHorario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cita_CategoriaClinica" Association="Model.FK_Cita_CategoriaClinica">
+            <End Role="CategoriaClinica" EntitySet="CategoriaClinica" />
+            <End Role="Cita" EntitySet="Cita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cita_Paciente" Association="Model.FK_Cita_Paciente">
+            <End Role="Paciente" EntitySet="Paciente" />
+            <End Role="Cita" EntitySet="Cita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cita_Terapeuta" Association="Model.FK_Cita_Terapeuta">
+            <End Role="Terapeuta" EntitySet="Terapeuta" />
+            <End Role="Cita" EntitySet="Cita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cita_TipoTerapia" Association="Model.FK_Cita_TipoTerapia">
+            <End Role="TipoTerapia" EntitySet="TipoTerapia" />
+            <End Role="Cita" EntitySet="Cita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HorarioTerapeuta_Terapeuta" Association="Model.FK_HorarioTerapeuta_Terapeuta">
+            <End Role="Terapeuta" EntitySet="Terapeuta" />
+            <End Role="HorarioTerapeuta" EntitySet="HorarioTerapeuta" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="BloqueHorario">
+          <Key>
+            <PropertyRef Name="id_bloque" />
+          </Key>
+          <Property Name="id_bloque" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="hora_inicio" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="hora_fin" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="motivo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="id_terapeuta" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Terapeuta" Relationship="Model.FK_BloqueHorario_Terapeuta" FromRole="BloqueHorario" ToRole="Terapeuta" />
+        </EntityType>
+        <EntityType Name="Cita">
+          <Key>
+            <PropertyRef Name="id_cita" />
+          </Key>
+          <Property Name="id_cita" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="hora_inicio" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="hora_fin" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="estado" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="motivo_cancelacion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="id_paciente" Type="Int32" Nullable="false" />
+          <Property Name="id_terapeuta" Type="Int32" Nullable="false" />
+          <Property Name="id_terapia" Type="Int32" Nullable="false" />
+          <Property Name="id_categoria" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CategoriaClinica" Relationship="Model.FK_Cita_CategoriaClinica" FromRole="Cita" ToRole="CategoriaClinica" />
+          <NavigationProperty Name="Paciente" Relationship="Model.FK_Cita_Paciente" FromRole="Cita" ToRole="Paciente" />
+          <NavigationProperty Name="Terapeuta" Relationship="Model.FK_Cita_Terapeuta" FromRole="Cita" ToRole="Terapeuta" />
+          <NavigationProperty Name="TipoTerapia" Relationship="Model.FK_Cita_TipoTerapia" FromRole="Cita" ToRole="TipoTerapia" />
+        </EntityType>
+        <EntityType Name="HorarioTerapeuta">
+          <Key>
+            <PropertyRef Name="id_horario" />
+          </Key>
+          <Property Name="id_horario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_terapeuta" Type="Int32" Nullable="false" />
+          <Property Name="dia_semana" Type="Int32" Nullable="false" />
+          <Property Name="hora_inicio" Type="Time" Nullable="false" Precision="0" />
+          <Property Name="hora_fin" Type="Time" Nullable="false" Precision="0" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Terapeuta" Relationship="Model.FK_HorarioTerapeuta_Terapeuta" FromRole="HorarioTerapeuta" ToRole="Terapeuta" />
+        </EntityType>
+        <Association Name="FK_BloqueHorario_Terapeuta">
+          <End Type="Model.Terapeuta" Role="Terapeuta" Multiplicity="1" />
+          <End Type="Model.BloqueHorario" Role="BloqueHorario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terapeuta">
+              <PropertyRef Name="id_terapeuta" />
+            </Principal>
+            <Dependent Role="BloqueHorario">
+              <PropertyRef Name="id_terapeuta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cita_CategoriaClinica">
+          <End Type="Model.CategoriaClinica" Role="CategoriaClinica" Multiplicity="1" />
+          <End Type="Model.Cita" Role="Cita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoriaClinica">
+              <PropertyRef Name="id_categoria" />
+            </Principal>
+            <Dependent Role="Cita">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cita_Paciente">
+          <End Type="Model.Paciente" Role="Paciente" Multiplicity="1" />
+          <End Type="Model.Cita" Role="Cita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Paciente">
+              <PropertyRef Name="id_paciente" />
+            </Principal>
+            <Dependent Role="Cita">
+              <PropertyRef Name="id_paciente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cita_Terapeuta">
+          <End Type="Model.Terapeuta" Role="Terapeuta" Multiplicity="1" />
+          <End Type="Model.Cita" Role="Cita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terapeuta">
+              <PropertyRef Name="id_terapeuta" />
+            </Principal>
+            <Dependent Role="Cita">
+              <PropertyRef Name="id_terapeuta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cita_TipoTerapia">
+          <End Type="Model.TipoTerapia" Role="TipoTerapia" Multiplicity="1" />
+          <End Type="Model.Cita" Role="Cita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoTerapia">
+              <PropertyRef Name="id_terapia" />
+            </Principal>
+            <Dependent Role="Cita">
+              <PropertyRef Name="id_terapia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HorarioTerapeuta_Terapeuta">
+          <End Type="Model.Terapeuta" Role="Terapeuta" Multiplicity="1" />
+          <End Type="Model.HorarioTerapeuta" Role="HorarioTerapeuta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Terapeuta">
+              <PropertyRef Name="id_terapeuta" />
+            </Principal>
+            <Dependent Role="HorarioTerapeuta">
+              <PropertyRef Name="id_terapeuta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -688,6 +972,46 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
                 <ScalarProperty Name="end_ip_address" ColumnName="end_ip_address" />
                 <ScalarProperty Name="create_date" ColumnName="create_date" />
                 <ScalarProperty Name="modify_date" ColumnName="modify_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BloqueHorario">
+            <EntityTypeMapping TypeName="Model.BloqueHorario">
+              <MappingFragment StoreEntitySet="BloqueHorario">
+                <ScalarProperty Name="id_terapeuta" ColumnName="id_terapeuta" />
+                <ScalarProperty Name="motivo" ColumnName="motivo" />
+                <ScalarProperty Name="hora_fin" ColumnName="hora_fin" />
+                <ScalarProperty Name="hora_inicio" ColumnName="hora_inicio" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="id_bloque" ColumnName="id_bloque" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cita">
+            <EntityTypeMapping TypeName="Model.Cita">
+              <MappingFragment StoreEntitySet="Cita">
+                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
+                <ScalarProperty Name="id_terapia" ColumnName="id_terapia" />
+                <ScalarProperty Name="id_terapeuta" ColumnName="id_terapeuta" />
+                <ScalarProperty Name="id_paciente" ColumnName="id_paciente" />
+                <ScalarProperty Name="motivo_cancelacion" ColumnName="motivo_cancelacion" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="hora_fin" ColumnName="hora_fin" />
+                <ScalarProperty Name="hora_inicio" ColumnName="hora_inicio" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="id_cita" ColumnName="id_cita" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HorarioTerapeuta">
+            <EntityTypeMapping TypeName="Model.HorarioTerapeuta">
+              <MappingFragment StoreEntitySet="HorarioTerapeuta">
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="hora_fin" ColumnName="hora_fin" />
+                <ScalarProperty Name="hora_inicio" ColumnName="hora_inicio" />
+                <ScalarProperty Name="dia_semana" ColumnName="dia_semana" />
+                <ScalarProperty Name="id_terapeuta" ColumnName="id_terapeuta" />
+                <ScalarProperty Name="id_horario" ColumnName="id_horario" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -68,6 +68,84 @@ namespace MediGrids.Controllers
             return View();
         }
 
+        // GET: Paciente/ObtenerHorariosDisponibles?idTerapeuta=1&fecha=2026-04-01
+        [HttpGet]
+        public JsonResult ObtenerHorariosDisponibles(int idTerapeuta, string fecha)
+        {
+            try
+            {
+                DateTime fechaCita = DateTime.Parse(fecha);
+                // Convertir dia de semana: DayOfWeek (0=Domingo..6=Sabado) coincide con dia_semana en BD
+                int diaSemana = (int)fechaCita.DayOfWeek;
+
+                // 1. Obtener horario laboral del terapeuta para ese dia de la semana
+                var horariosLaborales = db.HorarioTerapeuta
+                    .Where(h => h.id_terapeuta == idTerapeuta
+                             && h.dia_semana == diaSemana
+                             && h.activo == true)
+                    .OrderBy(h => h.hora_inicio)
+                    .ToList();
+
+                if (!horariosLaborales.Any())
+                {
+                    return Json(new { success = true, horarios = new List<object>(), mensaje = "El terapeuta no tiene horario asignado para este dia" }, JsonRequestBehavior.AllowGet);
+                }
+
+                // 2. Generar slots de 1 hora basados en los bloques de horario laboral
+                var todosLosSlots = new List<TimeSpan>();
+                foreach (var bloque in horariosLaborales)
+                {
+                    var horaActual = bloque.hora_inicio;
+                    while (horaActual < bloque.hora_fin)
+                    {
+                        todosLosSlots.Add(horaActual);
+                        horaActual = horaActual.Add(TimeSpan.FromHours(1));
+                    }
+                }
+
+                // 3. Obtener citas ya agendadas para ese terapeuta en esa fecha (no canceladas)
+                var citasExistentes = db.Cita
+                    .Where(c => c.id_terapeuta == idTerapeuta
+                             && c.fecha == fechaCita
+                             && c.estado != "Cancelada")
+                    .Select(c => new { c.hora_inicio, c.hora_fin })
+                    .ToList();
+
+                // 4. Obtener bloqueos de horario para ese terapeuta en esa fecha
+                var bloqueos = db.BloqueHorario
+                    .Where(b => b.id_terapeuta == idTerapeuta
+                             && b.fecha == fechaCita)
+                    .Select(b => new { b.hora_inicio, b.hora_fin })
+                    .ToList();
+
+                // 5. Determinar disponibilidad de cada slot
+                var resultado = todosLosSlots.Select(slot =>
+                {
+                    var slotFin = slot.Add(TimeSpan.FromHours(1));
+
+                    // Verificar si hay cita que se solape con este slot
+                    bool ocupadoPorCita = citasExistentes.Any(c =>
+                        slot < c.hora_fin && slotFin > c.hora_inicio);
+
+                    // Verificar si hay bloqueo que se solape con este slot
+                    bool ocupadoPorBloqueo = bloqueos.Any(b =>
+                        slot < b.hora_fin && slotFin > b.hora_inicio);
+
+                    return new
+                    {
+                        hora = slot.Hours.ToString("00") + ":" + slot.Minutes.ToString("00"),
+                        disponible = !ocupadoPorCita && !ocupadoPorBloqueo
+                    };
+                }).ToList();
+
+                return Json(new { success = true, horarios = resultado }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, mensaje = "Error al obtener horarios: " + ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

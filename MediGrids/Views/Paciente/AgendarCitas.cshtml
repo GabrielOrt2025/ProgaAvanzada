@@ -103,54 +103,22 @@
                 <!-- Calendario y Disponibilidad -->
                 <div class="form-section">
                     <h3><i class="lni lni-calendar"></i> Seleccione Fecha y Hora</h3>
-                    
-                    <!-- Rango de Fechas -->
+
+                    <!-- Fecha especifica -->
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="fechaInicio">Fecha Inicio</label>
-                                <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="fechaFin">Fecha Fin</label>
-                                <input type="date" class="form-control" id="fechaFin" name="fechaFin" required>
+                                <label for="fechaCita">Fecha de la Cita</label>
+                                <input type="date" class="form-control" id="fechaCita" name="fechaCita" required>
                             </div>
                         </div>
                     </div>
 
-                    <button type="button" class="btn btn-secondary mb-3" id="btn-consultar-disponibilidad">
-                        <i class="lni lni-search"></i> Consultar Disponibilidad
-                    </button>
-
-                    <!-- Calendario -->
-                    <div class="calendar-container" id="calendario-container" style="display: none;">
-                        <div class="calendar-header">
-                            <h4 id="calendario-mes-anio">Enero 2024</h4>
-                            <div class="calendar-nav">
-                                <button type="button" id="btn-mes-anterior"><i class="lni lni-chevron-left"></i></button>
-                                <button type="button" id="btn-mes-siguiente"><i class="lni lni-chevron-right"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="calendar-grid">
-                            <div class="calendar-day-header">Dom</div>
-                            <div class="calendar-day-header">Lun</div>
-                            <div class="calendar-day-header">Mar</div>
-                            <div class="calendar-day-header">Mie</div>
-                            <div class="calendar-day-header">Jue</div>
-                            <div class="calendar-day-header">Vie</div>
-                            <div class="calendar-day-header">Sab</div>
-                            <div id="calendario-dias"></div>
-                        </div>
-
-                        <!-- Horarios Disponibles -->
-                        <div id="horarios-container" style="display: none;">
-                            <h5 class="mt-4 mb-3">Horarios Disponibles: <span id="fecha-seleccionada"></span></h5>
-                            <div class="time-slots" id="horarios-disponibles">
-                                <!-- Se llenaran dinamicamente -->
-                            </div>
+                    <!-- Horarios Disponibles -->
+                    <div id="horarios-container" style="display: none;">
+                        <h5 class="mt-4 mb-3">Horarios Disponibles: <span id="fecha-seleccionada"></span></h5>
+                        <div class="time-slots" id="horarios-disponibles">
+                            <!-- Se llenaran dinamicamente -->
                         </div>
 
                         <!-- Leyenda -->
@@ -185,7 +153,7 @@
 </section>
 
 <!-- Script de Agendar Citas -->
-<script src="~/Template/js/agendar-citas.js"></script>
+<script src="~/Template/js/agendar-citas.js?v=@DateTime.Now.Ticks"></script>
 <script>
     // Inicializar la aplicación con datos del servidor
     (function() {

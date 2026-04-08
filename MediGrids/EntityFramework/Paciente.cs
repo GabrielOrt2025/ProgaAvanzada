@@ -18,6 +18,7 @@ namespace MediGrids.EntityFramework
         public Paciente()
         {
             this.PacienteEjercicio = new HashSet<PacienteEjercicio>();
+            this.Cita = new HashSet<Cita>();
         }
     
         public int id_paciente { get; set; }
@@ -31,5 +32,7 @@ namespace MediGrids.EntityFramework
         public virtual Usuario Usuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PacienteEjercicio> PacienteEjercicio { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cita> Cita { get; set; }
     }
 }

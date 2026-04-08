@@ -9,9 +9,9 @@ let categoriasPorTerapiaAgrupadas = {};
 let selectedTerapia = null;
 let selectedCategoria = null;
 let selectedTerapeuta = null;
+let selectedTerapeutaId = null;
 let selectedFecha = null;
 let selectedHora = null;
-let currentDate = new Date();
 
 /**
  * Inicializa la aplicación con los datos del servidor
@@ -47,22 +47,15 @@ function initAgendarCitas(categorias, terapeutas) {
  * Registra todos los event listeners
  */
 function registrarEventListeners() {
-    // Paso 1: Manejo de selección de terapia
+    // Paso 1: Manejo de seleccion de terapia
     document.getElementById('tipoTerapia').addEventListener('change', onTerapiaChange);
     document.getElementById('categoriaClinica').addEventListener('change', onCategoriaChange);
 
-    // Navegación entre pasos
+    // Navegacion entre pasos
     document.getElementById('btn-siguiente-1').addEventListener('click', onSiguientePaso1);
     document.getElementById('btn-anterior-2').addEventListener('click', onAnteriorPaso2);
 
-    // Consultar disponibilidad
-    document.getElementById('btn-consultar-disponibilidad').addEventListener('click', onConsultarDisponibilidad);
-
-    // Navegación de meses
-    document.getElementById('btn-mes-anterior').addEventListener('click', onMesAnterior);
-    document.getElementById('btn-mes-siguiente').addEventListener('click', onMesSiguiente);
-
-    // Envío del formulario
+    // Envio del formulario
     document.getElementById('form-paso-2').addEventListener('submit', onSubmitFormulario);
 
     console.log('Todos los event listeners registrados correctamente');
@@ -194,6 +187,7 @@ function mostrarTerapeutas(terapeutasFiltrados) {
             card.classList.add('selected');
             card.querySelector('input[type="radio"]').checked = true;
             selectedTerapeuta = `${terapeuta.Nombre} ${terapeuta.Apellidos}`;
+            selectedTerapeutaId = terapeuta.IdTerapeuta;
         });
 
         container.appendChild(card);
@@ -233,15 +227,25 @@ function onSiguientePaso1() {
     document.getElementById('step-indicator-1').classList.add('completed');
     document.getElementById('step-indicator-2').classList.add('active');
 
-    // Establecer fechas por defecto
-    const today = new Date();
-    const nextWeek = new Date(today);
-    nextWeek.setDate(nextWeek.getDate() + 7);
+    // Establecer fecha minima (hoy) y registrar evento
+    var today = new Date();
+    var yyyy = today.getFullYear();
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var dd = String(today.getDate()).padStart(2, '0');
+    var todayStr = yyyy + '-' + mm + '-' + dd;
 
-    document.getElementById('fechaInicio').value = today.toISOString().split('T')[0];
-    document.getElementById('fechaFin').value = nextWeek.toISOString().split('T')[0];
+    var fechaCitaInput = document.getElementById('fechaCita');
+    fechaCitaInput.min = todayStr;
+    fechaCitaInput.value = '';
+    selectedFecha = null;
+    selectedHora = null;
+    document.getElementById('horarios-container').style.display = 'none';
 
-    console.log('Paso 2 activado');
+    // Registrar evento change en el input de fecha
+    fechaCitaInput.removeEventListener('change', onFechaCitaChange);
+    fechaCitaInput.addEventListener('change', onFechaCitaChange);
+
+    console.log('Paso 2 activado - fecha min:', todayStr);
 }
 
 /**
@@ -256,104 +260,80 @@ function onAnteriorPaso2() {
 }
 
 /**
- * Consulta la disponibilidad y muestra el calendario
+ * Maneja el cambio de fecha de la cita
+ * Hace una consulta AJAX al servidor para obtener los horarios del terapeuta
  */
-function onConsultarDisponibilidad() {
-    const fechaInicio = document.getElementById('fechaInicio').value;
-    const fechaFin = document.getElementById('fechaFin').value;
-
-    if (!fechaInicio || !fechaFin) {
-        alert('Por favor seleccione el rango de fechas');
+function onFechaCitaChange() {
+    var fechaValue = this.value;
+    if (!fechaValue) {
+        document.getElementById('horarios-container').style.display = 'none';
+        selectedFecha = null;
+        selectedHora = null;
         return;
     }
 
-    document.getElementById('calendario-container').style.display = 'block';
-    generarCalendario(new Date(fechaInicio));
+    var partes = fechaValue.split('-');
+    var fechaSeleccionada = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
+    selectedFecha = fechaSeleccionada.toLocaleDateString('es-ES');
+    selectedHora = null;
+
+    document.getElementById('fecha-seleccionada').textContent = selectedFecha;
+
+    // Consultar horarios del terapeuta al servidor
+    consultarHorariosServidor(selectedTerapeutaId, fechaValue);
 }
 
 /**
- * Genera el calendario para el mes especificado
+ * Consulta los horarios disponibles desde el servidor via AJAX
  */
-function generarCalendario(fecha) {
-    const diasContainer = document.getElementById('calendario-dias');
-    diasContainer.innerHTML = '';
+function consultarHorariosServidor(idTerapeuta, fecha) {
+    var horariosContainer = document.getElementById('horarios-disponibles');
+    horariosContainer.innerHTML = '<p class="text-muted">Consultando horarios disponibles...</p>';
+    document.getElementById('horarios-container').style.display = 'block';
 
-    const año = fecha.getFullYear();
-    const mes = fecha.getMonth();
+    var url = '/Paciente/ObtenerHorariosDisponibles?idTerapeuta=' + idTerapeuta + '&fecha=' + fecha;
 
-    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-    document.getElementById('calendario-mes-anio').textContent = `${meses[mes]} ${año}`;
-
-    const primerDia = new Date(año, mes, 1).getDay();
-    const ultimoDia = new Date(año, mes + 1, 0).getDate();
-
-    // Días vacíos al inicio
-    for (let i = 0; i < primerDia; i++) {
-        const diaVacio = document.createElement('div');
-        diaVacio.className = 'calendar-day disabled';
-        diasContainer.appendChild(diaVacio);
-    }
-
-    // Días del mes
-    for (let dia = 1; dia <= ultimoDia; dia++) {
-        const diaElement = document.createElement('div');
-        diaElement.className = 'calendar-day';
-        diaElement.innerHTML = `<strong>${dia}</strong>`;
-
-        const fechaDia = new Date(año, mes, dia);
-        const hoy = new Date();
-        hoy.setHours(0, 0, 0, 0);
-
-        // Deshabilitar días pasados
-        if (fechaDia < hoy) {
-            diaElement.classList.add('disabled');
-        } else {
-            diaElement.addEventListener('click', function () {
-                if (!diaElement.classList.contains('disabled')) {
-                    document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
-                    diaElement.classList.add('selected');
-                    selectedFecha = fechaDia.toLocaleDateString('es-ES');
-                    document.getElementById('fecha-seleccionada').textContent = selectedFecha;
-                    mostrarHorarios(fechaDia);
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var respuesta = JSON.parse(xhr.responseText);
+                if (respuesta.success) {
+                    mostrarHorarios(respuesta.horarios, respuesta.mensaje);
+                } else {
+                    horariosContainer.innerHTML = '<p class="text-muted">' + (respuesta.mensaje || 'Error al consultar horarios') + '</p>';
                 }
-            });
+            } else {
+                horariosContainer.innerHTML = '<p class="text-muted">Error de conexion al consultar horarios</p>';
+            }
         }
-
-        diasContainer.appendChild(diaElement);
-    }
+    };
+    xhr.send();
 }
 
 /**
- * Muestra los horarios disponibles para una fecha
+ * Muestra los horarios disponibles recibidos del servidor
  */
-function mostrarHorarios(fecha) {
-    const horariosContainer = document.getElementById('horarios-disponibles');
+function mostrarHorarios(horarios, mensaje) {
+    var horariosContainer = document.getElementById('horarios-disponibles');
     horariosContainer.innerHTML = '';
     document.getElementById('horarios-container').style.display = 'block';
 
-    // Horarios de ejemplo (8:00 AM - 5:00 PM)
-    const horarios = [
-        { hora: '08:00', disponible: true },
-        { hora: '09:00', disponible: true },
-        { hora: '10:00', disponible: false },
-        { hora: '11:00', disponible: true },
-        { hora: '12:00', disponible: false },
-        { hora: '13:00', disponible: true },
-        { hora: '14:00', disponible: true },
-        { hora: '15:00', disponible: false },
-        { hora: '16:00', disponible: true },
-        { hora: '17:00', disponible: true }
-    ];
+    if (!horarios || horarios.length === 0) {
+        horariosContainer.innerHTML = '<p class="text-muted">' + (mensaje || 'No hay horarios disponibles para este dia') + '</p>';
+        return;
+    }
 
-    horarios.forEach(horario => {
-        const slot = document.createElement('div');
-        slot.className = `time-slot ${horario.disponible ? 'available' : 'occupied'}`;
+    horarios.forEach(function(horario) {
+        var slot = document.createElement('div');
+        slot.className = 'time-slot ' + (horario.disponible ? 'available' : 'occupied');
         slot.textContent = horario.hora;
 
         if (horario.disponible) {
             slot.addEventListener('click', function () {
-                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                document.querySelectorAll('.time-slot').forEach(function(s) { s.classList.remove('selected'); });
                 slot.classList.add('selected');
                 selectedHora = horario.hora;
             });
@@ -361,22 +341,6 @@ function mostrarHorarios(fecha) {
 
         horariosContainer.appendChild(slot);
     });
-}
-
-/**
- * Navega al mes anterior
- */
-function onMesAnterior() {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    generarCalendario(currentDate);
-}
-
-/**
- * Navega al mes siguiente
- */
-function onMesSiguiente() {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    generarCalendario(currentDate);
 }
 
 /**

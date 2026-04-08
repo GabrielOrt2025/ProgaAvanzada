@@ -34,5 +34,8 @@ namespace MediGrids.EntityFramework
         public virtual DbSet<TipoTerapia> TipoTerapia { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<database_firewall_rules> database_firewall_rules { get; set; }
+        public virtual DbSet<BloqueHorario> BloqueHorario { get; set; }
+        public virtual DbSet<Cita> Cita { get; set; }
+        public virtual DbSet<HorarioTerapeuta> HorarioTerapeuta { get; set; }
     }
 }

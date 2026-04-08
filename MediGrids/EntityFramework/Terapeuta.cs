@@ -18,6 +18,9 @@ namespace MediGrids.EntityFramework
         public Terapeuta()
         {
             this.Ejercicio = new HashSet<Ejercicio>();
+            this.BloqueHorario = new HashSet<BloqueHorario>();
+            this.Cita = new HashSet<Cita>();
+            this.HorarioTerapeuta = new HashSet<HorarioTerapeuta>();
         }
     
         public int id_terapeuta { get; set; }
@@ -33,5 +36,11 @@ namespace MediGrids.EntityFramework
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ejercicio> Ejercicio { get; set; }
         public virtual Usuario Usuario { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BloqueHorario> BloqueHorario { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cita> Cita { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<HorarioTerapeuta> HorarioTerapeuta { get; set; }
     }
 }
