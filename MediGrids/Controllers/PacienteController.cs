@@ -148,43 +148,157 @@ namespace MediGrids.Controllers
 
         // POST: Paciente/ConfirmarCita
         [HttpPost]
-        public JsonResult ConfirmarCita(int idTerapeuta, string fecha, string horaInicio)
+        public JsonResult ConfirmarCita(int idTerapeuta, int idTerapia, int idCategoria, string fecha, string horaInicio)
         {
             try
             {
+                // Obtener el id_paciente desde la sesion del usuario logueado
+                var userId = Session["UserId"];
+                if (userId == null)
+                {
+                    return Json(new { success = false, mensaje = "Sesion expirada. Por favor inicie sesion nuevamente." });
+                }
+
+                int idUsuario = (int)userId;
+                var paciente = db.Paciente.FirstOrDefault(p => p.id_usuario == idUsuario);
+                if (paciente == null)
+                {
+                    return Json(new { success = false, mensaje = "No se encontro el perfil de paciente para este usuario." });
+                }
+
                 DateTime fechaCita = DateTime.Parse(fecha);
                 TimeSpan hora = TimeSpan.Parse(horaInicio);
                 TimeSpan horaFin = hora.Add(TimeSpan.FromHours(1));
 
-                // Verificar que no exista ya un bloqueo para ese horario
-                bool yaExiste = db.BloqueHorario.Any(b =>
+                // Verificar que no exista ya una cita para ese terapeuta en ese horario
+                bool yaExisteCita = db.Cita.Any(c =>
+                    c.id_terapeuta == idTerapeuta
+                    && c.fecha == fechaCita
+                    && c.hora_inicio == hora
+                    && c.estado != "Cancelada");
+
+                if (yaExisteCita)
+                {
+                    return Json(new { success = false, mensaje = "Este horario ya se encuentra ocupado por otra cita" });
+                }
+
+                // Verificar que no exista un bloqueo para ese horario
+                bool yaExisteBloqueo = db.BloqueHorario.Any(b =>
                     b.id_terapeuta == idTerapeuta
                     && b.fecha == fechaCita
                     && b.hora_inicio == hora);
 
-                if (yaExiste)
+                if (yaExisteBloqueo)
                 {
-                    return Json(new { success = false, mensaje = "Este horario ya se encuentra bloqueado" });
+                    return Json(new { success = false, mensaje = "Este horario se encuentra bloqueado" });
                 }
 
-                // Insertar en BloqueHorario
-                var bloqueo = new BloqueHorario
+                // Insertar en la tabla Cita
+                var cita = new Cita
                 {
-                    id_terapeuta = idTerapeuta,
                     fecha = fechaCita,
                     hora_inicio = hora,
                     hora_fin = horaFin,
-                    motivo = "Confirmada"
+                    estado = "Programada",
+                    id_paciente = paciente.id_paciente,
+                    id_terapeuta = idTerapeuta,
+                    id_terapia = idTerapia,
+                    id_categoria = idCategoria
                 };
 
-                db.BloqueHorario.Add(bloqueo);
+                db.Cita.Add(cita);
                 db.SaveChanges();
 
-                return Json(new { success = true, mensaje = "Cita confirmada exitosamente" });
+                return Json(new { success = true, mensaje = "Cita confirmada exitosamente", idCita = cita.id_cita });
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, mensaje = "Error al confirmar la cita: " + ex.Message });
+            }
+        }
+
+        // GET: Paciente/MisCitas
+        [HttpGet]
+        public ActionResult MisCitas()
+        {
+            var userId = Session["UserId"];
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            int idUsuario = (int)userId;
+            var paciente = db.Paciente.FirstOrDefault(p => p.id_usuario == idUsuario);
+            if (paciente == null)
+            {
+                ViewBag.Error = "No se encontro el perfil de paciente.";
+                return View(new List<MiCitaViewModel>());
+            }
+
+            var citas = db.Cita
+                .Where(c => c.id_paciente == paciente.id_paciente)
+                .OrderByDescending(c => c.fecha)
+                .ThenByDescending(c => c.hora_inicio)
+                .Select(c => new MiCitaViewModel
+                {
+                    IdCita = c.id_cita,
+                    Fecha = c.fecha,
+                    HoraInicio = c.hora_inicio,
+                    HoraFin = c.hora_fin,
+                    Estado = c.estado,
+                    NombreTerapeuta = c.Terapeuta.nombre + " " + c.Terapeuta.apellidos,
+                    NombreTerapia = c.TipoTerapia.nombre,
+                    NombreCategoria = c.CategoriaClinica.nombre
+                })
+                .ToList();
+
+            return View(citas);
+        }
+
+        // POST: Paciente/CancelarCita
+        [HttpPost]
+        public JsonResult CancelarCita(int idCita)
+        {
+            try
+            {
+                var userId = Session["UserId"];
+                if (userId == null)
+                {
+                    return Json(new { success = false, mensaje = "Sesion expirada. Por favor inicie sesion nuevamente." });
+                }
+
+                int idUsuario = (int)userId;
+                var paciente = db.Paciente.FirstOrDefault(p => p.id_usuario == idUsuario);
+                if (paciente == null)
+                {
+                    return Json(new { success = false, mensaje = "No se encontro el perfil de paciente." });
+                }
+
+                var cita = db.Cita.FirstOrDefault(c => c.id_cita == idCita && c.id_paciente == paciente.id_paciente);
+                if (cita == null)
+                {
+                    return Json(new { success = false, mensaje = "Cita no encontrada." });
+                }
+
+                if (cita.estado == "Cancelada")
+                {
+                    return Json(new { success = false, mensaje = "Esta cita ya fue cancelada." });
+                }
+
+                if (cita.estado == "Completada")
+                {
+                    return Json(new { success = false, mensaje = "No se puede cancelar una cita completada." });
+                }
+
+                // Eliminar la cita de la base de datos
+                db.Cita.Remove(cita);
+                db.SaveChanges();
+
+                return Json(new { success = true, mensaje = "Cita cancelada exitosamente." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, mensaje = "Error al cancelar la cita: " + ex.Message });
             }
         }
 

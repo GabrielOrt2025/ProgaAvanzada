@@ -1,0 +1,142 @@
+@model List<MediGrids.Models.MiCitaViewModel>
+@{
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+    ViewBag.Title = "Mis Citas";
+}
+
+<link rel="stylesheet" href="~/Template/css/mis-citas.css" />
+
+<section class="container">
+    <div class="mis-citas-header">
+        <h1><i class="lni lni-calendar"></i> Mis Citas</h1>
+        <p>Consulte el historial de sus citas agendadas y gestione sus proximas consultas</p>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    <div class="mis-citas-container">
+        <div class="mis-citas-actions">
+            <h3><i class="lni lni-list"></i> Listado de Citas</h3>
+            <a href="@Url.Action("AgendarCitas", "Paciente")" class="btn-agendar-nueva">
+                <i class="lni lni-plus"></i> Agendar Nueva Cita
+            </a>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="tabla-citas" id="tablaCitas">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Horario</th>
+                            <th>Terapia</th>
+                            <th>Categoria</th>
+                            <th>Terapeuta</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cita in Model)
+                        {
+                            <tr id="fila-cita-@cita.IdCita">
+                                <td data-label="Fecha">@cita.FechaFormateada</td>
+                                <td data-label="Horario">@cita.HoraFormateada</td>
+                                <td data-label="Terapia">@cita.NombreTerapia</td>
+                                <td data-label="Categoria">@cita.NombreCategoria</td>
+                                <td data-label="Terapeuta">@cita.NombreTerapeuta</td>
+                                <td data-label="Estado">
+                                    @{
+                                        var badgeClass = "badge-programada";
+                                        if (cita.Estado == "Confirmada") { badgeClass = "badge-confirmada"; }
+                                        else if (cita.Estado == "Completada") { badgeClass = "badge-completada"; }
+                                        else if (cita.Estado == "Cancelada") { badgeClass = "badge-cancelada"; }
+                                        else if (cita.Estado == "No asistio") { badgeClass = "badge-noasistio"; }
+                                    }
+                                    <span class="badge-estado @badgeClass">@cita.Estado</span>
+                                </td>
+                                <td data-label="Acciones">
+                                    @if (cita.PuedeCancelar)
+                                    {
+                                        <button type="button" class="btn-cancelar-cita" onclick="cancelarCita(@cita.IdCita)">
+                                            <i class="lni lni-trash-can"></i> Cancelar
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">--</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="sin-citas">
+                <i class="lni lni-calendar"></i>
+                <h4>No tiene citas registradas</h4>
+                <p>Agende su primera cita terapeutica para comenzar su tratamiento</p>
+                <a href="@Url.Action("AgendarCitas", "Paciente")" class="btn-agendar-nueva">
+                    <i class="lni lni-plus"></i> Agendar Cita
+                </a>
+            </div>
+        }
+    </div>
+</section>
+
+<script>
+    function cancelarCita(idCita) {
+        if (!confirm('Esta seguro que desea cancelar esta cita?\n\nEsta accion eliminara la cita permanentemente.')) {
+            return;
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Paciente/CancelarCita', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var respuesta = JSON.parse(xhr.responseText);
+                    if (respuesta.success) {
+                        alert(respuesta.mensaje);
+                        // Eliminar la fila de la tabla
+                        var fila = document.getElementById('fila-cita-' + idCita);
+                        if (fila) {
+                            fila.remove();
+                        }
+                        // Si no quedan filas, recargar la pagina para mostrar el mensaje de sin citas
+                        var filas = document.querySelectorAll('.tabla-citas tbody tr');
+                        if (filas.length === 0) {
+                            location.reload();
+                        }
+                    } else {
+                        alert(respuesta.mensaje || 'Error al cancelar la cita');
+                    }
+                } else {
+                    alert('Error de conexion al cancelar la cita');
+                }
+            }
+        };
+        xhr.send('idCita=' + idCita);
+    }
+
+    // Inicializar DataTable si esta disponible
+    document.addEventListener('DOMContentLoaded', function () {
+        if (typeof jQuery !== 'undefined' && jQuery.fn.DataTable) {
+            jQuery('#tablaCitas').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/2.3.7/i18n/es-ES.json'
+                },
+                order: [[0, 'desc']],
+                pageLength: 10
+            });
+        }
+    });
+</script>

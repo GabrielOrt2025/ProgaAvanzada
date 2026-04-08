@@ -7,7 +7,9 @@ let categoriasPorTerapia = [];
 let terapeutasData = [];
 let categoriasPorTerapiaAgrupadas = {};
 let selectedTerapia = null;
+let selectedTerapiaId = null;
 let selectedCategoria = null;
+let selectedCategoriaId = null;
 let selectedTerapeuta = null;
 let selectedTerapeutaId = null;
 let selectedFecha = null;
@@ -67,6 +69,7 @@ function registrarEventListeners() {
 function onTerapiaChange() {
     const terapiaId = parseInt(this.value);
     selectedTerapia = this.options[this.selectedIndex].text;
+    selectedTerapiaId = terapiaId || null;
 
     const categoriaSelect = document.getElementById('categoriaClinica');
 
@@ -104,6 +107,7 @@ function onTerapiaChange() {
 function onCategoriaChange() {
     selectedCategoria = this.options[this.selectedIndex].text;
     const categoriaId = parseInt(this.value);
+    selectedCategoriaId = categoriaId || null;
 
     console.log('=== CATEGORÍA SELECCIONADA ===');
     console.log('Categoría ID:', categoriaId);
@@ -366,7 +370,11 @@ function onSubmitFormulario(e) {
     btnConfirmar.disabled = true;
     btnConfirmar.innerHTML = '<i class="lni lni-spinner-arrow"></i> Confirmando...';
 
-    var datos = 'idTerapeuta=' + selectedTerapeutaId + '&fecha=' + fechaValue + '&horaInicio=' + selectedHora;
+    var datos = 'idTerapeuta=' + selectedTerapeutaId
+        + '&idTerapia=' + selectedTerapiaId
+        + '&idCategoria=' + selectedCategoriaId
+        + '&fecha=' + fechaValue
+        + '&horaInicio=' + selectedHora;
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/Paciente/ConfirmarCita', true);

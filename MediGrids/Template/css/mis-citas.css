@@ -1,0 +1,219 @@
+/* ===================================
+   Mis Citas - Estilos
+   =================================== */
+
+.mis-citas-header {
+    background: linear-gradient(135deg, #0c7a3e 0%, #0a5e2f 100%);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    color: white;
+}
+
+.mis-citas-header h1 {
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.mis-citas-header p {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.1rem;
+}
+
+.mis-citas-container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+.mis-citas-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.mis-citas-actions h3 {
+    color: #0c7a3e;
+    margin: 0;
+}
+
+.btn-agendar-nueva {
+    background: #0c7a3e;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-agendar-nueva:hover {
+    background: #0a5e2f;
+    color: white;
+    text-decoration: none;
+}
+
+/* Tabla de citas */
+.tabla-citas {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.tabla-citas thead th {
+    background: #f8f9fa;
+    color: #333;
+    font-weight: 600;
+    padding: 12px 16px;
+    border-bottom: 2px solid #0c7a3e;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.tabla-citas tbody tr {
+    transition: background 0.2s;
+}
+
+.tabla-citas tbody tr:hover {
+    background: #f0faf4;
+}
+
+.tabla-citas tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+/* Badges de estado */
+.badge-estado {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-programada {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+.badge-confirmada {
+    background: #e3f2fd;
+    color: #1565c0;
+    border: 1px solid #90caf9;
+}
+
+.badge-completada {
+    background: #f3e5f5;
+    color: #7b1fa2;
+    border: 1px solid #ce93d8;
+}
+
+.badge-cancelada {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+}
+
+.badge-noasistio {
+    background: #fff3e0;
+    color: #e65100;
+    border: 1px solid #ffcc80;
+}
+
+/* Boton cancelar */
+.btn-cancelar-cita {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-cancelar-cita:hover {
+    background: #b02a37;
+}
+
+.btn-cancelar-cita:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Sin citas */
+.sin-citas {
+    text-align: center;
+    padding: 60px 20px;
+    color: #888;
+}
+
+.sin-citas i {
+    font-size: 4rem;
+    color: #ccc;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.sin-citas h4 {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.sin-citas p {
+    margin-bottom: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tabla-citas thead {
+        display: none;
+    }
+
+    .tabla-citas tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    .tabla-citas tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .tabla-citas tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #333;
+        margin-right: 10px;
+    }
+
+    .tabla-citas tbody td:last-child {
+        border-bottom: none;
+    }
+}
