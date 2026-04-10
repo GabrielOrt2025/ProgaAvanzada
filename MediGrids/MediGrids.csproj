@@ -118,6 +118,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\Agendacontroller.cs" />
     <Compile Include="Controllers\TerapeutaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\GestionTerapeutaController.cs" />
@@ -176,6 +177,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AgendaBloqueoViewModel.cs" />
+    <Compile Include="Models\AgendaCitaViewModel.cs" />
     <Compile Include="Models\CategoriaClinicaViewModel.cs" />
     <Compile Include="Models\GestionTerapeutaViewModel.cs" />
     <Compile Include="Models\MiCitaViewModel.cs" />
@@ -243,6 +246,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Template\css\agendar-citas.css" />
+    <Content Include="Template\css\AgendarCitas.css" />
     <Content Include="Template\css\animate.css" />
     <Content Include="Template\css\BibliotecaEjercicios.css" />
     <Content Include="Template\css\bootstrap.min.css" />
@@ -316,6 +320,9 @@
     <Content Include="Views\Home\PanelTerapeuta.cshtml" />
     <Content Include="Views\Home\PanelPaciente.cshtml" />
     <Content Include="Views\Paciente\MisCitas.cshtml" />
+    <Content Include="Views\Home\Agenda\GestionarAgendaTerapeuta.cshtml" />
+    <Content Include="Views\Agenda\GestionarAgendaTerapeuta.cshtml" />
+    <Content Include="Views\Agenda\CrearBloqueo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -68,6 +68,10 @@ namespace MediGrids.Controllers
             // Dependiendo del rol, el usuario verá un panel distinto
             if (user.id_rol == 2)
             {
+                var terapeuta = db.Terapeuta.FirstOrDefault(t => t.email == user.correo);
+                if (terapeuta != null)
+                    Session["TerapeutaId"] = terapeuta.id_terapeuta;
+
                 return RedirectToAction("PanelTerapeuta");
             }
             else if (user.id_rol == 1) // Admin

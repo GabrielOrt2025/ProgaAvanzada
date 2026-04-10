@@ -63,21 +63,25 @@
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(m => m.id_terapia, "Id Terapia")
-                        @Html.TextBoxFor(m => m.id_terapia, new { @class = "form-control", type = "number", placeholder = "Ingrese el id de la terapia" })
-                        @Html.ValidationMessageFor(m => m.id_terapia, "", new { @class = "text-danger" })
+                        <label>Tipo de Terapia</label>
+                        @Html.DropDownListFor(m => m.id_terapia,
+                            new SelectList(ViewBag.Terapias, "id_terapia", "nombre"),
+                            "-- Seleccione una terapia --",
+                            new { @class = "form-control" })
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(m => m.id_categoria, "Id Categoria")
-                        @Html.TextBoxFor(m => m.id_categoria, new { @class = "form-control", type = "number", placeholder = "Ingrese el id de la categoria" })
-                        @Html.ValidationMessageFor(m => m.id_categoria, "", new { @class = "text-danger" })
+                        <label>Categoría</label>
+                        @Html.DropDownListFor(m => m.id_categoria,
+                            new SelectList(ViewBag.Categorias, "id_categoria", "nombre"),
+                            "-- Seleccione una categoría --",
+                            new { @class = "form-control" })
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(m => m.creado_por, "Creado por")
-                        @Html.TextBoxFor(m => m.creado_por, new { @class = "form-control", placeholder = "Ingrese el nombre del creador" })
-                        @Html.ValidationMessageFor(m => m.creado_por, "", new { @class = "text-danger" })
+                        <label>Creado por</label>
+                        <input type="text" class="form-control" value="@ViewBag.NombreTerapeuta" disabled />
+                        @Html.HiddenFor(m => m.creado_por)
                     </div>
 
                 </div>

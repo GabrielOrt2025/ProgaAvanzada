@@ -5,8 +5,9 @@
     ViewBag.Title = "Editar Ejercicio";
 }
 
-<section class="container">
+<link rel="stylesheet" href="~/Template/css/ejercicios.css" />
 
+<section class="container">
     <div class="agendar-citas-header">
         <h1><i class="lni lni-pencil"></i> Editar Ejercicio</h1>
         <p>Modifique la informacion del ejercicio</p>
@@ -18,70 +19,74 @@
             @using (Html.BeginForm("Editar", "Terapeuta", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
-
-                
                 @Html.HiddenFor(m => m.id_ejercicio)
 
-                
-                <div class="form-group mb-3">
-                    <label>Nombre</label>
-                    @Html.TextBoxFor(m => m.nombre, new { @class = "form-control", required = "required" })
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        @Html.TextBoxFor(m => m.nombre, new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(m => m.nombre, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descripcion</label>
+                        @Html.TextAreaFor(m => m.descripcion, new { @class = "form-control", rows = 3 })
+                        @Html.ValidationMessageFor(m => m.descripcion, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Objetivo</label>
+                        @Html.TextAreaFor(m => m.objetivo, new { @class = "form-control", rows = 3 })
+                        @Html.ValidationMessageFor(m => m.objetivo, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Dificultad</label>
+                        @Html.TextBoxFor(m => m.dificultad, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.dificultad, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Video URL</label>
+                        @Html.TextBoxFor(m => m.video_url, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.video_url, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tipo de Terapia</label>
+                        @Html.DropDownListFor(m => m.id_terapia,
+                                 new SelectList(ViewBag.Terapias, "id_terapia", "nombre", Model.id_terapia),
+                                 "-- Seleccione una terapia --",
+                                 new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.id_terapia, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        @Html.DropDownListFor(m => m.id_categoria,
+                                 new SelectList(ViewBag.Categorias, "id_categoria", "nombre", Model.id_categoria),
+                                 "-- Seleccione una categoría --",
+                                 new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.id_categoria, "", new { @class = "text-danger" })
+                    </div>
+
                 </div>
 
-                
-                <div class="form-group mb-3">
-                    <label>Descripcion</label>
-                    @Html.TextAreaFor(m => m.descripcion, new { @class = "form-control", rows = 3 })
-                </div>
-
-                
-                <div class="form-group mb-3">
-                    <label>Objetivo</label>
-                    @Html.TextAreaFor(m => m.objetivo, new { @class = "form-control", rows = 3 })
-                </div>
-
-                
-                <div class="form-group mb-3">
-                    <label>Dificultad</label>
-                    @Html.TextBoxFor(m => m.dificultad, new { @class = "form-control" })
-                </div>
-
-                
-                <div class="form-group mb-3">
-                    <label>Video URL</label>
-                    @Html.TextBoxFor(m => m.video_url, new { @class = "form-control" })
-                </div>
-
-                
-                <div class="form-group mb-3">
-                    <label>Id Terapia</label>
-                    @Html.TextBoxFor(m => m.id_terapia, new { @class = "form-control" })
-                </div>
-
-                
-                <div class="form-group mb-3">
-                    <label>Id Categoria</label>
-                    @Html.TextBoxFor(m => m.id_categoria, new { @class = "form-control" })
-                </div>
-
-                
-                <div class="d-flex justify-content-end gap-2 mt-4">
-
-                    
-                    <a href="@Url.Action("GestionarEjercicio", "Terapeuta")"
-                       class="btn btn-secondary">
-                        Cancelar
-                    </a>
-
-                    
-                    <button type="submit" class="btn btn-primary">
+                <div class="ejercicio-actions" style="margin-top: 20px;">
+                    <button type="submit" class="btn-accion btn-editar">
                         <i class="lni lni-save"></i> Guardar Cambios
                     </button>
-
+                    <a href="@Url.Action("GestionarEjercicio", "Terapeuta")" class="btn-accion btn-eliminar">
+                        <i class="lni lni-arrow-left"></i> Cancelar
+                    </a>
                 </div>
             }
 
         </div>
     </div>
-
 </section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

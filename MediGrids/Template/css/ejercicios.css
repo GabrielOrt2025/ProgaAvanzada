@@ -66,6 +66,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    white-space: nowrap;
 }
 
     .btn-crear-ejercicio:hover {
@@ -79,7 +80,7 @@
 
 .ejercicios-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
     gap: 20px;
 }
 
@@ -94,6 +95,8 @@
     transition: 0.3s;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     border: 1px solid #e8e8e8;
+    display: flex;
+    flex-direction: column;
 }
 
     .ejercicio-card:hover {
@@ -110,63 +113,73 @@
     .ejercicio-card-header h4 {
         margin-top: 10px;
         margin-bottom: 0;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         color: white;
+        word-break: break-word;
     }
 
 /* Badge */
 .ejercicio-badge {
     background: rgba(255,255,255,0.2);
-    padding: 6px 12px;
+    padding: 4px 10px;
     border-radius: 20px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: white;
+    display: inline-block;
 }
 
 /* Body */
 .ejercicio-card-body {
-    padding: 20px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     color: #333;
+    flex: 1;
 }
 
 /* Info */
 .ejercicio-info-item .label {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: #0c7a3e;
     font-weight: bold;
+    display: block;
+    margin-bottom: 2px;
 }
 
 .ejercicio-info-item p {
     color: #444;
     margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.4;
 }
 
-/* Meta */
+/* Meta — 4 columnas para que quepan Dificultad, Terapia, Categoria, Estado */
 .ejercicio-meta {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
 }
 
 .meta-box {
     background: #f1f3f5;
     border-radius: 8px;
-    padding: 10px;
+    padding: 8px 6px;
     text-align: center;
 }
 
     .meta-box .label {
-        font-size: 0.75rem;
+        font-size: 0.68rem;
         color: #0c7a3e;
         font-weight: bold;
+        display: block;
+        margin-bottom: 2px;
     }
 
     .meta-box .value {
         color: #333;
         font-weight: 600;
+        font-size: 0.82rem;
     }
 
 /* Footer */
@@ -175,47 +188,49 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    padding-top: 10px;
+    padding-top: 8px;
     border-top: 1px solid #ddd;
 }
 
 .creado-por {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: #666;
 }
 
 /* ===================================
-   BOTONES (FIX IMPORTANTE)
+   BOTONES — 2 filas de 2
    =================================== */
 
 .ejercicio-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 14px;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
 }
 
-    /* Form dentro del flex */
-    .ejercicio-actions .form-eliminar {
-        flex: 1;
+    /* Los forms ocupan una celda del grid */
+    .ejercicio-actions .form-eliminar,
+    .ejercicio-actions .form-toggle {
         margin: 0;
     }
 
 /* Botones base */
 .btn-accion {
     width: 100%;
-    min-height: 44px;
-    padding: 10px 14px;
+    min-height: 40px;
+    padding: 8px 10px;
     border-radius: 8px;
     font-weight: 600;
+    font-size: 0.82rem;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     text-decoration: none;
     box-sizing: border-box;
+    transition: 0.2s;
 }
 
 /* Editar */
@@ -227,6 +242,7 @@
     .btn-editar:hover {
         background: #155724;
         color: white;
+        text-decoration: none;
     }
 
 /* Eliminar */
@@ -240,15 +256,39 @@
         color: white;
     }
 
-/* Video */
+/* Activar */
+.btn-activar {
+    background: #0c7a3e;
+    color: #fff;
+}
+
+    .btn-activar:hover {
+        background: #0a6234;
+        color: #fff;
+    }
+
+/* Desactivar */
+.btn-desactivar {
+    background: #dc3545;
+    color: #fff;
+}
+
+    .btn-desactivar:hover {
+        background: #b02a37;
+        color: #fff;
+    }
+
+/* Video — ocupa las 2 columnas si es el único en su fila */
 .btn-video {
     background: #dbeafe;
     color: #0b5ed7;
+
 }
 
     .btn-video:hover {
         background: #0b5ed7;
         color: white;
+        text-decoration: none;
     }
 
 /* ===================================
@@ -273,7 +313,7 @@
 
 @media (max-width: 768px) {
     .ejercicio-meta {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .ejercicios-header-actions {
@@ -283,10 +323,10 @@
     }
 
     .ejercicio-actions {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
 
-        .ejercicio-actions .form-eliminar {
-            width: 100%;
-        }
+    .btn-video {
+        grid-column: span 1;
+    }
 }

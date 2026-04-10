@@ -1,0 +1,342 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+    ViewBag.Title = "Agenda de Citas";
+
+    var citas = ViewBag.Citas as List<MediGrids.Models.AgendaCitaViewModel> ?? new List<MediGrids.Models.AgendaCitaViewModel>();
+    var bloqueos = ViewBag.Bloqueos as List<MediGrids.Models.AgendaBloqueoViewModel> ?? new List<MediGrids.Models.AgendaBloqueoViewModel>();
+}
+
+<link rel="stylesheet" href="~/Template/css/AgendaCitas.css" />
+
+@* Serializar los datos para usarlos en JavaScript *@
+<script>
+    var citasData    = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(citas));
+    var bloqueosData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(bloqueos));
+</script>
+
+<section class="agenda-container">
+
+    @* ── Encabezado ── *@
+    <div class="agenda-page-header">
+        <div>
+            <h1><i class="lni lni-calendar"></i> Agenda de Citas</h1>
+            <p>Consulte y gestione las citas del día o de la semana</p>
+        </div>
+        <div class="agenda-header-btns">
+            <a href="@Url.Action("CrearCita", "Terapeuta")" class="btn-crear-cita">
+                <i class="lni lni-plus"></i> Nueva Cita
+            </a>
+            <a href="@Url.Action("CrearBloqueo", "Agenda")" class="btn-bloquear">
+                <i class="lni lni-lock"></i> Bloquear Horario
+            </a>
+        </div>
+    </div>
+
+    @* ── Tarjetas de resumen ── *@
+    <div class="agenda-stats">
+        <div class="stat-card">
+            <span class="stat-label">Citas esta semana</span>
+            <span class="stat-val" id="stat-total">0</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Horas ocupadas</span>
+            <span class="stat-val" id="stat-horas">0h</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Bloqueos activos</span>
+            <span class="stat-val" id="stat-bloqueos">0</span>
+        </div>
+    </div>
+
+    @* ── Barra de herramientas del calendario ── *@
+    <div class="agenda-toolbar">
+        <div class="vista-switch">
+            <button type="button" class="btn-vista active" id="btn-semana" onclick="setVista('semana')">
+                <i class="lni lni-calendar"></i> Semana
+            </button>
+            <button type="button" class="btn-vista" id="btn-dia" onclick="setVista('dia')">
+                <i class="lni lni-agenda"></i> Día
+            </button>
+        </div>
+
+        <div class="nav-fecha">
+            <button type="button" class="btn-nav" onclick="navegar(-1)">
+                <i class="lni lni-chevron-left"></i>
+            </button>
+            <span class="fecha-label" id="fecha-label">Cargando...</span>
+            <button type="button" class="btn-nav" onclick="navegar(1)">
+                <i class="lni lni-chevron-right"></i>
+            </button>
+            <button type="button" class="btn-hoy" onclick="irHoy()">Hoy</button>
+        </div>
+
+        <div class="leyenda">
+            <span class="leyenda-item"><span class="dot dot-programada"></span>Programada</span>
+            <span class="leyenda-item"><span class="dot dot-confirmada"></span>Confirmada</span>
+            <span class="leyenda-item"><span class="dot dot-cancelada"></span>Cancelada</span>
+            <span class="leyenda-item"><span class="dot dot-bloqueo"></span>Bloqueado</span>
+        </div>
+    </div>
+
+    @* ── Contenedor del calendario ── *@
+    <div class="calendario-wrapper">
+        <div id="calendario"></div>
+    </div>
+
+</section>
+
+@* ── Modal de detalle de cita ── *@
+<div class="modal-overlay" id="modal-overlay" onclick="cerrarModal(event)">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 id="modal-paciente">Paciente</h3>
+            <span class="modal-estado" id="modal-estado"></span>
+        </div>
+        <div class="modal-body">
+            <div class="modal-fila">
+                <span class="modal-lbl"><i class="lni lni-calendar"></i> Fecha</span>
+                <span id="modal-fecha"></span>
+            </div>
+            <div class="modal-fila">
+                <span class="modal-lbl"><i class="lni lni-clock"></i> Horario</span>
+                <span id="modal-horario"></span>
+            </div>
+            <div class="modal-fila">
+                <span class="modal-lbl"><i class="lni lni-notepad"></i> Motivo cancel.</span>
+                <span id="modal-motivo"></span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="modal-link-detalle" href="#" class="btn-modal-detalle">
+                <i class="lni lni-eye"></i> Ver detalle completo
+            </a>
+            <button type="button" class="btn-modal-cerrar" onclick="document.getElementById('modal-overlay').classList.remove('open')">
+                Cerrar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ── Constantes ──
+    var HORAS = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+    var DIAS_CORTO = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    var DIAS_LARGO = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    var MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+    var vista = 'semana';
+    var hoy = new Date();
+    var cursor = new Date(hoy);
+
+    // ── Parsear fechas que vienen de C# como string ISO ──
+    function parsearFecha(str) {
+        if (!str) return null;
+        return new Date(str);
+    }
+
+    function getLunes(d) {
+        var dt = new Date(d);
+        var day = dt.getDay();
+        var diff = (day === 0) ? -6 : 1 - day;
+        dt.setDate(dt.getDate() + diff);
+        dt.setHours(0, 0, 0, 0);
+        return dt;
+    }
+
+    function esHoy(fecha) {
+        return fecha.getDate() === hoy.getDate()
+            && fecha.getMonth() === hoy.getMonth()
+            && fecha.getFullYear() === hoy.getFullYear();
+    }
+
+    function horaANum(h) {
+        // "10:00:00" → 10
+        if (!h) return 0;
+        return parseInt(h.split(':')[0], 10);
+    }
+
+    function formatoHora(h) {
+        if (!h) return '';
+        var parts = h.split(':');
+        return parts[0] + ':' + parts[1];
+    }
+
+    // ── Navegación ──
+    function setVista(v) {
+        vista = v;
+        document.getElementById('btn-semana').classList.toggle('active', v === 'semana');
+        document.getElementById('btn-dia').classList.toggle('active', v === 'dia');
+        render();
+    }
+
+    function navegar(dir) {
+        if (vista === 'semana') cursor.setDate(cursor.getDate() + dir * 7);
+        else cursor.setDate(cursor.getDate() + dir);
+        render();
+    }
+
+    function irHoy() { cursor = new Date(hoy); render(); }
+
+    // ── Filtros de datos ──
+    function citasEnCelda(diaFecha, hora) {
+        return citasData.filter(function (c) {
+            var fc = parsearFecha(c.fecha);
+            if (!fc) return false;
+            return fc.getDate() === diaFecha.getDate()
+                && fc.getMonth() === diaFecha.getMonth()
+                && fc.getFullYear() === diaFecha.getFullYear()
+                && horaANum(c.hora_inicio) === hora;
+        });
+    }
+
+    function bloqueosEnCelda(diaFecha, hora) {
+        return bloqueosData.filter(function (b) {
+            var fb = parsearFecha(b.fecha);
+            if (!fb) return false;
+            return fb.getDate() === diaFecha.getDate()
+                && fb.getMonth() === diaFecha.getMonth()
+                && fb.getFullYear() === diaFecha.getFullYear()
+                && horaANum(b.hora_inicio) === hora;
+        });
+    }
+
+    // ── Bloques HTML ──
+    function htmlCita(c) {
+        var estadoClass = c.estado ? c.estado.toLowerCase() : '';
+        var dataStr = encodeURIComponent(JSON.stringify(c));
+        return '<div class="cita-bloque estado-' + estadoClass + '" onclick="verDetalle(\'' + dataStr + '\')">'
+            + '<span class="cita-nombre">' + (c.nombre_paciente || 'Paciente') + '</span>'
+            + '<span class="cita-hora">' + formatoHora(c.hora_inicio) + ' – ' + formatoHora(c.hora_fin) + '</span>'
+            + '</div>';
+    }
+
+    function htmlBloqueo(b) {
+        return '<div class="bloqueo-bloque">'
+            + '<span class="bloqueo-motivo">' + (b.motivo || 'Bloqueado') + '</span>'
+            + '<span class="bloqueo-hora">' + formatoHora(b.hora_inicio) + ' – ' + formatoHora(b.hora_fin) + '</span>'
+            + '</div>';
+    }
+
+    // ── Actualizar estadísticas ──
+    function actualizarStats(diasFechas) {
+        var totalCitas = 0, totalBloqueos = 0;
+        diasFechas.forEach(function (d) {
+            HORAS.forEach(function (h) {
+                totalCitas += citasEnCelda(d, h).length;
+                totalBloqueos += bloqueosEnCelda(d, h).length;
+            });
+        });
+        document.getElementById('stat-total').textContent = totalCitas;
+        document.getElementById('stat-horas').textContent = totalCitas + 'h';
+        document.getElementById('stat-bloqueos').textContent = totalBloqueos;
+    }
+
+    // ── Render vista SEMANA ──
+    function renderSemana() {
+        var lunes = getLunes(cursor);
+        var dias = [];
+        for (var i = 0; i < 7; i++) {
+            var d = new Date(lunes);
+            d.setDate(d.getDate() + i);
+            dias.push(d);
+        }
+
+        var m1 = MESES[dias[0].getMonth()];
+        var m2 = MESES[dias[6].getMonth()];
+        var titulo = m1 === m2
+            ? m1 + ' ' + dias[0].getFullYear()
+            : m1 + ' – ' + m2 + ' ' + dias[6].getFullYear();
+        document.getElementById('fecha-label').textContent = titulo;
+        actualizarStats(dias);
+
+        var html = '<div class="cal-grid cal-semana">';
+
+        // Cabecera
+        html += '<div class="cal-corner"></div>';
+        dias.forEach(function (d) {
+            var todayClass = esHoy(d) ? ' hoy' : '';
+            html += '<div class="cal-dia-header' + todayClass + '">'
+                + '<span class="cal-dia-nombre">' + DIAS_CORTO[d.getDay()] + '</span>'
+                + '<span class="cal-dia-num">' + d.getDate() + '</span>'
+                + '</div>';
+        });
+
+        // Filas de horas
+        HORAS.forEach(function (h) {
+            html += '<div class="cal-hora-label">' + h + ':00</div>';
+            dias.forEach(function (d) {
+                var citas = citasEnCelda(d, h);
+                var bloqueos = bloqueosEnCelda(d, h);
+                html += '<div class="cal-celda">';
+                bloqueos.forEach(function (b) { html += htmlBloqueo(b); });
+                citas.forEach(function (c) { html += htmlCita(c); });
+                html += '</div>';
+            });
+        });
+
+        html += '</div>';
+        document.getElementById('calendario').innerHTML = html;
+    }
+
+    // ── Render vista DÍA ──
+    function renderDia() {
+        var diaNom = DIAS_LARGO[cursor.getDay()];
+        document.getElementById('fecha-label').textContent =
+            diaNom + ', ' + cursor.getDate() + ' de ' + MESES[cursor.getMonth()] + ' ' + cursor.getFullYear();
+        actualizarStats([cursor]);
+
+        var html = '<div class="cal-grid cal-dia">';
+
+        html += '<div class="cal-corner"></div>';
+        var todayClass = esHoy(cursor) ? ' hoy' : '';
+        html += '<div class="cal-dia-header' + todayClass + '">'
+            + '<span class="cal-dia-nombre">' + diaNom + '</span>'
+            + '<span class="cal-dia-num">' + cursor.getDate() + '</span>'
+            + '</div>';
+
+        HORAS.forEach(function (h) {
+            var citas = citasEnCelda(cursor, h);
+            var bloqueos = bloqueosEnCelda(cursor, h);
+            html += '<div class="cal-hora-label">' + h + ':00</div>';
+            html += '<div class="cal-celda">';
+            bloqueos.forEach(function (b) { html += htmlBloqueo(b); });
+            citas.forEach(function (c) { html += htmlCita(c); });
+            html += '</div>';
+        });
+
+        html += '</div>';
+        document.getElementById('calendario').innerHTML = html;
+    }
+
+    function render() {
+        if (vista === 'semana') renderSemana();
+        else renderDia();
+    }
+
+    // ── Modal de detalle ──
+    function verDetalle(dataStr) {
+        var c = JSON.parse(decodeURIComponent(dataStr));
+        var fc = parsearFecha(c.fecha);
+        var fechaFmt = fc
+            ? ('0' + fc.getDate()).slice(-2) + '/' + ('0' + (fc.getMonth() + 1)).slice(-2) + '/' + fc.getFullYear()
+            : '';
+
+        document.getElementById('modal-paciente').textContent = c.nombre_paciente || 'Paciente';
+        document.getElementById('modal-estado').textContent = c.estado || '';
+        document.getElementById('modal-estado').className = 'modal-estado estado-' + (c.estado || '').toLowerCase();
+        document.getElementById('modal-fecha').textContent = fechaFmt;
+        document.getElementById('modal-horario').textContent = formatoHora(c.hora_inicio) + ' – ' + formatoHora(c.hora_fin);
+        document.getElementById('modal-motivo').textContent = c.motivo_cancelacion || '—';
+        document.getElementById('modal-link-detalle').href = '/Agenda/DetalleCita/' + c.id_cita;
+
+        document.getElementById('modal-overlay').classList.add('open');
+    }
+
+    function cerrarModal(e) {
+        if (e.target.id === 'modal-overlay')
+            document.getElementById('modal-overlay').classList.remove('open');
+    }
+
+    // ── Iniciar ──
+    render();
+</script>

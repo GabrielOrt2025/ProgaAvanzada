@@ -1,10 +1,10 @@
-@{
+﻿@{
     Layout = "~/Views/Shared/_LayoutInterno.cshtml";
     ViewBag.Title = "Gestionar Ejercicios";
     var obtenerEjercicios = ViewBag.obtenerEjercicios as List<MediGrids.Models.TerapeutaEjercicioViewModel>;
 }
 
-<link rel="stylesheet" href="~/Template/css/ejercicios.css" />
+<link rel="stylesheet" href="~/Template/css/ejercicios.css?v=3" />
 
 <section class="container">
     <div class="agendar-citas-header">
@@ -62,22 +62,33 @@
 
                                     <div class="meta-box">
                                         <span class="label">Terapia</span>
-                                        <span class="value">@item.id_terapia</span>
+                                        <span class="value">@item.nombre_terapia</span>
                                     </div>
 
                                     <div class="meta-box">
                                         <span class="label">Categoria</span>
-                                        <span class="value">@item.id_categoria</span>
+                                        <span class="value">@item.nombre_categoria</span>
+                                    </div>
+
+                                    <div class="meta-box">
+                                        <span class="label">Estado</span>
+                                        @if (item.activo)
+                                        {
+                                            <span class="value" style="color: #0c7a3e; font-weight: 600;">Activo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="value" style="color: #dc3545; font-weight: 600;">Inactivo</span>
+                                        }
                                     </div>
                                 </div>
 
                                 <div class="ejercicio-footer">
                                     <span class="creado-por">
-                                        <i class="lni lni-user"></i> Creado por: @item.creado_por
+                                        <i class="lni lni-user"></i> Creado por: @item.nombre_terapeuta
                                     </span>
                                 </div>
 
-                                
                                 <div class="ejercicio-actions">
 
                                     <a href="@Url.Action("EditarForm", "Terapeuta", new { id = item.id_ejercicio })"
@@ -85,15 +96,37 @@
                                         <i class="lni lni-pencil"></i> Editar
                                     </a>
 
+
                                     @using (Html.BeginForm("EliminarEjercicio", "Terapeuta", new { id = item.id_ejercicio }, FormMethod.Post, new { @class = "form-eliminar" }))
                                     {
                                         @Html.AntiForgeryToken()
-
                                         <button type="submit"
                                                 class="btn-accion btn-eliminar"
                                                 onclick="return confirm('Esta seguro de que desea eliminar este ejercicio?');">
                                             <i class="lni lni-trash-can"></i> Eliminar
                                         </button>
+                                    }
+
+                                    @* Botón activar/desactivar *@
+                                    @using (Html.BeginForm("ToggleActivoEjercicio", "Terapeuta", new { id = item.id_ejercicio }, FormMethod.Post, new { @class = "form-toggle" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        if (item.activo)
+                                        {
+                                            <button type="submit"
+                                                    class="btn-accion btn-desactivar"
+                                                    onclick="return confirm('Desea desactivar este ejercicio?');">
+                                                <i class="lni lni-close"></i> Desactivar
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit"
+                                                    class="btn-accion btn-activar"
+                                                    onclick="return confirm('Desea activar este ejercicio?');">
+                                                <i class="lni lni-checkmark"></i> Activar
+                                            </button>
+                                        }
                                     }
 
                                     @if (!string.IsNullOrEmpty(item.video_url))

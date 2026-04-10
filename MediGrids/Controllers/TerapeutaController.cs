@@ -43,13 +43,18 @@ namespace MediGrids.Controllers
                     video_url = t.video_url,
                     id_terapia = t.id_terapia,
                     id_categoria = t.id_categoria,
-                    creado_por = t.creado_por
+                    creado_por = t.creado_por,
+                    activo = t.activo,
+                    nombre_terapia = t.TipoTerapia.nombre,
+                    nombre_categoria = t.CategoriaClinica.nombre,
+                    nombre_terapeuta = t.Terapeuta.nombre + " " + t.Terapeuta.apellidos
                 }).ToList();
             }
             else if (rol == 2) 
             {
+                int idTerapeuta = (int)Session["TerapeutaId"];
                 ViewBag.obtenerEjercicios = db.Ejercicio
-                    .Where(t => t.creado_por == userId)
+                    .Where(t => t.creado_por == idTerapeuta)
                     .Select(t => new TerapeutaEjercicioViewModel
                     {
                         id_ejercicio = t.id_ejercicio,
@@ -60,7 +65,11 @@ namespace MediGrids.Controllers
                         video_url = t.video_url,
                         id_terapia = t.id_terapia,
                         id_categoria = t.id_categoria,
-                        creado_por = t.creado_por
+                        creado_por = t.creado_por,
+                        activo = t.activo,
+                        nombre_terapia = t.TipoTerapia.nombre,
+                        nombre_categoria = t.CategoriaClinica.nombre,
+                        nombre_terapeuta = t.Terapeuta.nombre + " " + t.Terapeuta.apellidos
                     })
                     .ToList();
             }
@@ -103,7 +112,8 @@ namespace MediGrids.Controllers
             {
                 return HttpNotFound();
             }
-
+            ViewBag.Terapias = db.TipoTerapia.ToList();
+            ViewBag.Categorias = db.CategoriaClinica.ToList();
             // Estos son los datos que se muestran en el form para poder editarlos
             // Talvez se tengan que eliminar algunos
             var edit = new TerapeutaEjercicioViewModel
@@ -153,16 +163,34 @@ namespace MediGrids.Controllers
         [HttpGet]
         public ActionResult CrearEjercicio()
         {
-            return View(new TerapeutaEjercicioViewModel());
+            int idTerapeuta = (int)Session["TerapeutaId"];
+
+            // Buscar nombre del terapeuta para mostrarlo en el campo
+            var terapeuta = db.Terapeuta.FirstOrDefault(t => t.id_terapeuta == idTerapeuta);
+            ViewBag.NombreTerapeuta = terapeuta != null
+                ? terapeuta.nombre + " " + terapeuta.apellidos
+                : "Terapeuta";
+
+            // Cargar dropdowns
+            ViewBag.Terapias = db.TipoTerapia.ToList();
+            ViewBag.Categorias = db.CategoriaClinica.ToList();
+
+            // Pre-llenar creado_por con el id del terapeuta en sesión
+            var model = new TerapeutaEjercicioViewModel
+            {
+                creado_por = idTerapeuta
+            };
+
+            return View(model);
         }
 
-
-        //Metodo post que se encarga de guardar el nuevo ejercico en la BD, se utiliza .add y .savechanches para que funcione
         [HttpPost]
         public ActionResult CrearEjercicio(TerapeutaEjercicioViewModel model)
         {
             if (ModelState.IsValid)
             {
+                int idTerapeuta = (int)Session["TerapeutaId"];
+
                 var ejercicio = new Ejercicio
                 {
                     nombre = model.nombre,
@@ -172,7 +200,7 @@ namespace MediGrids.Controllers
                     video_url = model.video_url,
                     id_terapia = model.id_terapia,
                     id_categoria = model.id_categoria,
-                    creado_por = model.creado_por
+                    creado_por = idTerapeuta  // ← siempre desde sesión
                 };
 
                 db.Ejercicio.Add(ejercicio);
@@ -181,7 +209,31 @@ namespace MediGrids.Controllers
                 return RedirectToAction("GestionarEjercicio");
             }
 
+            // Si hay error recargar dropdowns
+            int idTerapeutaErr = (int)Session["TerapeutaId"];
+            var terapeutaErr = db.Terapeuta.FirstOrDefault(t => t.id_terapeuta == idTerapeutaErr);
+            ViewBag.NombreTerapeuta = terapeutaErr != null
+                ? terapeutaErr.nombre + " " + terapeutaErr.apellidos
+                : "Terapeuta";
+            ViewBag.Terapias = db.TipoTerapia.ToList();
+            ViewBag.Categorias = db.CategoriaClinica.ToList();
+
             return View(model);
+        }
+
+
+        [HttpPost]
+        public ActionResult ToggleActivoEjercicio(int id)
+        {
+            var ejercicio = db.Ejercicio.Find(id);
+
+            if (ejercicio != null)
+            {
+                ejercicio.activo = !ejercicio.activo;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("GestionarEjercicio");
         }
 
         // =============================================
