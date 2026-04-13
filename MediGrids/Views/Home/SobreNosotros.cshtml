@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "Sobre Nosotros";
+    Layout = "~/Views/Shared/_LayoutExterno.cshtml";
+}
+
+<link rel="stylesheet" href="~/Template/css/sobre-nosotros.css" />
+
+<section class="container mt-5 pt-5 sobre-page">
+    <div class="sobre-header text-center mb-5">
+        <span class="sobre-badge">MediGrids</span>
+        <h1>Sobre Nosotros</h1>
+        <p>
+            En MediGrids trabajamos para conectar a pacientes, familias y profesionales en un entorno organizado,
+            accesible y centrado en el bienestar terapéutico.
+        </p>
+    </div>
+
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+            <div class="sobre-card h-100">
+                <h2>Nuestra misión</h2>
+                <p>
+                    Facilitar la gestión de terapias y citas mediante una plataforma clara, moderna y accesible,
+                    que apoye tanto a pacientes como a especialistas en su día a día.
+                </p>
+
+                <h2 class="mt-4">Nuestra visión</h2>
+                <p>
+                    Ser una solución digital confiable para la organización terapéutica, promoviendo una atención más
+                    eficiente, humana y conectada.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="sobre-card h-100">
+                <h2>¿Por qué MediGrids?</h2>
+                <ul class="sobre-list">
+                    <li>Organización de terapeutas, pacientes y citas en un solo lugar.</li>
+                    <li>Acceso a biblioteca de ejercicios terapéuticos.</li>
+                    <li>Asignación de ejercicios y seguimiento del progreso.</li>
+                    <li>Interfaz clara y amigable para pacientes y profesionales.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="contacto-section">
+        <div class="row">
+            <div class="col-lg-5 mb-4 mb-lg-0">
+                <div class="sobre-card h-100">
+                    <span class="contacto-mini-badge">Contacto</span>
+                    <h2>Estamos para ayudarte</h2>
+                    <p>
+                        Si tienes consultas sobre nuestros servicios, terapeutas o el proceso de citas, puedes
+                        comunicarte con nosotros por los siguientes medios.
+                    </p>
+
+                    <div class="contacto-info">
+                        <p><strong>Teléfono:</strong> +(506) 8659-8990</p>
+                        <p><strong>Correo:</strong> medigridsnotificaciones@gmail.com</p>
+                        <p><strong>Ubicación:</strong> San Antonio, Escazu, San Jose. </p>
+                        <p><strong>Horario:</strong> Lunes a Sábado, 08:30 - 18:30</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="sobre-card h-100">
+                    <h2>Envíanos un mensaje</h2>
+                    <p class="mb-4">
+                        Completa el siguiente formulario y nos pondremos en contacto contigo.
+                    </p>
+
+                    @if (TempData["MensajeExito"] != null)
+                    {
+                        <div class="alert alert-success mb-3">
+                            @TempData["MensajeExito"]
+                        </div>
+                    }
+
+                    @if (TempData["MensajeError"] != null)
+                    {
+                        <div class="alert alert-danger mb-3">
+                            @TempData["MensajeError"]
+                        </div>
+                    }
+
+                    <form method="post" action="@Url.Action("EnviarMensaje", "Home")">
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <label>Nombre</label>
+                                <input type="text" name="nombre" class="form-control" placeholder="Tu nombre">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Correo</label>
+                                <input type="email" name="correo" class="form-control" placeholder="Tu correo">
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                <label>Asunto</label>
+                                <input type="text" name="asunto" class="form-control" placeholder="Asunto">
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                <label>Mensaje</label>
+                                <textarea name="mensaje" class="form-control" rows="5" placeholder="Escribe tu mensaje"></textarea>
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-success">Enviar Mensaje</button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

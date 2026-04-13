@@ -1,0 +1,96 @@
+﻿.terapeutas-page {
+    padding-bottom: 40px;
+}
+
+.terapeutas-header h1 {
+    font-size: 52px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: #13233a;
+}
+
+.terapeutas-header p {
+    max-width: 700px;
+    margin: 0 auto;
+    color: #6c757d;
+    font-size: 18px;
+}
+
+.terapeutas-badge {
+    display: inline-block;
+    background: #e9f7ef;
+    color: #0c7a3e;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 8px 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.terapeuta-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    padding: 24px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .terapeuta-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.10);
+    }
+
+.terapeuta-card-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.terapeuta-avatar {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0c7a3e, #39b86c);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.terapeuta-card h4 {
+    margin: 0 0 6px 0;
+    color: #13233a;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.terapeuta-especialidad {
+    display: inline-block;
+    color: #0c7a3e;
+    background: #edf8f1;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.terapeuta-card-body {
+    margin-bottom: 20px;
+}
+
+    .terapeuta-card-body p {
+        margin-bottom: 8px;
+        color: #495057;
+        font-size: 15px;
+    }
+
+.terapeuta-card-footer .btn {
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-weight: 600;
+}

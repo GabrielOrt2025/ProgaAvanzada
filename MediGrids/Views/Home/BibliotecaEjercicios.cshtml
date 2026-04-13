@@ -12,12 +12,15 @@
 <section class="container mt-5 pt-5">
     <div class="biblioteca-header-box">
         <h1>Biblioteca de Ejercicios</h1>
+        @{
+            var categoriasCompletas = ViewBag.CategoriasCompletas as List<MediGrids.EntityFramework.CategoriaClinica>;
+        }
 
         <form action='@Url.Action("BibliotecaEjercicios", "Home")' method="get">
             <div class="row align-items-end">
                 <div class="col-md-4">
-                    <label>Tipo de terapia</label>
-                    <select name="idTerapia" class="form-control">
+                    <label for="idTerapia">Tipo de terapia</label>
+                    <select name="idTerapia" id="idTerapia" class="form-control">
                         <option value="">-- Seleccione una terapia --</option>
                         @if (terapias != null)
                         {
@@ -32,8 +35,8 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label>Categoría clínica</label>
-                    <select name="idCategoria" class="form-control">
+                    <label for="idCategoria">Categoría clínica</label>
+                    <select name="idCategoria" id="idCategoria" class="form-control">
                         <option value="">-- Seleccione una categoría --</option>
                         @if (categorias != null)
                         {
@@ -190,5 +193,14 @@
     </div>
 </div>
 
+<script>
+    const categoriasCompletas = @Html.Raw(
+        Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.CategoriasCompletas ?? new List<object>())
+    );
+
+    const categoriaSeleccionada = '@(ViewBag.IdCategoria ?? "")';
+</script>
+
+<script src="~/Template/js/BibliotecaEjercicios.js"></script>
 
 <script src="~/Template/js/BibliotecaEjercicios.js"></script>

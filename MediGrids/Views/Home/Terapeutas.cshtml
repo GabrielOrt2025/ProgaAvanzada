@@ -1,0 +1,64 @@
+﻿@model List<MediGrids.Models.TerapeutaPublicoViewModel>
+
+@{
+    ViewBag.Title = "Terapeutas";
+    Layout = "~/Views/Shared/_LayoutExterno.cshtml";
+}
+
+<link rel="stylesheet" href="~/Template/css/terapeutas.css" />
+
+
+
+<section class="container mt-5 pt-5 terapeutas-page">
+    <div class="terapeutas-header text-center mb-5">
+        <span class="terapeutas-badge">Equipo MediGrids</span>
+        <h1>Nuestros Terapeutas</h1>
+        <p>Conoce a nuestros profesionales y agenda tu cita según la especialidad que necesites.</p>
+    </div>
+
+    <div class="alert alert-success d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <div>
+            <strong>¿Deseas agendar una cita?</strong><br />
+            Inicia sesión o regístrate para continuar con el proceso.
+        </div>
+        <div class="mt-2 mt-md-0">
+            <a href="@Url.Action("Login", "Home")" class="btn btn-success me-2">Iniciar Sesión</a>
+            <a href="@Url.Action("Register", "Home")" class="btn btn-outline-success">Registrarse</a>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="terapeuta-card h-100">
+                    <div class="terapeuta-card-top">
+                        <div class="terapeuta-avatar">
+                            @item.NombreCompleto.Substring(0, 1)
+                        </div>
+                        <div>
+                            <h4>@item.NombreCompleto</h4>
+                            <span class="terapeuta-especialidad">@item.Especialidad</span>
+                        </div>
+                    </div>
+
+                    <div class="terapeuta-card-body">
+                        @if (!string.IsNullOrEmpty(item.Email))
+                        {
+                            <p><strong>Email:</strong> @item.Email</p>
+                        }
+
+                        @if (!string.IsNullOrEmpty(item.Telefono))
+                        {
+                            <p><strong>Teléfono:</strong> @item.Telefono</p>
+                        }
+                    </div>
+
+                    <div class="terapeuta-card-footer">
+             
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

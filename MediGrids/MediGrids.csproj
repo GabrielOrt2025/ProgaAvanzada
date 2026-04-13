@@ -183,6 +183,7 @@
     <Compile Include="Models\GestionTerapeutaViewModel.cs" />
     <Compile Include="Models\MiCitaViewModel.cs" />
     <Compile Include="Models\TerapeutaEjercicioViewModel.cs" />
+    <Compile Include="Models\TerapeutaPublicoViewModel.cs" />
     <Compile Include="Models\TerapeutaViewModel.cs" />
     <Compile Include="Models\TipoTerapiaViewModel.cs" />
     <Compile Include="Models\PacienteViewModel.cs" />
@@ -249,6 +250,7 @@
     <Content Include="Template\css\AgendarCitas.css" />
     <Content Include="Template\css\animate.css" />
     <Content Include="Template\css\BibliotecaEjercicios.css" />
+    <Content Include="Template\css\blog.css" />
     <Content Include="Template\css\bootstrap.min.css" />
     <Content Include="Template\css\ejercicios.css" />
     <Content Include="Template\css\gestion-terapeutas.css" />
@@ -257,6 +259,10 @@
     <Content Include="Template\css\login.css" />
     <Content Include="Template\css\main.css" />
     <Content Include="Template\css\mis-citas.css" />
+    <Content Include="Template\css\panelinterno.css" />
+    <Content Include="Template\css\panelpacientes.css" />
+    <Content Include="Template\css\sobre-nosotros.css" />
+    <Content Include="Template\css\terapeutas.css" />
     <Content Include="Template\css\tiny-slider.css" />
     <Content Include="Template\fonts\LineIcons.svg" />
     <Content Include="Template\images\about\about.png" />
@@ -323,6 +329,9 @@
     <Content Include="Views\Home\Agenda\GestionarAgendaTerapeuta.cshtml" />
     <Content Include="Views\Agenda\GestionarAgendaTerapeuta.cshtml" />
     <Content Include="Views\Agenda\CrearBloqueo.cshtml" />
+    <Content Include="Views\Home\Terapeutas.cshtml" />
+    <Content Include="Views\Home\Blog.cshtml" />
+    <Content Include="Views\Home\SobreNosotros.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

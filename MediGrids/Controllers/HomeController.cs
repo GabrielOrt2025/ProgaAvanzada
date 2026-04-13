@@ -1,7 +1,10 @@
 ﻿using MediGrids.EntityFramework;
 using Microsoft.Ajax.Utilities;
+using System;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web.Mvc;
@@ -89,12 +92,150 @@ namespace MediGrids.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult Register(string nombre, string apellidos, string email, string password, string confirmPassword)
+        {
+            if (string.IsNullOrWhiteSpace(nombre) ||
+                string.IsNullOrWhiteSpace(apellidos) ||
+                string.IsNullOrWhiteSpace(email) ||
+                string.IsNullOrWhiteSpace(password) ||
+                string.IsNullOrWhiteSpace(confirmPassword))
+            {
+                ViewBag.Error = "Todos los campos son obligatorios.";
+                return View();
+            }
+
+            if (password != confirmPassword)
+            {
+                ViewBag.Error = "Las contraseñas no coinciden.";
+                return View();
+            }
+
+            var existeUsuario = db.Usuario.FirstOrDefault(u => u.correo == email);
+            if (existeUsuario != null)
+            {
+                ViewBag.Error = "Ya existe una cuenta registrada con ese correo.";
+                return View();
+            }
+
+            var nuevoUsuario = new Usuario
+            {
+                correo = email,
+                password_hash = password,
+                id_rol = 3,
+                activo = true
+            };
+
+            db.Usuario.Add(nuevoUsuario);
+            db.SaveChanges();
+
+            var nuevoPaciente = new Paciente
+            {
+                id_usuario = nuevoUsuario.id_usuario,
+                nombre = nombre,
+                apellidos = apellidos,
+                telefono = null,
+                email = email,
+                activo = true
+            };
+
+            db.Paciente.Add(nuevoPaciente);
+            db.SaveChanges();
+
+            TempData["MensajeExito"] = "Cuenta creada correctamente. Ahora puedes iniciar sesión.";
+            return RedirectToAction("Login", "Home");
+        }
+
         [HttpGet]
         public ActionResult Logout()
         {
             Session.Clear();
             Session.Abandon();
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public ActionResult Terapeutas()
+        {
+            var terapeutas = db.Terapeuta
+                .Where(t => t.activo == true)
+                .Select(t => new MediGrids.Models.TerapeutaPublicoViewModel
+                {
+                    IdTerapeuta = t.id_terapeuta,
+                    NombreCompleto = t.nombre + " " + t.apellidos,
+                    Especialidad = t.CategoriaClinica.nombre + " - " + t.CategoriaClinica.TipoTerapia.nombre,
+                    Email = t.email,
+                    Telefono = t.telefono
+                })
+                .ToList();
+
+            return View(terapeutas);
+        }
+
+
+        [HttpGet]
+        public ActionResult Blog()
+        {
+            return View();
+        }
+
+        // 1. Mostrar la página
+
+
+        [HttpGet]
+        public ActionResult SobreNosotros()
+        {
+            return View();
+        }
+
+
+        // 2. Recibir el formulario y enviar correo
+
+        [HttpPost]
+        public ActionResult EnviarMensaje(string nombre, string correo, string asunto, string mensaje)
+        {
+            try
+            {
+                var fromAddress = new MailAddress("medigridsnotificaciones@gmail.com", "MediGrids");
+                var toAddress = new MailAddress("medigridsnotificaciones@gmail.com");
+
+                const string fromPassword = "bvlsewtmfmelyyqi";
+                
+                string subject = "Nuevo mensaje de contacto: " + asunto;
+
+                string body = $@"
+Nombre: {nombre}
+Correo: {correo}
+
+Mensaje:
+{mensaje}
+";
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                };
+
+                using (var message = new MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    smtp.Send(message);
+                }
+
+                TempData["MensajeExito"] = "Tu mensaje fue enviado correctamente. Te estaremos contactando pronto.";
+            }
+            catch (Exception)
+            {
+                TempData["MensajeError"] = "Error al enviar el mensaje";
+            }
+
+            return RedirectToAction("SobreNosotros");
         }
 
         #endregion
@@ -147,13 +288,19 @@ namespace MediGrids.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            // Esta vista corresponde a la consulta de la biblioteca de ejercicios
-            // Aquí luego se puede dejar únicamente la visualización de ejercicios activos
             var ejercicios = db.Ejercicio
                 .Include(e => e.CategoriaClinica)
                 .AsQueryable();
 
             ViewBag.Terapias = db.TipoTerapia.ToList();
+            ViewBag.CategoriasCompletas = db.CategoriaClinica
+                .Select(c => new
+                {
+                    id_categoria = c.id_categoria,
+                    nombre = c.nombre,
+                    id_terapia = c.id_terapia
+                })
+                .ToList();
 
             if (idTerapia.HasValue)
             {

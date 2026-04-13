@@ -11,8 +11,8 @@
           </Key>
           <Property Name="id_bloque" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fecha" Type="date" Nullable="false" />
-          <Property Name="hora_inicio" Type="time" Precision="7" Nullable="false" />
-          <Property Name="hora_fin" Type="time" Precision="7" Nullable="false" />
+          <Property Name="hora_inicio" Type="time" Precision="0" Nullable="false" />
+          <Property Name="hora_fin" Type="time" Precision="0" Nullable="false" />
           <Property Name="motivo" Type="varchar" MaxLength="255" />
           <Property Name="id_terapeuta" Type="int" Nullable="false" />
         </EntityType>
@@ -31,8 +31,8 @@
           </Key>
           <Property Name="id_cita" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fecha" Type="date" Nullable="false" />
-          <Property Name="hora_inicio" Type="time" Precision="7" Nullable="false" />
-          <Property Name="hora_fin" Type="time" Precision="7" Nullable="false" />
+          <Property Name="hora_inicio" Type="time" Precision="0" Nullable="false" />
+          <Property Name="hora_fin" Type="time" Precision="0" Nullable="false" />
           <Property Name="estado" Type="varchar" MaxLength="30" />
           <Property Name="motivo_cancelacion" Type="varchar" MaxLength="255" />
           <Property Name="id_paciente" Type="int" Nullable="false" />
@@ -757,8 +757,8 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           </Key>
           <Property Name="id_bloque" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="hora_inicio" Type="Time" Nullable="false" Precision="7" />
-          <Property Name="hora_fin" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="hora_inicio" Type="Time" Nullable="false" Precision="0" />
+          <Property Name="hora_fin" Type="Time" Nullable="false" Precision="0" />
           <Property Name="motivo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="id_terapeuta" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Terapeuta" Relationship="Model.FK_BloqueHorario_Terapeuta" FromRole="BloqueHorario" ToRole="Terapeuta" />
@@ -769,8 +769,8 @@ warning 6002: The table/view 'database-prograavanzada.sys.database_firewall_rule
           </Key>
           <Property Name="id_cita" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="hora_inicio" Type="Time" Nullable="false" Precision="7" />
-          <Property Name="hora_fin" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="hora_inicio" Type="Time" Nullable="false" Precision="0" />
+          <Property Name="hora_fin" Type="Time" Nullable="false" Precision="0" />
           <Property Name="estado" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="motivo_cancelacion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="id_paciente" Type="Int32" Nullable="false" />
