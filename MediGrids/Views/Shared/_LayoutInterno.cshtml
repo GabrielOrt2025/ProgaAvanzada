@@ -24,10 +24,10 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.7/css/dataTables.dataTables.css" />
 
     <style>
-        .internal-page-wrapper {
-            padding-top: 140px;
-            padding-bottom: 40px;
-        }
+            .internal-page-wrapper {
+                padding-top: 140px;
+                padding-bottom: 40px;
+            }
     </style>
 </head>
 
@@ -58,12 +58,12 @@
                     <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                         <ul id="nav" class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a href="@Url.Action("PanelInterno","Home")">Inicio</a>
+                                <a href="@Url.Action("PanelInterno", "Home")">Inicio</a>
                             </li>
 
                     
                             <li class="nav-item">
-                                <a href="@Url.Action("Index","GestionTerapeuta")">Gestión De Terapeutas</a>
+                                <a href="@Url.Action("Index", "GestionTerapeuta")">Gestión De Terapeutas</a>
                             </li>
 
                             <li class="nav-item">
@@ -75,7 +75,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a href="@Url.Action("AsignacionEjercicios","Terapeuta")">Asignación Ejercicios</a>
+                                <a href="@Url.Action("AsignacionEjercicios", "Terapeuta")">Asignación Ejercicios</a>
                             </li>
 
                         
@@ -84,7 +84,7 @@
 
                     <!-- LOGOUT -->
                     <div class="button">
-                        <a href="@Url.Action("Index","Home")" class="btn">Cerrar sesión</a>
+                        <a href="@Url.Action("Logout", "Home")" class="btn">Cerrar sesión</a>
                     </div>
 
                 </nav>
@@ -125,4 +125,5 @@
     <script src="https://cdn.datatables.net/2.3.7/js/dataTables.bootstrap5.js"></script>
 
 </body>
+
 </html>

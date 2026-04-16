@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>@ViewBag.Title - MediGrids</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/Template/images/favicon.svg" />
+
+    <!-- Web Font -->
+    <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+    <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
+    rel="stylesheet">
+
+    <!-- ========================= CSS here ========================= -->
+    <link rel="stylesheet" href="~/Template/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Template/css/LineIcons.2.0.css" />
+    <link rel="stylesheet" href="~/Template/css/animate.css" />
+    <link rel="stylesheet" href="~/Template/css/tiny-slider.css" />
+    <link rel="stylesheet" href="~/Template/css/glightbox.min.css" />
+    <link rel="stylesheet" href="~/Template/css/main.css" />
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.7/css/dataTables.dataTables.css" />
+
+    <style>
+            .paciente-page-wrapper {
+                padding-top: 140px;
+                padding-bottom: 40px;
+            }
+    </style>
+</head>
+
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-inner">
+            <div class="preloader-icon">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- /End Preloader -->
+
+    <!-- Start Header Area -->
+    <header class="header navbar-area">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-12">
+                    <div class="nav-inner">
+                        <nav class="navbar navbar-expand-lg">
+                            <a class="navbar-brand" href="@Url.Action("PanelPaciente", "Home")">
+                                <img src="~/Template/images/logo/logo.svg" alt="Logo">
+                            </a>
+
+                            <button class="navbar-toggler mobile-menu-btn" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                    aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="toggler-icon"></span>
+                                <span class="toggler-icon"></span>
+                                <span class="toggler-icon"></span>
+                            </button>
+
+                            <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
+                                <ul id="nav" class="navbar-nav ms-auto">
+                                    <!-- Links de paciente -->
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("PanelPaciente", "Home")">Mi Panel</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("AgendarCitas", "Paciente")">Agendar Cita</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("MisCitas", "Paciente")">Mis Citas</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("BibliotecaEjercicios", "Home")">Biblioteca</a>
+                                    </li>
+                                    <!-- Links publicos -->
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Terapeutas", "Home")">Terapeutas</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("SobreNosotros", "Home")">Sobre Nosotros</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="button d-flex align-items-center gap-2">
+                                <a href="@Url.Action("Logout", "Home")" class="btn btn-outline-danger">Cerrar sesión</a>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End Header Area -->
+
+    <div class="paciente-page-wrapper">
+        @RenderBody()
+    </div>
+
+    <!-- Start Footer Area -->
+    <footer class="footer overlay">
+        <div class="footer-middle">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer f-about">
+                            <div class="logo">
+                                <a href="@Url.Action("Index", "Home")">
+                                    <img src="~/Template/images/logo/white-logo.svg" alt="#">
+                                </a>
+                            </div>
+                            <p>Sistema integral de gestión de citas y terapias para profesionales y pacientes.</p>
+                            <ul class="social">
+                                <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="lni lni-instagram"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer f-link">
+                            <h3>Mi Cuenta</h3>
+                            <ul>
+                                <li><a href="@Url.Action("PanelPaciente", "Home")">Mi Panel</a></li>
+                                <li><a href="@Url.Action("AgendarCitas", "Paciente")">Agendar Cita</a></li>
+                                <li><a href="@Url.Action("MisCitas", "Paciente")">Mis Citas</a></li>
+                                <li><a href="@Url.Action("BibliotecaEjercicios", "Home")">Biblioteca de Ejercicios</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer opening-hours">
+                            <h3>Horarios de Atención</h3>
+                            <ul>
+                                <li>
+                                    <span class="day"><i class="lni lni-timer"></i> Lun - Mar</span>
+                                    <span class="time">08:30 - 18:30</span>
+                                </li>
+                                <li>
+                                    <span class="day"><i class="lni lni-timer"></i> Mié - Jue</span>
+                                    <span class="time">08:30 - 18:30</span>
+                                </li>
+                                <li>
+                                    <span class="day"><i class="lni lni-timer"></i> Viernes</span>
+                                    <span class="time">08:30 - 18:30</span>
+                                </li>
+                                <li>
+                                    <span class="day"><i class="lni lni-timer"></i> Sábado</span>
+                                    <span class="time">08:30 - 18:30</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <div class="single-footer last f-contact">
+                            <h3>Contacto</h3>
+                            <ul>
+                                <li>
+                                    <i class="lni lni-envelope"></i> medigridsnotificaciones@gmail.com
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="inner">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <div class="content">
+                                <p class="copyright-text">
+                                    &copy; @DateTime.Now.Year MediGrids. Todos los derechos reservados.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <ul class="extra-link">
+                                <li><a href="javascript:void(0)">Términos y Condiciones</a></li>
+                                <li><a href="javascript:void(0)">Preguntas Frecuentes</a></li>
+                                <li><a href="javascript:void(0)">Política de Privacidad</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" class="scroll-top">
+        <i class="lni lni-chevron-up"></i>
+    </a>
+
+    <!-- ========================= JS here ========================= -->
+    <script src="~/Template/js/bootstrap.min.js"></script>
+    <script src="~/Template/js/wow.min.js"></script>
+    <script src="~/Template/js/tiny-slider.js"></script>
+    <script src="~/Template/js/glightbox.min.js"></script>
+    <script src="~/Template/js/count-up.min.js"></script>
+    <script src="~/Template/js/imagesloaded.min.js"></script>
+    <script src="~/Template/js/isotope.min.js"></script>
+    <script src="~/Template/js/main.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.3.7/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.3.7/js/dataTables.bootstrap5.js"></script>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>

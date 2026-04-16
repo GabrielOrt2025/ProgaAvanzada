@@ -1,5 +1,5 @@
 @{
-    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+    Layout = "~/Views/Shared/_LayoutPaciente.cshtml";
     ViewBag.Title = "Agendar Cita";
     var tiposTerapia = ViewBag.TiposTerapia as List<MediGrids.Models.TipoTerapiaViewModel>;
     var categoriasCompletas = ViewBag.CategoriasCompletas as List<MediGrids.EntityFramework.CategoriaClinica>;
@@ -61,106 +61,107 @@
                                 <select class="form-control" id="categoriaClinica" name="categoriaClinica" required>
                                     <option value="">-- Primero seleccione un tipo de terapia --</option>
                                 </select>
-                                <small class="text-muted">Las categorias se cargaran segun el tipo de terapia seleccionado</small>
+                                <small class="text-muted">Las categorias se cargaran segun el tipo de terapia
+                                    seleccionado</small>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Selección de Terapeuta -->
-                <div class="form-section">
-                    <h3><i class="lni lni-user"></i> Seleccion de Profesional</h3>
-                    <div id="terapeutas-container">
-                        <p class="text-muted">Seleccione un tipo de terapia para ver los profesionales disponibles</p>
+                    <!-- Selección de Terapeuta -->
+                    <div class="form-section">
+                        <h3><i class="lni lni-user"></i> Seleccion de Profesional</h3>
+                        <div id="terapeutas-container">
+                            <p class="text-muted">Seleccione un tipo de terapia para ver los profesionales disponibles</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="d-flex justify-content-end gap-2">
-                    <button type="button" class="btn btn-primary btn-step" id="btn-siguiente-1">
-                        Siguiente <i class="lni lni-arrow-right"></i>
-                    </button>
-                </div>
-            </form>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-primary btn-step" id="btn-siguiente-1">
+                            Siguiente <i class="lni lni-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Paso 2: Disponibilidad -->
+            <div class="step-content" id="step-2">
+                <form id="form-paso-2">
+                    <!-- Resumen de Selección -->
+                    <div class="resumen-cita mb-4">
+                        <h4><i class="lni lni-checkmark-circle"></i> Resumen de su Seleccion</h4>
+                        <div class="info-item">
+                            <strong>Tipo de Terapia:</strong> <span id="resumen-terapia">-</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Categoria:</strong> <span id="resumen-categoria">-</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Terapeuta:</strong> <span id="resumen-terapeuta">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Calendario y Disponibilidad -->
+                    <div class="form-section">
+                        <h3><i class="lni lni-calendar"></i> Seleccione Fecha y Hora</h3>
+
+                        <!-- Fecha especifica -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fechaCita">Fecha de la Cita</label>
+                                    <input type="date" class="form-control" id="fechaCita" name="fechaCita" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Horarios Disponibles -->
+                        <div id="horarios-container" style="display: none;">
+                            <h5 class="mt-4 mb-3">Horarios Disponibles: <span id="fecha-seleccionada"></span></h5>
+                            <div class="time-slots" id="horarios-disponibles">
+                                <!-- Se llenaran dinamicamente -->
+                            </div>
+
+                            <!-- Leyenda -->
+                            <div class="legend">
+                                <div class="legend-item">
+                                    <div class="legend-color available"></div>
+                                    <span>Disponible</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color occupied"></div>
+                                    <span>Ocupado</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color selected"></div>
+                                    <span>Seleccionado</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between gap-2 mt-4">
+                        <button type="button" class="btn btn-secondary btn-step" id="btn-anterior-2">
+                            <i class="lni lni-arrow-left"></i> Anterior
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-step">
+                            <i class="lni lni-checkmark-circle"></i> Confirmar Cita
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
+    </section>
 
-        <!-- Paso 2: Disponibilidad -->
-        <div class="step-content" id="step-2">
-            <form id="form-paso-2">
-                <!-- Resumen de Selección -->
-                <div class="resumen-cita mb-4">
-                    <h4><i class="lni lni-checkmark-circle"></i> Resumen de su Seleccion</h4>
-                    <div class="info-item">
-                        <strong>Tipo de Terapia:</strong> <span id="resumen-terapia">-</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Categoria:</strong> <span id="resumen-categoria">-</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Terapeuta:</strong> <span id="resumen-terapeuta">-</span>
-                    </div>
-                </div>
-
-                <!-- Calendario y Disponibilidad -->
-                <div class="form-section">
-                    <h3><i class="lni lni-calendar"></i> Seleccione Fecha y Hora</h3>
-
-                    <!-- Fecha especifica -->
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="fechaCita">Fecha de la Cita</label>
-                                <input type="date" class="form-control" id="fechaCita" name="fechaCita" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Horarios Disponibles -->
-                    <div id="horarios-container" style="display: none;">
-                        <h5 class="mt-4 mb-3">Horarios Disponibles: <span id="fecha-seleccionada"></span></h5>
-                        <div class="time-slots" id="horarios-disponibles">
-                            <!-- Se llenaran dinamicamente -->
-                        </div>
-
-                        <!-- Leyenda -->
-                        <div class="legend">
-                            <div class="legend-item">
-                                <div class="legend-color available"></div>
-                                <span>Disponible</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color occupied"></div>
-                                <span>Ocupado</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color selected"></div>
-                                <span>Seleccionado</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-between gap-2 mt-4">
-                    <button type="button" class="btn btn-secondary btn-step" id="btn-anterior-2">
-                        <i class="lni lni-arrow-left"></i> Anterior
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-step">
-                        <i class="lni lni-checkmark-circle"></i> Confirmar Cita
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</section>
-
-<!-- Script de Agendar Citas -->
-<script src="~/Template/js/agendar-citas.js?v=@DateTime.Now.Ticks"></script>
-<script>
-    // Inicializar la aplicación con datos del servidor
-    (function() {
+    <!-- Script de Agendar Citas -->
+    <script src="~/Template/js/agendar-citas.js?v=@DateTime.Now.Ticks"></script>
+    <script>
+        // Inicializar la aplicación con datos del servidor
+        (function () {
         var categorias = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Categorias ?? new List<object>()));
         var terapeutas = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Terapeutas ?? new List<object>()));
 
         // Llamar a la función de inicialización del archivo externo
         initAgendarCitas(categorias, terapeutas);
-    })();
-</script>
+        })();
+    </script>

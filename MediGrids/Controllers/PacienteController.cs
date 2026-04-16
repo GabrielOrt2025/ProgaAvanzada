@@ -17,6 +17,12 @@ namespace MediGrids.Controllers
         [HttpGet]
         public ActionResult AgendarCitas()
         {
+            if (Session["UserId"] == null)
+            {
+                TempData["MensajeError"] = "Debe iniciar sesión para agendar una cita.";
+                return RedirectToAction("Login", "Home");
+            }
+
             // 1. Obtener todos los tipos de terapia disponibles
             var tiposTerapia = db.TipoTerapia
                 .Select(t => new TipoTerapiaViewModel
@@ -32,7 +38,7 @@ namespace MediGrids.Controllers
             // 2. Obtener todas las categorías clínicas (sin referencias circulares)
             var categorias = db.CategoriaClinica
                 .Select(c => new CategoriaClinicaViewModel
-                { 
+                {
                     IdCategoria = c.id_categoria,
                     Nombre = c.nombre,
                     Descripcion = c.descripcion,
