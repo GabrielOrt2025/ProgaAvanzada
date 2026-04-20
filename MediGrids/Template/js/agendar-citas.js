@@ -16,6 +16,52 @@ let selectedFecha = null;
 let selectedHora = null;
 
 /**
+ * Muestra una notificación toast personalizada
+ * @param {'success'|'error'|'warning'} type
+ * @param {string} title
+ * @param {string} message
+ */
+function showToast(type, title, message) {
+    var icons = {
+        success: '&#10003;',
+        error:   '&#10007;',
+        warning: '&#9888;'
+    };
+
+    var container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+
+    var toast = document.createElement('div');
+    toast.className = 'toast-notification toast-' + type;
+    toast.innerHTML =
+        '<div class="toast-icon">' + (icons[type] || '!') + '</div>' +
+        '<div class="toast-body">' +
+            '<div class="toast-title">' + title + '</div>' +
+            (message ? '<div class="toast-message">' + message + '</div>' : '') +
+        '</div>' +
+        '<button class="toast-close" aria-label="Cerrar">&#10005;</button>';
+
+    toast.querySelector('.toast-close').addEventListener('click', function () {
+        dismissToast(toast);
+    });
+
+    container.appendChild(toast);
+
+    setTimeout(function () { dismissToast(toast); }, 5000);
+}
+
+function dismissToast(toast) {
+    toast.classList.add('toast-hide');
+    setTimeout(function () {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 320);
+}
+
+/**
  * Inicializa la aplicación con los datos del servidor
  */
 function initAgendarCitas(categorias, terapeutas) {
@@ -213,7 +259,7 @@ function onSiguientePaso1() {
     console.log('Validación - Terapeuta:', terapeuta);
 
     if (!terapia || !categoria || !terapeuta) {
-        alert('Por favor complete todos los campos antes de continuar');
+        showToast('warning', 'Campos incompletos', 'Por favor complete todos los campos antes de continuar.');
         return;
     }
 
@@ -354,12 +400,12 @@ function onSubmitFormulario(e) {
     e.preventDefault();
 
     if (!selectedFecha || !selectedHora) {
-        alert('Por favor seleccione una fecha y hora para la cita');
+        showToast('warning', 'Fecha u hora no seleccionada', 'Por favor seleccione una fecha y hora para la cita.');
         return;
     }
 
     if (!selectedTerapeutaId) {
-        alert('No se ha seleccionado un terapeuta');
+        showToast('warning', 'Sin terapeuta', 'No se ha seleccionado un terapeuta.');
         return;
     }
 
@@ -387,21 +433,20 @@ function onSubmitFormulario(e) {
             if (xhr.status === 200) {
                 var respuesta = JSON.parse(xhr.responseText);
                 if (respuesta.success) {
-                    alert('Cita agendada exitosamente!\n\n' +
-                        'Terapia: ' + selectedTerapia + '\n' +
-                        'Categoria: ' + selectedCategoria + '\n' +
-                        'Terapeuta: ' + selectedTerapeuta + '\n' +
-                        'Fecha: ' + selectedFecha + '\n' +
-                        'Hora: ' + selectedHora);
+                    showToast('success', '¡Cita agendada!',
+                        '<b>Terapia:</b> ' + selectedTerapia + '<br>' +
+                        '<b>Categoría:</b> ' + selectedCategoria + '<br>' +
+                        '<b>Terapeuta:</b> ' + selectedTerapeuta + '<br>' +
+                        '<b>Fecha:</b> ' + selectedFecha + ' &mdash; <b>Hora:</b> ' + selectedHora);
 
                     // Refrescar horarios para mostrar el slot como ocupado
                     consultarHorariosServidor(selectedTerapeutaId, fechaValue);
                     selectedHora = null;
                 } else {
-                    alert(respuesta.mensaje || 'Error al confirmar la cita');
+                    showToast('error', 'Error', respuesta.mensaje || 'Error al confirmar la cita');
                 }
             } else {
-                alert('Error de conexion al confirmar la cita');
+                showToast('error', 'Error de conexión', 'No se pudo conectar con el servidor. Por favor intente nuevamente.');
             }
         }
     };
