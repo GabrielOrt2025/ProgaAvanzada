@@ -261,6 +261,7 @@
     <Content Include="Template\css\mis-citas.css" />
     <Content Include="Template\css\panelinterno.css" />
     <Content Include="Template\css\panelpacientes.css" />
+    <Content Include="Template\css\register.css" />
     <Content Include="Template\css\sobre-nosotros.css" />
     <Content Include="Template\css\terapeutas.css" />
     <Content Include="Template\css\tiny-slider.css" />

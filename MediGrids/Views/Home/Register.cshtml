@@ -1,97 +1,52 @@
 ﻿@{
     ViewBag.Title = "Registro";
     Layout = "~/Views/Shared/_LayoutExterno.cshtml";
-
 }
 
-<link rel="stylesheet" href="~/Template/css/login.css" />
+<link rel="stylesheet" href="@Url.Content("~/Template/css/register.css")" />
 
-<!-- Franja verde (breadcrumbs) igual a Login -->
-<div class="breadcrumbs overlay">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-8 offset-lg-2 col-md-12 col-12">
-                <div class="breadcrumbs-content">
-                    <h1 class="page-title">Registro</h1>
-                </div>
-                <ul class="breadcrumb-nav">
-                    <li><a href="@Url.Action("Index","Home")">Inicio</a></li>
-                    <li>Registro</li>
-                </ul>
-            </div>
+<div class="rg-breadcrumbs">
+    <div class="container rg-inner">
+        <h1 class="rg-title-top">Registro</h1>
+        <div class="rg-crumb">
+            <a href="@Url.Action("Index","Home")">Inicio</a>
+            &nbsp;>&nbsp;
+            <span>Registro</span>
         </div>
     </div>
 </div>
 
-<!-- Cuadro blanco centrado igual a Login -->
-<div class="login-container">
-    <div class="login-card">
-        <h2 class="login-title">Crear cuenta</h2>
-
-        <div class="social-buttons">
-            <div class="row">
-                <div class="col-md-6 col-12">
-                    <a href="javascript:void(0)" class="btn-social facebook">
-                        <i class="lni lni-facebook-original"></i>
-                        Iniciar sesión con Facebook
-                    </a>
-                </div>
-
-                <div class="col-md-6 col-12">
-                    <a href="javascript:void(0)" class="btn-social google">
-                        <i class="lni lni-google"></i>
-                        Iniciar sesión con Google 
-                    </a>
-                </div>
-
-                <div class="col-md-6 col-12">
-                    <a href="javascript:void(0)" class="btn-social instagram">
-                        <i class="lni lni-instagram"></i>
-                        Iniciar sesión con Instagram
-                    </a>
-                </div>
-
-                <div class="col-md-6 col-12">
-                    <a href="javascript:void(0)" class="btn-social linkedin">
-                        <i class="lni lni-linkedin-original"></i>
-                        Iniciar sesión con LinkedIn
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="divider"> Registrate aqui</div>
-
+<div class="rg-wrap">
+    <div class="rg-card">
+        <h2 class="rg-title">Crear cuenta</h2>
+        <p class="rg-subtitle">Complete sus datos para registrarse</p>
 
         <form action="@Url.Action("Register", "Home")" method="post">
-
-            <!-- Inputs (solo placeholders, como el diseño del template) -->
-            <div class="form-group">
-                <input type="text" class="form-control" name="nombre" placeholder="Nombre" required>
+            <div class="rg-group">
+                <input type="text" class="rg-input" name="nombre" placeholder="Nombre" required>
             </div>
 
-            <div class="form-group">
-                <input type="text" class="form-control" name="apellidos" placeholder="Apellidos" required>
+            <div class="rg-group">
+                <input type="text" class="rg-input" name="apellidos" placeholder="Apellidos" required>
             </div>
 
-            <div class="form-group">
-                <input type="email" class="form-control" name="email" placeholder="Correo" required>
+            <div class="rg-group">
+                <input type="email" class="rg-input" name="email" placeholder="Correo electrónico" required>
             </div>
 
-            <div class="form-group">
-                <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
+            <div class="rg-group">
+                <input type="password" class="rg-input" name="password" placeholder="Contraseña" required>
             </div>
 
-            <div class="form-group">
-                <input type="password" class="form-control" name="confirmPassword" placeholder="Confirme Contraseña" required>
+            <div class="rg-group">
+                <input type="password" class="rg-input" name="confirmPassword" placeholder="Confirmar contraseña" required>
             </div>
 
-            <button type="submit" class="btn btn-login">Registrarse</button>
+            <button type="submit" class="rg-btn">Crear cuenta</button>
 
-            <p class="register-link">
+            <p class="rg-link">
                 ¿Ya tiene cuenta? <a href="@Url.Action("Login", "Home")">Inicie sesión</a>
             </p>
-
         </form>
     </div>
 </div>
