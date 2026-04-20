@@ -1,0 +1,107 @@
+@{
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+    ViewBag.Title = "Gestionar Pacientes";
+    var obtenerPacientes = ViewBag.obtenerPacientes as List<MediGrids.Models.PacienteViewModel>;
+}
+
+<link rel="stylesheet" href="~/Template/css/ejercicios.css" />
+
+<section class="container">
+    <div class="agendar-citas-header">
+        <h1><i class="lni lni-users"></i> Gestionar Pacientes</h1>
+        <p>Administre los pacientes registrados en el sistema</p>
+    </div>
+
+    <div class="step-wizard">
+        <div class="form-section ejercicios-section">
+
+            <div class="ejercicios-header-actions">
+                <div>
+                    <h3><i class="lni lni-list"></i> Pacientes Registrados</h3>
+                    <p class="ejercicios-subtitle">
+                        Consulte la informacion de cada paciente y gestione su estado en el sistema.
+                    </p>
+                </div>
+            </div>
+
+            @if (obtenerPacientes != null && obtenerPacientes.Any())
+            {
+                <div class="ejercicios-grid">
+                    @foreach (var item in obtenerPacientes)
+                    {
+                        <div class="ejercicio-card">
+
+                            <div class="ejercicio-card-header">
+                                <div class="ejercicio-badge">
+                                    Paciente #@item.IdPaciente
+                                </div>
+                                <h4>@item.Nombre @item.Apellidos</h4>
+                            </div>
+
+                            <div class="ejercicio-card-body">
+
+                                <div class="ejercicio-info-item">
+                                    <span class="label">Email</span>
+                                    <p>@item.Email</p>
+                                </div>
+
+                                <div class="ejercicio-meta">
+                                    <div class="meta-box" style="grid-column: span 2;">
+                                        <span class="label">Estado</span>
+                                        @if (item.Activo == true)
+                                        {
+                                            <span class="value" style="color: #0c7a3e; font-weight: 600;">Activo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="value" style="color: #dc3545; font-weight: 600;">Inactivo</span>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="ejercicio-actions">
+
+                                    <a href="@Url.Action("EditarPaciente", "GestionarPaciente", new { id = item.IdPaciente })"
+                                       class="btn-accion btn-editar">
+                                        <i class="lni lni-pencil"></i> Editar
+                                    </a>
+
+                                    @using (Html.BeginForm("ToggleActivoPaciente", "GestionarPaciente", new { id = item.IdPaciente }, FormMethod.Post, new { @class = "form-toggle" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        if (item.Activo == true)
+                                        {
+                                            <button type="submit"
+                                                    class="btn-accion btn-desactivar"
+                                                    onclick="return confirm('¿Desea desactivar este paciente?');">
+                                                <i class="lni lni-close"></i> Desactivar
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit"
+                                                    class="btn-accion btn-activar"
+                                                    onclick="return confirm('¿Desea activar este paciente?');">
+                                                <i class="lni lni-checkmark"></i> Activar
+                                            </button>
+                                        }
+                                    }
+
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-state-ejercicios">
+                    <i class="lni lni-users"></i>
+                    <p>No hay pacientes registrados en este momento.</p>
+                </div>
+            }
+
+        </div>
+    </div>
+</section>
