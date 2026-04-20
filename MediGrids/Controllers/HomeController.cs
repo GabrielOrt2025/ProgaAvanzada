@@ -1,4 +1,5 @@
 ﻿using MediGrids.EntityFramework;
+using MediGrids.Models;
 using Microsoft.Ajax.Utilities;
 using System;
 using System.Data.Entity;
@@ -293,6 +294,7 @@ Mensaje:
                 .AsQueryable();
 
             ViewBag.Terapias = db.TipoTerapia.ToList();
+
             ViewBag.CategoriasCompletas = db.CategoriaClinica
                 .Select(c => new
                 {
@@ -328,7 +330,57 @@ Mensaje:
 
         #endregion
 
-        #region Panel Paciente 
+
+        #region Ejercicios Asignados Paciente
+
+        [HttpGet]
+        public ActionResult MisEjerciciosAsignados()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            if ((int)Session["Rol"] != 3)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            int userId = (int)Session["UserId"];
+
+            var paciente = db.Paciente
+                .FirstOrDefault(p => p.id_usuario == userId && p.activo == true);
+
+            if (paciente == null)
+            {
+                TempData["MensajeError"] = "No se encontró la información del paciente.";
+                return RedirectToAction("PanelPaciente");
+            }
+
+            var ejerciciosAsignados = db.PacienteEjercicio
+                .Where(pe => pe.id_paciente == paciente.id_paciente)
+                .Join(db.Ejercicio,
+                      pe => pe.id_ejercicio,
+                      e => e.id_ejercicio,
+                      (pe, e) => new MisEjerciciosAsignadosViewModel
+                      {
+                          IdPaciente = pe.id_paciente,
+                          IdEjercicio = pe.id_ejercicio,
+                          FechaAsignacion = pe.fecha_asignacion,
+                          Estado = pe.estado,
+                          NombreEjercicio = e.nombre,
+                          Descripcion = e.descripcion,
+                          IdCategoria = e.id_categoria,
+                          IdTerapia = e.id_terapia
+                      })
+                .ToList();
+
+            return View(ejerciciosAsignados);
+        }
+
+        #endregion
+
+        #region Panel Paciente
 
         [HttpGet]
         public ActionResult PanelPaciente()
@@ -346,6 +398,98 @@ Mensaje:
             return View();
         }
 
+        [HttpGet]
+        public ActionResult MiPerfilPaciente()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            if ((int)Session["Rol"] != 3)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            int userId = (int)Session["UserId"];
+
+            var paciente = db.Paciente.FirstOrDefault(p => p.id_usuario == userId && p.activo == true);
+
+            if (paciente == null)
+            {
+                TempData["MensajeError"] = "No se encontró la información del paciente.";
+                return RedirectToAction("PanelPaciente");
+            }
+
+            return View(paciente);
+        }
+
+        [HttpGet]
+        public ActionResult EditarMiPerfilPaciente()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            if ((int)Session["Rol"] != 3)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            int userId = (int)Session["UserId"];
+
+            var paciente = db.Paciente.FirstOrDefault(p => p.id_usuario == userId && p.activo == true);
+
+            if (paciente == null)
+            {
+                TempData["MensajeError"] = "No se encontró la información del paciente.";
+                return RedirectToAction("PanelPaciente");
+            }
+
+            return View(paciente);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditarMiPerfilPaciente(Paciente model)
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            if ((int)Session["Rol"] != 3)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            int userId = (int)Session["UserId"];
+
+            var paciente = db.Paciente.FirstOrDefault(p => p.id_usuario == userId && p.activo == true);
+            if (paciente == null)
+            {
+                TempData["MensajeError"] = "No se encontró la información del paciente.";
+                return RedirectToAction("PanelPaciente");
+            }
+
+            if (string.IsNullOrWhiteSpace(model.nombre) ||
+                string.IsNullOrWhiteSpace(model.apellidos))
+            {
+                ViewBag.Error = "Nombre y apellidos son obligatorios.";
+                return View(paciente);
+            }
+
+            paciente.nombre = model.nombre;
+            paciente.apellidos = model.apellidos;
+            paciente.telefono = model.telefono;
+
+            db.SaveChanges();
+
+            TempData["MensajeExito"] = "Perfil actualizado correctamente.";
+            return RedirectToAction("MiPerfilPaciente");
+        }
+
+     
 
         #endregion
 

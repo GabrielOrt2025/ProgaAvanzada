@@ -65,22 +65,15 @@
 
                             <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                                 <ul id="nav" class="navbar-nav ms-auto">
+
                                     <li class="nav-item">
-                                        <a class="page-scroll active dd-menu collapsed" href="javascript:void(0)"
-                                           data-bs-toggle="collapse" data-bs-target="#submenu-1-1"
-                                           aria-controls="navbarSupportedContent" aria-expanded="false"
-                                           aria-label="Toggle navigation">Inicio</a>
-                                        <ul class="sub-menu collapse" id="submenu-1-1">
-                                            <li class="nav-item active">
-                                                <a href="@Url.Action("Index", "Home")">Inicio</a>
-                                            </li>
-                                        </ul>
+                                        <a class="page-scroll active" href="@Url.Action("Index", "Home")">
+                                            Inicio
+                                        </a>
                                     </li>
 
-
-
                                     <li class="nav-item">
-                                        <a href="javascript:void(0)" aria-label="Toggle navigation">Servicios</a>
+                                        <a href="javascript:void(0)">Servicios</a>
                                     </li>
 
                                     <li class="nav-item">
@@ -92,40 +85,41 @@
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="@Url.Action("SobreNosotros", "Home")">Sobre Nosotros</a> 
+                                        <a href="@Url.Action("SobreNosotros", "Home")">Sobre Nosotros</a>
                                     </li>
-                                </ul>
-                            </div> <!-- navbar collapse -->
 
-                            <div class="button d-flex align-items-center gap-2">
-                                @if (Session["UserId"] == null)
-                                {
-                                    <a href="@Url.Action("Login", "Home")" class="btn btn-success">Iniciar Sesión</a>
-                                    <a href="@Url.Action("Register", "Home")" class="btn btn-outline-success">Registrarse</a>
-                                }
-                                else
-                                {
-                                    if (Session["Rol"] != null && Convert.ToInt32(Session["Rol"]) == 1)
+                                </ul>
+
+                                <!-- BOTONES DENTRO DEL NAV -->
+                                <div class="button d-flex align-items-center gap-2 ms-3">
+                                    @if (Session["UserId"] == null)
                                     {
-                                        <a href="@Url.Action("PanelInterno", "Home")" class="btn btn-success">Mi Panel</a>
-                                    }
-                                    else if (Session["Rol"] != null && Convert.ToInt32(Session["Rol"]) == 2)
-                                    {
-                                        <a href="@Url.Action("PanelTerapeuta", "Home")" class="btn btn-success">Mi Panel</a>
-                                    }
-                                    else if (Session["Rol"] != null && Convert.ToInt32(Session["Rol"]) == 3)
-                                    {
-                                        <a href="@Url.Action("PanelPaciente", "Home")" class="btn btn-success">Mi Panel</a>
+                                        <a href="@Url.Action("Login", "Home")" class="btn btn-success">Iniciar Sesión</a>
+                                        <a href="@Url.Action("Register", "Home")" class="btn btn-outline-success">Registrarse</a>
                                     }
                                     else
                                     {
-                                        <a href="@Url.Action("Index", "Home")" class="btn btn-success">Inicio</a>
-                                    }
+                                        if (Session["Rol"] != null && Convert.ToInt32(Session["Rol"]) == 1)
+                                        {
+                                            <a href="@Url.Action("PanelInterno", "Home")" class="btn btn-success">Mi Panel</a>
+                                        }
+                                        else if (Session["Rol"] != null && Convert.ToInt32(Session["Rol"]) == 2)
+                                        {
+                                            <a href="@Url.Action("PanelTerapeuta", "Home")" class="btn btn-success">Mi Panel</a>
+                                        }
+                                        else if (Session["Rol"] != null && Convert.ToInt32(Session["Rol"]) == 3)
+                                        {
+                                            <a href="@Url.Action("PanelPaciente", "Home")" class="btn btn-success">Mi Panel</a>
+                                        }
 
-                                    <a href="@Url.Action("Logout", "Home")" class="btn btn-outline-danger">Cerrar sesion</a>
-                                }
+                                        <a href="@Url.Action("Logout", "Home")" class="btn btn-outline-danger">Cerrar sesión</a>
+                                    }
+                                </div>
+
                             </div>
                         </nav>
+
+                 
                         <!-- End Navbar -->
                     </div>
                 </div>

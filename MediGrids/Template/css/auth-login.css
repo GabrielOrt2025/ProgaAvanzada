@@ -1,3 +1,7 @@
+﻿body {
+    background: red !important;
+}
+
 .lg-breadcrumbs {
     position: relative;
     padding-top: 140px;

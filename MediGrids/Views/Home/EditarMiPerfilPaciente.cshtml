@@ -1,0 +1,66 @@
+﻿@model MediGrids.EntityFramework.Paciente
+
+@{
+    ViewBag.Title = "Editar Mi Perfil";
+    Layout = "~/Views/Shared/_LayoutPaciente.cshtml";
+}
+
+<link rel="stylesheet" href="~/Template/css/panelpacientes.css" />
+
+<section class="paciente-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1>Editar mi perfil</h1>
+                <p>
+                    Actualiza tu información personal registrada en MediGrids.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="paciente-section">
+    <div class="container">
+        <div class="paciente-card" style="max-width: 900px; margin: 0 auto;">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            @using (Html.BeginForm("EditarMiPerfilPaciente", "Home", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.id_paciente)
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nombre</label>
+                        @Html.TextBoxFor(m => m.nombre, new { @class = "form-control", required = "required" })
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Apellidos</label>
+                        @Html.TextBoxFor(m => m.apellidos, new { @class = "form-control", required = "required" })
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Correo</label>
+                        @Html.TextBoxFor(m => m.email, new { @class = "form-control", @readonly = "readonly" })
+                        <small class="text-muted">El correo no se puede modificar.</small>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Teléfono</label>
+                        @Html.TextBoxFor(m => m.telefono, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-success">Guardar cambios</button>
+                    <a href="@Url.Action("MiPerfilPaciente", "Home")" class="btn btn-secondary">Cancelar</a>
+                </div>
+            }
+        </div>
+    </div>
+</section>

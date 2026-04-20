@@ -62,8 +62,8 @@
                     <p>
                         Consulta la información general de tu cuenta y tu acceso dentro de MediGrids.
                     </p>
-                    <a href="javascript:void(0)" class="btn btn-secondary">
-                        Próximamente
+                    <a href="@Url.Action("MiPerfilPaciente", "Home")" class="btn btn-success">
+                        Ingresar
                     </a>
                 </div>
             </div>
@@ -78,6 +78,19 @@
                         Consulta el historial de tus citas agendadas y cancela las que ya no necesites.
                     </p>
                     <a href="@Url.Action("MisCitas", "Paciente")" class="btn btn-success">
+                        Ingresar
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="paciente-card">
+                    <div class="paciente-icon">
+                        <i class="lni lni-list"></i>
+                    </div>
+                    <h4>Mis Ejercicios</h4>
+                    <p>Consulta los ejercicios asignados a tu tratamiento.</p>
+                    <a href="@Url.Action("MisEjerciciosAsignados", "Home")" class="btn btn-success">
                         Ingresar
                     </a>
                 </div>
