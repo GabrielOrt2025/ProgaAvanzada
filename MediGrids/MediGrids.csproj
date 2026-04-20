@@ -119,6 +119,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\Agendacontroller.cs" />
+    <Compile Include="Controllers\GestionarPacientesController.cs" />
+    <Compile Include="Controllers\RolController.cs" />
     <Compile Include="Controllers\TerapeutaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\GestionTerapeutaController.cs" />
@@ -183,6 +185,7 @@
     <Compile Include="Models\GestionTerapeutaViewModel.cs" />
     <Compile Include="Models\MiCitaViewModel.cs" />
     <Compile Include="Models\MisEjerciciosAsignadosViewModel.cs" />
+    <Compile Include="Models\RolesViewModel.cs" />
     <Compile Include="Models\TerapeutaEjercicioViewModel.cs" />
     <Compile Include="Models\TerapeutaPublicoViewModel.cs" />
     <Compile Include="Models\TerapeutaViewModel.cs" />
@@ -337,6 +340,9 @@
     <Content Include="Views\Home\MiPerfilPaciente.cshtml" />
     <Content Include="Views\Home\MisEjerciciosAsignados.cshtml" />
     <Content Include="Views\Home\EditarMiPerfilPaciente.cshtml" />
+    <Content Include="Views\Rol\GestionarRoles.cshtml" />
+    <Content Include="Views\GestionarPacientes\GestionarPacientes.cshtml" />
+    <Content Include="Views\GestionarPacientes\EditarPaciente.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

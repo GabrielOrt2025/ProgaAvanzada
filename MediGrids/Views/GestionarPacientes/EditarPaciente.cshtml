@@ -1,0 +1,62 @@
+@model MediGrids.Models.PacienteViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutInterno.cshtml";
+    ViewBag.Title = "Editar Paciente";
+}
+
+<link rel="stylesheet" href="~/Template/css/ejercicios.css" />
+
+<section class="container">
+    <div class="agendar-citas-header">
+        <h1><i class="lni lni-pencil"></i> Editar Paciente</h1>
+        <p>Modifique la información del paciente</p>
+    </div>
+
+    <div class="step-wizard">
+        <div class="form-section">
+
+            @using (Html.BeginForm("EditarPaciente", "GestionarPacientes", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.IdPaciente)
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Apellidos</label>
+                        @Html.TextBoxFor(m => m.Apellidos, new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(m => m.Apellidos, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+
+                <div class="ejercicio-actions" style="margin-top: 20px;">
+                    <button type="submit" class="btn-accion btn-editar">
+                        <i class="lni lni-save"></i> Guardar Cambios
+                    </button>
+                    <a href="@Url.Action("GestionarPacientes", "GestionarPacientes")" class="btn-accion btn-eliminar">
+                        <i class="lni lni-arrow-left"></i> Cancelar
+                    </a>
+                </div>
+            }
+
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
