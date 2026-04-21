@@ -41,7 +41,7 @@
 <section class="container">
     <div class="panel-hero">
         <h1>Panel del Terapeuta</h1>
-        <p>Acceda al módulo de gestión de ejercicios terapéuticos.</p>
+        <p>Bienvenido, @Session["UserEmail"]</p>
     </div>
 
     <div class="row justify-content-center">
@@ -69,6 +69,16 @@
                 <a href="@Url.Action("GestionarAgendaTerapeuta", "Agenda")" class="btn btn-success">
                     Ingresar
                 </a>
+            </div>
+        </div>
+
+
+        <div class="col-lg-4 col-md-6 col-12">
+            <div class="panel-card">
+                <div class="panel-icon"><i class="lni lni-layout"></i></div>
+                <h4>Asignación de Ejercicios</h4>
+                <p>Permite asignar ejercicios a pacientes según terapia o tratamiento.</p>
+                <a href='@Url.Action("AsignacionEjercicios", "Terapeuta")' class="btn btn-success">Ingresar</a>
             </div>
         </div>
 
